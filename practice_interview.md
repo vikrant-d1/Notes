@@ -160,6 +160,22 @@ const transformName = (name:string) => {
   }
 ```
 
+### 10.(a) All word upper case first letter capital (updated)
+```javascript 
+let stringData = 'hi i am check the value of uppercase';
+
+function captilization(stringData){
+    let stringArr = stringData.split(' ');
+     let updatedString = ' ';
+     for(let i=1; i<=stringArr.length-1; i++){
+        let capitalLetter = stringArr[i].charAt(0).toUpperCase()+stringArr[i].slice(1,stringArr[i].length);
+         updatedString+= capitalLetter+' ';
+     }
+    return updatedString;
+}
+
+console.log('check data',captilization(stringData));
+```
 
 ### 11. check letter repitation in the word
 ```javascript 
@@ -239,27 +255,8 @@ console.log('check Data',nonRepeativeLetterIndex(a))
         return  pre
      },{})
  }
- 
  console.log(letterCouter(newStr));
  ```
-
-### 15.all area releted questions;
-
-
-```javascript 
- selectEndTime(e,totalSelectedMin){
-    let self = this;
-    self.setState({
-      includeEndTimes:self.state.includeEndTimes?.length>0?self.state.includeEndTimes:self.state.includeTimes,
-    })
-
-     self.setState({
-     selectEndTimeSlot:moment(e).add(totalSelectedMin, 'm').toDate()
-      })
-  }
-
-  includeEndTimes:includeTimes,
-```
 
  ### 16.check prime number
 ```javascript 
@@ -529,3 +526,176 @@ let rsData = [2,1,3].myReduce(function(curr,per){
 console.log('reduce Result:',rsData);
 ```
 
+### 30.Call function pollyfill 
+
+```javascript 
+
+function printName(city, country){
+    console.log( `${this.firstName} ${this.lastName}, ${city} - ${country}` );
+}
+
+const myName = {
+    firstName: 'Ankit',
+    lastName: 'Saxena'
+};
+
+
+Function.prototype.myCall = function(context, ...args){
+    let currentContext = context || globalThis;
+    let randomProp = Math.random();
+    while( currentContext[randomProp] !== undefined ){
+        randomProp = Math.random();
+    }
+    currentContext[randomProp] = this;
+    let result = currentContext[randomProp](...args);
+    delete currentContext[randomProp];
+    return result;
+}
+
+printName.myCall(myName, "Palia", "India");
+```
+### 31.Pollyfill of apply 
+```javascript 
+
+Function.prototype.myApply = function(context, args){
+    let currentContext = context || globalThis;
+    let uniqueProp = Math.random();
+    while( currentContext[uniqueProp] !== undefined ){
+        uniqueProp = Math.random();
+    }
+    currentContext[uniqueProp] = this;
+    let result = currentContext[uniqueProp](...args);
+    delete currentContext[uniqueProp];
+    return result;
+}
+
+printName.myApply(myName, ["Palia", "India"]);
+````
+### 32. PollyFill of the bind function
+```javascript 
+
+Function.prototype.myBind = function(...args){
+    var callback = this,
+        ctx = args.splice(1);
+    return function(...a){        
+        callback.call(args[0], ...[...ctx, ...a]);
+    }
+}
+
+const result2 = printName.myBind(myName, "Palia",);
+result2("India");
+```
+
+### 33. debouncing function
+
+```javascript 
+function debounce(func, delay) {
+    let timerId;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timerId);
+        timerId = setTimeout(function () {
+            func.apply(context, args);
+        }, delay);
+    };
+}
+
+
+function delayFuncExec() { 
+    console.log("I AM GFG "); 
+} 
+  
+let timerId = setTimeout(delayFuncExec, 1000) 
+
+```
+
+### 34.Implimenting Throtaling function
+```javascript 
+function throttle(callback, delay = 1000) {
+      let shouldWait = false;
+      return (...args) => {
+        if (shouldWait) return;
+        callback(...args);
+        shouldWait = true;
+        setTimeout(() => {
+              shouldWait = false;
+        }, delay);
+      };
+}
+
+function logMessage(message) { 
+    console.log(message); 
+} 
+
+const throttledLogMessage = throttle(logMessage, 1000); 
+  
+// Logs 'Hello' 
+throttledLogMessage('Hello'); 
+```
+
+### 35.sort accoding to max count of reppetted letter
+```javascript 
+const arrs = ['sanjayyyyy','kashyapyy','hellooo','worlddddd'];
+
+function sordOrder(arr){
+    let obj = [];
+    for(let i=0; i<arr.length;i++){
+        let maxCount ={};
+        let word = arr[i].split('');
+        for(let j=0; j<word.length; j++){
+            if(maxCount.hasOwnProperty(word[j])){
+                maxCount[word[j]]++
+            }else{
+                maxCount[word[j]] =1;
+            }
+        }
+        let findMax = 0;
+        for(let item in maxCount){
+           if(findMax<maxCount[item]){
+            findMax =maxCount[item];
+           }
+        }
+        obj.push({
+            name:[arr[i]],
+            count:findMax
+        });
+    }
+    
+    return obj.sort((a,b)=>{
+        if(b.count>a.count){
+           return -1;
+        }
+        if(a.count>b.count){
+            return 1;
+         }
+      
+            return 0
+    })
+}
+
+console.log('check data',sordOrder(arrs))
+```
+
+### 36. return targeted sum from the array possible number of pair
+```javascript 
+function findPairsWithSum(arr, targetSum) {
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] + arr[j] === targetSum) {
+        result.push([arr[i], arr[j]]);
+      }
+    }
+  }
+  return result;
+}
+
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+const targetSum = 12;
+
+const pairsWithSum9 = findPairsWithSum(arr, targetSum);
+console.log(pairsWithSum9);
+```
+
+### 37.
