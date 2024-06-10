@@ -573,17 +573,25 @@ printName.myApply(myName, ["Palia", "India"]);
 ````
 ### 32. PollyFill of the bind function
 ```javascript 
+let obj = {
+  name: 'Jack',
+};
 
-Function.prototype.myBind = function(...args){
-    var callback = this,
-        ctx = args.splice(1);
-    return function(...a){        
-        callback.call(args[0], ...[...ctx, ...a]);
-    }
-}
+let myFunc = function (id, city) {
+  console.log(`${this.name}, ${id}, ${city}`);  // id will be undefined
+};
 
-const result2 = printName.myBind(myName, "Palia",);
-result2("India");
+// Accepting any number of arguments passed to myBind
+Function.prototype.myBind = function (obj, ...args) {
+  let func = this;
+  // Accepting arguments passed to newFunc
+  return function (...newArgs) {
+    func.apply(obj, [...args, ...newArgs]);
+  };
+};
+
+let newFunc = myFunc.myBind(obj, 'a_random_id')
+newFunc('New York') // Jack, a_random_id, New York
 ```
 
 ### 33. debouncing function
