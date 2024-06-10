@@ -587,7 +587,7 @@ result2("India");
 ```
 
 ### 33. debouncing function
-
+Debouncing is a technique that delays the execution of a function until the user stops performing a certain action for a specified amount of time. 
 ```javascript 
 function debounce(func, delay) {
     let timerId;
@@ -611,6 +611,7 @@ let timerId = setTimeout(delayFuncExec, 1000)
 ```
 
 ### 34.Implimenting Throtaling function
+Throttling is a technique that limits the execution of a function to once in every specified time interval. 
 ```javascript 
 function throttle(callback, delay = 1000) {
       let shouldWait = false;
