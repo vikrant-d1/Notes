@@ -50,5 +50,5 @@ evtSource.onmessage = (e) => {
 };
 ```
 
-*[Know more about EventSource] (https://developer.mozilla.org/en-US/docs/Web/API/EventSource)*
+*[Know more about EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)*
 
