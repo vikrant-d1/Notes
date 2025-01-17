@@ -1,12 +1,18 @@
-# Node js Practice questions anwsers
+# Node js Practice Notes
 
-### What is a Stream in Node.js?
+# Table of Contents
+- [1. What is a Stream in Node.js?](#1. What is a Stream in Node.js?)
+- [2. What Are CommonJS and ES Modules?](#2. What Are CommonJS and ES Modules?)
+- [3. Best Practices for Building Efficient RESTful APIs?](#3. Best Practices for Building Efficient RESTful APIs?)
+- [4. Implementing Secure Authentication and Authorization with JWT?](#4. Implementing Secure Authentication and Authorization with JWT?)
+- [5. Applying Rate Limiting and Throttling to APIs in Node.js?](#5. Applying Rate Limiting and Throttling to APIs in Node.js?)
+- [6. Nodejs Error hendeling?](#5. Nodejs Error hendeling?)
+
+### 1. What is a Stream in Node.js?
 
 A **stream** in Node.js is a way to handle reading or writing data continuously, piece by piece, without loading the entire data into memory. Streams are especially useful for working with large files or real-time data because they process data efficiently, reducing memory usage and improving performance.
 
 Streams in Node.js are implemented using the **EventEmitter** module, which emits events during their lifecycle.
-
----
 
 ### Types of Streams in Node.js
 
@@ -23,8 +29,6 @@ There are four types of streams in Node.js:
    
 4. **Transform Streams**: Modify or transform data as it is written and read.
    - Example: `zlib.createGzip()` for compressing data.
-
----
 
 ### How to Work with Streams
 
@@ -107,8 +111,6 @@ readableStream.pipe(gzip).pipe(writableStream);
 console.log('File compressed successfully.');
 ```
 
----
-
 ### Key Methods and Events
 
 - **Readable Stream Events**:
@@ -123,8 +125,6 @@ console.log('File compressed successfully.');
 - **Stream Methods**:
   - `pipe(destination)`: Pipes data from one stream to another.
 
----
-
 ### Use Cases of Streams
 
 - Reading and writing large files (e.g., logs, videos).
@@ -132,26 +132,23 @@ console.log('File compressed successfully.');
 - Network communication.
 - File compression/decompression.
 
----
-
 Streams are a powerful feature of Node.js, enabling efficient data handling, especially for large-scale applications.
-
 
 Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their syntax, features, differences, and practical use cases. Here's a comprehensive guide:
 
 ---
 
-## 1. **What Are CommonJS and ES Modules?**
+
+## 2. What Are CommonJS and ES Modules?
 
 - **CommonJS (CJS):** A module system primarily used in Node.js. It allows you to export and import functionalities from other files.
   
 - **ES Modules (ESM):** A modern, standardized JavaScript module system introduced in ES6 (2015). It is now natively supported in browsers and Node.js.
 
----
 
-## 2. **Syntax Differences**
+### 2. **Syntax Differences**
 
-### **CommonJS (CJS) Syntax**
+#### **CommonJS (CJS) Syntax**
 
 - Exporting:  
   Use `module.exports` or `exports`.
@@ -177,9 +174,7 @@ Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their 
   console.log(greet('Vikrant'));
   ```
 
----
-
-### **ES Modules (ESM) Syntax**
+#### **ES Modules (ESM) Syntax**
 
 - Exporting:  
   Use `export` or `export default`.
@@ -209,9 +204,7 @@ Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their 
   console.log(greet('Vikrant'));
   ```
 
----
-
-## 3. **Key Differences**
+#### 3. **Key Differences**
 
 | Feature                      | CommonJS (CJS)                              | ES Modules (ESM)                      |
 |------------------------------|---------------------------------------------|----------------------------------------|
@@ -223,11 +216,10 @@ Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their 
 | **Support in Browsers**      | Not natively supported                     | Natively supported                    |
 | **Support in Node.js**       | Default                                    | Requires `"type": "module"` in `package.json` or `.mjs` |
 
----
 
-## 4. **Deep Dive: CommonJS**
+### 4. **Deep Dive: CommonJS**
 
-### Features:
+#### Features:
 - **Synchronous Loading:** Modules are loaded and executed synchronously.
 - **Dynamic `require`:** You can conditionally or programmatically load modules.
 
@@ -238,39 +230,34 @@ Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their 
   }
   ```
 
-### Limitations:
+#### Limitations:
 - Not natively supported in browsers (requires bundlers like Webpack or tools like Browserify).
 - Synchronous loading can impact performance in large-scale applications.
 
----
+### 5. **Deep Dive: ES Modules**
 
-## 5. **Deep Dive: ES Modules**
-
-### Features:
+#### Features:
 - **Static Structure:** ES modules are statically analyzed, enabling tree-shaking and optimizations.
 - **Asynchronous Loading:** Ideal for web development, where non-blocking operations are crucial.
 - **Strict Mode:** ES modules are always in strict mode.
 
-### Limitations:
+#### Limitations:
 - Requires compatibility configurations for older browsers or Node.js versions.
 - Cannot use `require` dynamically (must use `import()`).
 
----
 
-## 6. **Practical Usage**
+### 6. **Practical Usage**
 
-### **When to Use CommonJS**
+#### **When to Use CommonJS**
 - Legacy projects or environments that only support CJS (e.g., Node.js versions before 12.x).
 - Dynamic module loading or conditions based on runtime logic.
 
-### **When to Use ES Modules**
+#### **When to Use ES Modules**
 - Modern web applications.
 - Projects where performance (tree-shaking, asynchronous loading) is crucial.
 - Codebases targeting both Node.js and browser environments.
 
----
-
-## 7. **Transitioning from CJS to ESM**
+### 7. **Transitioning from CJS to ESM**
 
 - Update `package.json`:
   ```json
@@ -281,9 +268,8 @@ Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their 
 
 - Convert `require` to `import` and `module.exports` to `export`.
 
----
 
-## 8. **Mixed Usage in Node.js**
+### 8. **Mixed Usage in Node.js**
 
 In some cases, you might work with both CJS and ESM:
 
@@ -302,22 +288,18 @@ In some cases, you might work with both CJS and ESM:
   console.log(greet('Vikrant'));
   ```
 
----
-
 By mastering these concepts, you’ll be able to choose the right module system based on your project’s needs and ensure smooth integration with tools and libraries.
 
 
+---
 
-
-### Best Practices for Building Efficient RESTful APIs
+## 3. Best Practices for Building Efficient RESTful APIs?
 
 RESTful APIs are a cornerstone of modern web development, and following best practices ensures they are efficient, scalable, and maintainable. Here's a comprehensive guide:
 
----
+### 1. **Design a Clear and Consistent API Structure**
 
-## 1. **Design a Clear and Consistent API Structure**
-
-### **Resource-Based URLs**
+#### **Resource-Based URLs**
 - Use nouns for resources, not verbs.
 - URLs should be hierarchical and reflect resource relationships.
 
@@ -330,7 +312,7 @@ PUT /users/1        # Update a user
 DELETE /users/1     # Delete a user
 ```
 
-### **Use Proper HTTP Methods**
+#### **Use Proper HTTP Methods**
 | Method  | Purpose                    |
 |---------|----------------------------|
 | `GET`   | Retrieve data              |
@@ -341,9 +323,9 @@ DELETE /users/1     # Delete a user
 
 ---
 
-## 2. **Handle Errors Gracefully**
+### 2. **Handle Errors Gracefully**
 
-### **Standardized HTTP Status Codes**
+#### **Standardized HTTP Status Codes**
 Use appropriate status codes to indicate the outcome of a request:
 
 | Status Code | Meaning                        |
@@ -355,7 +337,7 @@ Use appropriate status codes to indicate the outcome of a request:
 | `404 Not Found`| Resource not found          |
 | `500 Internal Server Error`| Server error   |
 
-### **Error Responses**
+#### **Error Responses**
 Return detailed but user-friendly error messages in JSON format.
 
 **Example:**
@@ -370,7 +352,7 @@ Return detailed but user-friendly error messages in JSON format.
 
 ---
 
-## 3. **Use Query Parameters for Filtering, Sorting, and Pagination**
+### 3. **Use Query Parameters for Filtering, Sorting, and Pagination**
 
 - **Filtering:**  
   ```bash
@@ -401,7 +383,7 @@ Return metadata for pagination:
 
 ---
 
-## 4. **Implement Authentication and Authorization**
+### 4. **Implement Authentication and Authorization**
 
 - Use **JWT (JSON Web Tokens)** for stateless authentication.
 - Secure sensitive endpoints with role-based access control.
@@ -415,9 +397,9 @@ Return metadata for pagination:
 
 ---
 
-## 5. **Optimize Performance**
+### 5. **Optimize Performance**
 
-### **Enable Caching**
+#### **Enable Caching**
 - Use HTTP caching headers like `ETag` and `Cache-Control`.
 
 **Example:**
@@ -425,22 +407,22 @@ Return metadata for pagination:
 Cache-Control: public, max-age=3600
 ```
 
-### **Batch Requests**
+#### **Batch Requests**
 Allow clients to send multiple requests in one batch to reduce overhead.
 
-### **Use Compression**
+#### **Use Compression**
 Enable GZIP or Brotli compression to reduce payload size.
 
 ---
 
-## 6. **Ensure Data Validation and Sanitization**
+### 6. **Ensure Data Validation and Sanitization**
 
 - Use validation libraries like `Joi` or `Yup` to validate request payloads.
 - Sanitize inputs to prevent SQL injection or XSS attacks.
 
 ---
 
-## 7. **Version Your API**
+### 7. **Version Your API**
 
 Include the version in the URL to prevent breaking changes for clients when updates are made.
 
@@ -452,7 +434,7 @@ GET /v2/users
 
 ---
 
-## 8. **Secure the API**
+### 8. **Secure the API**
 
 - Use HTTPS to encrypt data in transit.
 - Implement rate limiting to prevent abuse (e.g., `express-rate-limit`).
@@ -460,7 +442,7 @@ GET /v2/users
 
 ---
 
-## 9. **Enable HATEOAS (Hypermedia as the Engine of Application State)**
+### 9. **Enable HATEOAS (Hypermedia as the Engine of Application State)**
 
 Provide links to related resources in the response for easier navigation.
 
@@ -478,7 +460,7 @@ Provide links to related resources in the response for easier navigation.
 
 ---
 
-## 10. **Use Tools for Monitoring and Testing**
+### 10. **Use Tools for Monitoring and Testing**
 
 - Use **Postman** or **Insomnia** for manual testing.
 - Implement automated tests with frameworks like **Jest** or **Mocha**.
@@ -486,7 +468,7 @@ Provide links to related resources in the response for easier navigation.
 
 ---
 
-### Sample Node.js Express Implementation
+#### Sample Node.js Express Implementation
 
 ```javascript
 const express = require('express');
@@ -519,17 +501,18 @@ app.listen(3000, () => {
 
 ---
 
-### Conclusion
+#### Conclusion
 
 By following these best practices, you can build efficient, secure, and maintainable RESTful APIs that provide a great developer and user experience.
 
-### Implementing Secure Authentication and Authorization with JWT
+---
+
+## 4. Implementing Secure Authentication and Authorization with JWT?
 
 Here’s a step-by-step guide to implementing secure authentication and authorization using **JSON Web Tokens (JWT)** in a Node.js application with **Express**:
 
----
 
-## 1. **Understanding JWT**
+### 1. **Understanding JWT**
 - **JWT (JSON Web Token)** is a compact, self-contained token used to securely transmit information between parties.
 - A JWT consists of three parts:
   - **Header**: Specifies the algorithm and token type.
@@ -541,29 +524,23 @@ Here’s a step-by-step guide to implementing secure authentication and authoriz
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjE4OTQ1NjAwfQ.K0nUV1CFIp3j2GZqRh1Ro0tDqkPGw7Xppn03uD1-qkA
 ```
 
----
-
-## 2. **Setup a Basic Express App**
+### 2. **Setup a Basic Express App**
 
 Install necessary dependencies:
 ```bash
 npm install express jsonwebtoken bcryptjs dotenv body-parser
 ```
 
----
-
-## 3. **Environment Configuration**
+### 3. **Environment Configuration**
 Create a `.env` file to store sensitive information:
 ```
 JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=1h
 ```
 
----
+### 4. **User Authentication (Login)**
 
-## 4. **User Authentication (Login)**
-
-### **Hash Passwords**
+#### **Hash Passwords**
 Use `bcryptjs` to hash passwords for secure storage.
 
 **Example:**
@@ -582,9 +559,7 @@ const verifyPassword = async (password, hashedPassword) => {
 };
 ```
 
----
-
-### **Generate JWT**
+#### **Generate JWT**
 
 **Example:**
 ```javascript
@@ -601,7 +576,7 @@ const generateToken = (user) => {
 
 ---
 
-### **Login Route**
+#### **Login Route**
 ```javascript
 const express = require('express');
 const app = express();
@@ -631,7 +606,7 @@ app.post('/login', async (req, res) => {
 
 ---
 
-## 5. **Protect Routes (Middleware for Authentication)**
+### 5. **Protect Routes (Middleware for Authentication)**
 
 Create middleware to verify JWT:
 ```javascript
@@ -653,7 +628,7 @@ const authenticateToken = (req, res, next) => {
 
 ---
 
-## 6. **Authorization (Role-Based Access Control)**
+### 6. **Authorization (Role-Based Access Control)**
 
 Create middleware to check roles:
 ```javascript
@@ -669,7 +644,7 @@ const authorize = (roles = []) => {
 
 ---
 
-## 7. **Protected Routes Example**
+### 7. **Protected Routes Example**
 
 **Example:**
 ```javascript
@@ -684,14 +659,14 @@ app.get('/user', authenticateToken, authorize(['user', 'admin']), (req, res) => 
 
 ---
 
-## 8. **Logout (Token Invalidation)**
+### 8. **Logout (Token Invalidation)**
 
 To "log out" a user:
 - Implement a token blacklist or store invalidated tokens in a database with an expiration time.
 
 ---
 
-## 9. **Security Best Practices**
+### 9. **Security Best Practices**
 
 - **Use HTTPS**: Always secure API endpoints.
 - **Set Expiration**: Limit token validity using the `expiresIn` option.
@@ -702,7 +677,7 @@ To "log out" a user:
 
 ---
 
-### Full Example Code
+#### Full Example Code
 
 ```javascript
 require('dotenv').config();
@@ -776,13 +751,14 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 By following these steps, you can implement secure authentication and role-based authorization for your RESTful APIs.
 
-### Applying Rate Limiting and Throttling to APIs in Node.js
+---
+
+## 5. Applying Rate Limiting and Throttling to APIs in Node.js?
 
 Rate limiting and throttling are essential for securing APIs against abuse, preventing denial-of-service (DoS) attacks, and ensuring fair usage. Here's a step-by-step guide to implementing these techniques in a Node.js application using **Express**.
 
----
 
-## 1. **Install Necessary Packages**
+### 1. **Install Necessary Packages**
 
 Use the `express-rate-limit` package to implement rate limiting.
 
@@ -790,9 +766,7 @@ Use the `express-rate-limit` package to implement rate limiting.
 npm install express-rate-limit
 ```
 
----
-
-## 2. **Set Up Basic Rate Limiting**
+### 2. **Set Up Basic Rate Limiting**
 
 The `express-rate-limit` package allows you to define the maximum number of requests a client can make within a specific time window.
 
@@ -824,9 +798,7 @@ app.get('/', (req, res) => {
 app.listen(3000, () => console.log('Server running on port 3000'));
 ```
 
----
-
-## 3. **Apply Rate Limiting to Specific Routes**
+### 3. **Apply Rate Limiting to Specific Routes**
 
 Instead of applying the rate limiter globally, you can apply it to specific routes.
 
@@ -845,9 +817,7 @@ app.post('/login', authLimiter, (req, res) => {
 });
 ```
 
----
-
-## 4. **Advanced Rate Limiting with Custom Key Generator**
+### 4. **Advanced Rate Limiting with Custom Key Generator**
 
 You can customize the key used to track requests, for example, by using the user ID instead of the IP address.
 
@@ -865,9 +835,7 @@ const customLimiter = rateLimit({
 app.use('/api', customLimiter);
 ```
 
----
-
-## 5. **Throttling Using Middleware**
+### 5. **Throttling Using Middleware**
 
 Throttle requests to allow delayed processing under high load. You can use the `express-slow-down` package.
 
@@ -889,9 +857,7 @@ const speedLimiter = slowDown({
 app.use('/api', speedLimiter);
 ```
 
----
-
-## 6. **Combining Rate Limiting and Throttling**
+### 6. **Combining Rate Limiting and Throttling**
 
 To enhance security, combine both rate limiting and throttling on critical endpoints like login or sensitive data access.
 
@@ -902,9 +868,7 @@ app.post('/login', authLimiter, speedLimiter, (req, res) => {
 });
 ```
 
----
-
-## 7. **Real-Time Monitoring with Headers**
+### 7. **Real-Time Monitoring with Headers**
 
 Enable headers to inform clients of their remaining limits:
 - `RateLimit-Limit`: Maximum number of requests allowed.
@@ -913,9 +877,7 @@ Enable headers to inform clients of their remaining limits:
 
 Ensure `standardHeaders` is set to `true` in the rate limiter configuration.
 
----
-
-## 8. **Best Practices**
+### 8. **Best Practices**
 
 1. **Different Limits for Different Users**: 
    - Allow higher limits for premium or admin users.
@@ -935,9 +897,8 @@ Ensure `standardHeaders` is set to `true` in the rate limiter configuration.
    - Use a global rate limiter for general API usage.
    - Apply stricter limits on sensitive routes like `/login` or `/password-reset`.
 
----
 
-### Full Example Code
+#### Full Example Code
 
 Here’s a complete example combining everything:
 
@@ -991,5 +952,167 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 This implementation ensures your API is protected against abuse while maintaining good performance and user experience.
 
+---
 
+## 6. Nodejs Error hendeling?
+Error handling is a crucial aspect of building a robust REST API in Node.js. Below are various types of error handling techniques you can implement in a Node.js REST API:
+
+### 1. **Basic Error Handling**
+
+You can use try-catch blocks to handle synchronous errors in your route handlers.
+
+```javascript
+app.get('/api/resource', (req, res) => {
+    try {
+        // Your logic here
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+});
+```
+
+### 2. **Asynchronous Error Handling**
+
+For asynchronous code (like database calls), you can use try-catch within an async function.
+
+```javascript
+app.get('/api/resource', async (req, res) => {
+    try {
+        const data = await getDataFromDatabase();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+});
+```
+
+### 3. **Using Middleware for Error Handling**
+
+You can create a centralized error-handling middleware to catch errors from all routes.
+
+```javascript
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error',
+    });
+});
+
+// Example route
+app.get('/api/resource', async (req, res, next) => {
+    try {
+        const data = await getDataFromDatabase();
+        res.json(data);
+    } catch (error) {
+        next(error); // Pass the error to the error handler
+    }
+});
+```
+
+### 4. **Validation Errors**
+
+You can handle validation errors using libraries like `Joi` or `express-validator`.
+
+```javascript
+const { body, validationResult } = require('express-validator');
+
+app.post('/api/resource', [
+    body('name').isString().notEmpty(),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    // Proceed with creating the resource
+});
+```
+
+### 5. **Handling 404 Errors**
+
+You can handle 404 errors by adding a middleware at the end of your route definitions.
+
+```javascript
+app.use((req, res) => {
+    res.status(404).json({ message: 'Resource not found' });
+});
+```
+
+### 6. **Custom Error Classes**
+
+You can create custom error classes to handle different types of errors more effectively.
+
+```javascript
+class AppError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.statusCode = statusCode;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+
+// Usage
+app.get('/api/resource', async (req, res, next) => {
+    try {
+        const data = await getDataFromDatabase();
+        if (!data) {
+            throw new AppError('Resource not found', 404);
+        }
+        res.json(data);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    res.status(err.statusCode || 500).json({
+        message: err.message || 'Internal Server Error',
+    });
+});
+```
+
+### 7. **Logging Errors**
+
+Consider using a logging library like `winston` or `morgan` to log errors for debugging purposes.
+
+```javascript
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'error',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: 'error.log' }),
+    ],
+});
+
+// In your error handling middleware
+app.use((err, req, res, next) => {
+    logger.error(err.stack);
+    res.status(err.statusCode || 500).json({
+        message: err.message || 'Internal Server Error',
+    });
+});
+```
+
+### 8. Catching Unhandled Rejections and Exceptions
+You can also catch unhandled promise rejections and uncaught exceptions globally using the process object.
+```javascript
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // Optionally, you can exit the process or log the error to a monitoring service
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception thrown:', error);
+    // Optionally, you can exit the process or log the error to a monitoring service
+});
+```
+
+### Conclusion
+
+By implementing these error handling techniques, you can create a more resilient and user-friendly REST API in Node.js. Make sure to tailor the error responses to your application's needs and provide meaningful messages to the clients.
+
+---
 
