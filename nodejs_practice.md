@@ -6,7 +6,7 @@
 - [3. Best Practices for Building Efficient RESTful APIs?](#3-best-practices-for-building-efficient-restful-apis)
 - [4. Implementing Secure Authentication and Authorization with JWT?](#4-implementing-secure-authentication-and-authorization-with-jwt)
 - [5. Applying Rate Limiting and Throttling to APIs in Node.js?](#5-applying-rate-limiting-and-throttling-to-apis-in-nodejs)
-- [6. Node.js Error Handling?](#6-nodejs-error-handling)
+- [6. Nodejs Error hendeling?](#6-nodejs-error-hendeling)
 
 ### 1. What is a Stream in Node.js?
 
@@ -291,8 +291,6 @@ In some cases, you might work with both CJS and ESM:
 By mastering these concepts, you’ll be able to choose the right module system based on your project’s needs and ensure smooth integration with tools and libraries.
 
 
----
-
 ## 3. Best Practices for Building Efficient RESTful APIs?
 
 RESTful APIs are a cornerstone of modern web development, and following best practices ensures they are efficient, scalable, and maintainable. Here's a comprehensive guide:
@@ -350,7 +348,6 @@ Return detailed but user-friendly error messages in JSON format.
 }
 ```
 
----
 
 ### 3. **Use Query Parameters for Filtering, Sorting, and Pagination**
 
@@ -381,7 +378,6 @@ Return metadata for pagination:
 }
 ```
 
----
 
 ### 4. **Implement Authentication and Authorization**
 
@@ -413,14 +409,12 @@ Allow clients to send multiple requests in one batch to reduce overhead.
 #### **Use Compression**
 Enable GZIP or Brotli compression to reduce payload size.
 
----
 
 ### 6. **Ensure Data Validation and Sanitization**
 
 - Use validation libraries like `Joi` or `Yup` to validate request payloads.
 - Sanitize inputs to prevent SQL injection or XSS attacks.
 
----
 
 ### 7. **Version Your API**
 
@@ -440,7 +434,6 @@ GET /v2/users
 - Implement rate limiting to prevent abuse (e.g., `express-rate-limit`).
 - Avoid exposing sensitive data in URLs or responses.
 
----
 
 ### 9. **Enable HATEOAS (Hypermedia as the Engine of Application State)**
 
@@ -458,15 +451,12 @@ Provide links to related resources in the response for easier navigation.
 }
 ```
 
----
-
 ### 10. **Use Tools for Monitoring and Testing**
 
 - Use **Postman** or **Insomnia** for manual testing.
 - Implement automated tests with frameworks like **Jest** or **Mocha**.
 - Monitor API performance and errors using tools like **New Relic**, **Datadog**, or **ELK Stack**.
 
----
 
 #### Sample Node.js Express Implementation
 
@@ -499,13 +489,10 @@ app.listen(3000, () => {
 });
 ```
 
----
-
 #### Conclusion
 
 By following these best practices, you can build efficient, secure, and maintainable RESTful APIs that provide a great developer and user experience.
 
----
 
 ## 4. Implementing Secure Authentication and Authorization with JWT?
 
@@ -574,8 +561,6 @@ const generateToken = (user) => {
 };
 ```
 
----
-
 #### **Login Route**
 ```javascript
 const express = require('express');
@@ -604,7 +589,6 @@ app.post('/login', async (req, res) => {
 });
 ```
 
----
 
 ### 5. **Protect Routes (Middleware for Authentication)**
 
@@ -626,7 +610,6 @@ const authenticateToken = (req, res, next) => {
 };
 ```
 
----
 
 ### 6. **Authorization (Role-Based Access Control)**
 
@@ -642,7 +625,6 @@ const authorize = (roles = []) => {
 };
 ```
 
----
 
 ### 7. **Protected Routes Example**
 
@@ -656,8 +638,6 @@ app.get('/user', authenticateToken, authorize(['user', 'admin']), (req, res) => 
   res.send('Welcome, User!');
 });
 ```
-
----
 
 ### 8. **Logout (Token Invalidation)**
 
@@ -674,8 +654,6 @@ To "log out" a user:
 - **Limit Token Scope**: Avoid overloading the JWT payload with sensitive data.
 - **Rate Limiting**: Prevent brute-force attacks on authentication endpoints.
 - **Refresh Tokens**: Use refresh tokens for long-lived sessions.
-
----
 
 #### Full Example Code
 
@@ -751,7 +729,6 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 By following these steps, you can implement secure authentication and role-based authorization for your RESTful APIs.
 
----
 
 ## 5. Applying Rate Limiting and Throttling to APIs in Node.js?
 
@@ -952,12 +929,10 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 This implementation ensures your API is protected against abuse while maintaining good performance and user experience.
 
----
-
 ## 6. Nodejs Error hendeling?
 Error handling is a crucial aspect of building a robust REST API in Node.js. Below are various types of error handling techniques you can implement in a Node.js REST API:
 
-### 1. **Basic Error Handling**
+#### 1. **Basic Error Handling**
 
 You can use try-catch blocks to handle synchronous errors in your route handlers.
 
@@ -971,7 +946,7 @@ app.get('/api/resource', (req, res) => {
 });
 ```
 
-### 2. **Asynchronous Error Handling**
+#### 2. **Asynchronous Error Handling**
 
 For asynchronous code (like database calls), you can use try-catch within an async function.
 
@@ -986,7 +961,7 @@ app.get('/api/resource', async (req, res) => {
 });
 ```
 
-### 3. **Using Middleware for Error Handling**
+#### 3. **Using Middleware for Error Handling**
 
 You can create a centralized error-handling middleware to catch errors from all routes.
 
@@ -1010,7 +985,7 @@ app.get('/api/resource', async (req, res, next) => {
 });
 ```
 
-### 4. **Validation Errors**
+#### 4. **Validation Errors**
 
 You can handle validation errors using libraries like `Joi` or `express-validator`.
 
@@ -1028,7 +1003,7 @@ app.post('/api/resource', [
 });
 ```
 
-### 5. **Handling 404 Errors**
+#### 5. **Handling 404 Errors**
 
 You can handle 404 errors by adding a middleware at the end of your route definitions.
 
@@ -1038,7 +1013,7 @@ app.use((req, res) => {
 });
 ```
 
-### 6. **Custom Error Classes**
+#### 6. **Custom Error Classes**
 
 You can create custom error classes to handle different types of errors more effectively.
 
@@ -1072,7 +1047,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-### 7. **Logging Errors**
+#### 7. **Logging Errors**
 
 Consider using a logging library like `winston` or `morgan` to log errors for debugging purposes.
 
@@ -1096,7 +1071,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-### 8. Catching Unhandled Rejections and Exceptions
+#### 8. Catching Unhandled Rejections and Exceptions
 You can also catch unhandled promise rejections and uncaught exceptions globally using the process object.
 ```javascript
 process.on('unhandledRejection', (reason, promise) => {
@@ -1114,5 +1089,4 @@ process.on('uncaughtException', (error) => {
 
 By implementing these error handling techniques, you can create a more resilient and user-friendly REST API in Node.js. Make sure to tailor the error responses to your application's needs and provide meaningful messages to the clients.
 
----
 
