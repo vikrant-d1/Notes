@@ -136,8 +136,6 @@ Streams are a powerful feature of Node.js, enabling efficient data handling, esp
 
 Understanding CommonJS (CJS) and ES Modules (ESM) deeply involves knowing their syntax, features, differences, and practical use cases. Here's a comprehensive guide:
 
----
-
 
 ## 2. What Are CommonJS and ES Modules?
 
@@ -319,7 +317,6 @@ DELETE /users/1     # Delete a user
 | `PATCH` | Partially update resources |
 | `DELETE`| Remove resources           |
 
----
 
 ### 2. **Handle Errors Gracefully**
 
@@ -391,7 +388,6 @@ Return metadata for pagination:
 }
 ```
 
----
 
 ### 5. **Optimize Performance**
 
@@ -426,7 +422,6 @@ GET /v1/users
 GET /v2/users
 ```
 
----
 
 ### 8. **Secure the API**
 
@@ -644,7 +639,6 @@ app.get('/user', authenticateToken, authorize(['user', 'admin']), (req, res) => 
 To "log out" a user:
 - Implement a token blacklist or store invalidated tokens in a database with an expiration time.
 
----
 
 ### 9. **Security Best Practices**
 
