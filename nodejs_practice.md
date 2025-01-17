@@ -1,12 +1,12 @@
 # Node js Practice Notes
 
 # Table of Contents
-- [1. What is a Stream in Node.js?](#1. What is a Stream in Node.js?)
-- [2. What Are CommonJS and ES Modules?](#2. What Are CommonJS and ES Modules?)
-- [3. Best Practices for Building Efficient RESTful APIs?](#3. Best Practices for Building Efficient RESTful APIs?)
-- [4. Implementing Secure Authentication and Authorization with JWT?](#4. Implementing Secure Authentication and Authorization with JWT?)
-- [5. Applying Rate Limiting and Throttling to APIs in Node.js?](#5. Applying Rate Limiting and Throttling to APIs in Node.js?)
-- [6. Nodejs Error hendeling?](#5. Nodejs Error hendeling?)
+- [1. What is a Stream in Node.js?](#1-what-is-a-stream-in-nodejs)
+- [2. What Are CommonJS and ES Modules?](#2-what-are-commonjs-and-es-modules)
+- [3. Best Practices for Building Efficient RESTful APIs?](#3-best-practices-for-building-efficient-restful-apis)
+- [4. Implementing Secure Authentication and Authorization with JWT?](#4-implementing-secure-authentication-and-authorization-with-jwt)
+- [5. Applying Rate Limiting and Throttling to APIs in Node.js?](#5-applying-rate-limiting-and-throttling-to-apis-in-nodejs)
+- [6. Node.js Error Handling?](#6-nodejs-error-handling)
 
 ### 1. What is a Stream in Node.js?
 
