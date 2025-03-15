@@ -58,3 +58,35 @@
 - Repeatable read “locks” the rows it reads but it could be expensive if you read a lot of rows, postgres implements RR as snapshot. That is why you don’t get phantom reads with postgres in repeatable read
 - Serializable are usually implemented with optimistic concurrency control, you can implement it pessimistically with SELECT FOR UPDATE 
 
+#### Consistency
+- Consistency in Data
+- Consistency in reads
+- Consistency in Data
+- Defined by the user
+- Referential integrity (foreign keys)
+- Atomicity
+- Isolation
+
+#### Consistency in reads
+- If a transaction committed a change will a new transaction immediately see the change?
+- Affects the system as a whole
+- Relational and NoSQL databases suffer from this
+- Eventual consistency
+
+#### Durability
+- Changes made by committed transactions must be persisted in a durable non-volatile storage.
+- Durability techniques
+  - WAL - Write ahead log
+  - Asynchronous snapshot
+  - AOF
+
+### Durability - WAL
+- Writing a lot of data to disk is expensive (indexes, data files, columns, rows, etc..)
+- That is why DBMSs persist a compressed version of the changes known as WAL (write-ahead-log segments)
+
+### Durability - OS Cache
+- A write request in OS usually goes to the OS cache
+- When the writes go the OS cache, an OS crash, machine restart could lead to loss of data
+- Fsync OS command forces writes to always go to disk fsync can be expensive and slows down commits
+
+  
