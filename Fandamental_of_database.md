@@ -22,7 +22,7 @@
 - Example, you want to generate a report and you want to get consistent snapshot based at the time of transaction
 - We will learn more about this in the Isolation section
 
-#### Atomicity
+### Atomicity
 - All queries in a transaction must succeed.
 - If one query fails, all prior successful queries in the transaction should rollback.
 - If the database went down prior to a commit of a transaction,
@@ -32,7 +32,7 @@
 - An atomic transaction is a transaction that will rollback all queries if one or more queries failed.
 - The database should clean this up after restart.
 
-#### Isolation
+### Isolation
 - Can my inflight transaction see changes made by other transactions?
 - Read phenomena
 - Isolation Levels
@@ -58,7 +58,7 @@
 - Repeatable read “locks” the rows it reads but it could be expensive if you read a lot of rows, postgres implements RR as snapshot. That is why you don’t get phantom reads with postgres in repeatable read
 - Serializable are usually implemented with optimistic concurrency control, you can implement it pessimistically with SELECT FOR UPDATE 
 
-#### Consistency
+### Consistency
 - Consistency in Data
 - Consistency in reads
 - Consistency in Data
@@ -73,18 +73,18 @@
 - Relational and NoSQL databases suffer from this
 - Eventual consistency
 
-#### Durability
+### Durability
 - Changes made by committed transactions must be persisted in a durable non-volatile storage.
 - Durability techniques
   - WAL - Write ahead log
   - Asynchronous snapshot
   - AOF
 
-### Durability - WAL
+#### Durability - WAL
 - Writing a lot of data to disk is expensive (indexes, data files, columns, rows, etc..)
 - That is why DBMSs persist a compressed version of the changes known as WAL (write-ahead-log segments)
 
-### Durability - OS Cache
+#### Durability - OS Cache
 - A write request in OS usually goes to the OS cache
 - When the writes go the OS cache, an OS crash, machine restart could lead to loss of data
 - Fsync OS command forces writes to always go to disk fsync can be expensive and slows down commits
