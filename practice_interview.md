@@ -121,7 +121,7 @@ for (let i = n; i >= 1; i--) {
 }
 ```
 
-###  9. solution 
+###  9. Find pair of the sum given total number
 ```javascript 
 const findPair = (arr, target) => {
   const seenValues = new Set();
