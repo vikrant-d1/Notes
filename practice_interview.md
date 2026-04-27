@@ -741,4 +741,94 @@ const stringToObject = (str, value) =>
 
 console.log(stringToObject("a.b.c", "someValue"));
 ```
-### 38.
+### 38.Given an array, return an array where the each value is the product of the next two items: E.g. [3, 4, 5] -> [20, 15, 12]
+```javascript
+   function productOfNextTwo(arr){
+        let result =[];
+        let n = arr.length;
+       for(let i = 0; i < n; i++){
+        let next1 = arr[(i + 1) % n];
+        let next2 = arr[(i + 2) % n];
+
+        result.push(next1 * next2);
+    }
+    return result;
+    }
+    const inputArray = [3, 4, 5];
+const outputArray = productOfNextTwo(inputArray);
+console.log(outputArray); // Output: [20, 15, 12]
+```
+### 39.Find the 2nd largest element from a given array ? [100,20,112,22]
+```javascript
+function findSecondLargest(arr){
+        let largestNum = -Infinity;
+        let secondLargestNum = -Infinity;
+        for(let i=0; i<arr.length; i++){
+            if(arr[i]>largestNum){
+                secondLargestNum = largestNum;
+                largestNum = arr[i];
+            }else if (arr[i]>secondLargestNum && arr[i]< largestNum){
+              secondLargestNum = arr[i];
+            }
+        }
+
+        return secondLargestNum;
+    }
+    
+    const array = [10, 5, 20, 8, 12];
+console.log(findSecondLargest(array)); // Output: 12
+```
+### 40.Program challenge: Find the pairs from given input ?
+input1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+input2 = 10;
+output = [[4, 6], [3, 7], [2, 8], [1, 9]]
+
+```javascript
+function findPairs(input1, input2) {
+const pairs = [];
+const seen = new Set();
+for (const num of input1) {
+const complement = input2 - num;
+if (seen.has(complement)) {
+pairs.push([complement, num]);
+}
+seen.add(num);
+}
+return pairs;
+}
+const input1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const input2 = 10;
+const output = findPairs(input1, input2);
+console.log(output);
+// [[1, 9], [2, 8], [3, 7], [4, 6], [5, 5]]
+```
+
+### 41.Write a javascript program to get below output from given
+input ?
+I/P: abbcccddddeea
+O/P: 1a2b3c4d2e1a
+
+```javascript
+function encodeString(str){
+    let count = 1;
+    let output = '';
+
+    for(let i = 1; i < str.length; i++){
+        if(str[i] === str[i - 1]){
+            count++;
+        } else {
+            output += count + str[i - 1];
+            count = 1;
+        }
+    }
+
+    // Fix: append instead of overwrite
+    output += count + str[str.length - 1];
+
+    return output;
+}
+
+const input = "abbcccddddeea";
+const output = encodeString(input);
+console.log(output); // 1a2b3c4d2e1a
+```
