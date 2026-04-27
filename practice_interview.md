@@ -707,4 +707,38 @@ const pairsWithSum9 = findPairsWithSum(arr, targetSum);
 console.log(pairsWithSum9);
 ```
 
-### 37.
+### 37.Write a function which converts string input into an object
+```javascript
+function stringToObject(str, finalValue){
+    let keys = str.split('.');
+    let result = {};
+    let current = result;
+
+    for(let i = 0; i < keys.length; i++){
+        let key = keys[i];
+
+        if(i === keys.length - 1){
+            current[key] = finalValue;
+        } else {
+            current[key] = {};
+            current = current[key]; // 🔥 move deeper
+        }
+    }
+
+    return result;
+}
+
+// Test
+const output = stringToObject("a.b.c", "someValue");
+console.log(output);
+// Output: {a: {b: {c: "someValue"}}}
+```
+
+##### Cleaner Short Version
+```javascript
+const stringToObject = (str, value) =>
+  str.split('.').reduceRight((acc, key) => ({ [key]: acc }), value);
+
+console.log(stringToObject("a.b.c", "someValue"));
+```
+### 38.
