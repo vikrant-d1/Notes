@@ -11,20 +11,6 @@
 In Next.js 15, all request-time APIs now return Promises instead of values. This is the most critical change to understand:
 
 ```tsx
-// ❌ Next.js 14 (OLD — will show warnings, removed in v16)
-import { cookies, headers, draftMode } from 'next/headers';
-
-const cookieStore = cookies();
-const token = cookieStore.get('token');
-
-const headersList = headers();
-const referer = headersList.get('referer');
-
-// ❌ OLD: params were synchronous
-export default function Page({ params }) {
-  const { slug } = params;
-  return <h1>{slug}</h1>;
-}
 
 // ✅ Next.js 15 (NEW — all async)
 import { cookies, headers, draftMode } from 'next/headers';
@@ -72,9 +58,7 @@ npx @next/codemod@canary next-async-request-api .
 Next.js 15 flips caching from "cached by default" to "uncached by default":
 
 ```tsx
-// ❌ Next.js 14: fetch was cached by default
-const data = await fetch('https://api.example.com/data');
-// This was equivalent to: { cache: 'force-cache' }
+
 
 // ✅ Next.js 15: fetch is NOT cached by default
 const data = await fetch('https://api.example.com/data');
@@ -322,11 +306,6 @@ export async function updateUser(formData: FormData) {
   // action logic
 }
 
-// ❌ NOT USED — automatically removed from client bundle (dead code elimination)
-export async function unusedAction() {
-  // this won't be exposed
-}
-```
 
 **Key improvements:**
 - Unused Server Actions are eliminated from the client bundle
