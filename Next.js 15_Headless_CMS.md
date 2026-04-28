@@ -836,18 +836,1284 @@ jobs:
 
 ---
 
-## 11. Quick Reference
+---
 
-| Category | Tools |
-|----------|-------|
-| Styling | Tailwind CSS, CSS Modules, styled-components |
-| State | React Context, Zustand, Jotai |
-| Data Fetching | SWR, TanStack Query (client-side) |
-| Testing | Jest, React Testing Library, Playwright |
-| CMS SDKs | contentstack, contentful, @strapi/sdk |
-| Monitoring | Sentry, Vercel Analytics, OpenTelemetry |
-| CI/CD | GitHub Actions, Vercel, Netlify |
+## SECTION A: Architecture & System Design (Most Important for Senior Roles)
 
 ---
 
-*Focus on explaining the "why" behind your decisions. For 5.5+ years experience, interviewers want architectural reasoning and trade-off analysis, not just syntax knowledge. Good luck!*
+### Q1: How would you architect a multi-brand, multi-locale website using Next.js and a headless CMS?
+
+**A:** I'd use a single Next.js codebase with dynamic routing based on brand and locale. In the CMS, each brand gets its own environment or stack, with shared global fields for common content. Locales are handled at the entry level with fallback chains. The App Router's route groups can separate brand logic, while a shared component library with brand-specific theming (CSS variables or Tailwind config per brand) keeps the UI consistent. For routing, I'd use middleware to detect locale from headers or cookies and rewrite to the correct path. Builds are triggered per-brand via webhooks, and ISR keeps content fresh without full rebuilds.
+
+```
+// Folder structure:
+app/
+  (brand-a)/
+    [locale]/
+      page.tsx
+      blog/[slug]/page.tsx
+  (brand-b)/
+    [locale]/
+      page.tsx
+
+// middleware.ts — detect locale + brand
+export function middleware(request) {
+  const brand = request.headers.get('x-brand') || detectBrandFromHost(request);
+  const locale = request.cookies.get('locale')?.value
+    || request.headers.get('accept-language')?.split(',')[0]
+    || 'en';
+  return NextResponse.rewrite(
+    new URL(`/${brand}/${locale}${request.nextUrl.pathname}`, request.url)
+  );
+}
+```
+
+---
+
+### Q2: How do you handle content previews for editors?
+
+**A:** I set up Next.js Draft Mode (or Preview Mode in Pages Router). The CMS sends a preview request to an API route with a secret token, which enables draft mode via a cookie. In data-fetching functions, I check the preview flag and switch to the CMS preview/management API to fetch draft content. For live preview, I integrate Contentstack's Live Preview SDK, which uses postMessage to update content in real-time as editors type. Preview environments on Vercel (per-PR deployments) give editors a dedicated URL.
+
+```tsx
+// app/api/preview/route.ts
+import { draftMode } from 'next/headers';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  if (searchParams.get('secret') !== process.env.PREVIEW_SECRET) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+  const draft = await draftMode(); // ← Next.js 15: must await
+  draft.enable();
+  redirect(`/blog/${searchParams.get('slug')}`);
+}
+```
+
+---
+
+### Q3: You're building an e-commerce product listing page. Some data is static (product name, description from CMS) and some is dynamic (price, stock, personalized recommendations). How would you architect this in Next.js 15?
+
+**A:** This is a perfect use case for Partial Prerendering (PPR). I'd enable `experimental_ppr = true` on the route. The static CMS content (product title, description, images) renders into the prebuilt HTML shell. Dynamic sections (live pricing, stock status, user recommendations) are wrapped in `<Suspense>` boundaries with skeleton fallbacks. At request time, the shell is served instantly from CDN while dynamic parts stream in parallel. For the CMS data, I'd use `fetch` with `next: { tags: ['product'] }` for tag-based revalidation via webhook. The dynamic pricing comes from a separate microservice with `cache: 'no-store'`.
+
+```tsx
+import { Suspense } from 'react';
+
+export const experimental_ppr = true;
+
+export default async function ProductPage({ params }) {
+  const { slug } = await params;
+  const product = await fetchFromCMS(slug); // cached, revalidated via tags
+
+  return (
+    <div>
+      {/* Static shell — served from CDN instantly */}
+      <ProductHeader title={product.title} image={product.hero_image} />
+      <ProductDescription content={product.body} />
+
+      {/* Dynamic — streamed at request time */}
+      <Suspense fallback={<PriceSkeleton />}>
+        <LivePrice productId={product.uid} />
+      </Suspense>
+
+      <Suspense fallback={<RecommendationsSkeleton />}>
+        <PersonalizedRecommendations category={product.category} />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+---
+
+### Q4: How do you decide between Server Components and Client Components? Walk me through your decision process.
+
+**A:** My default is Server Components — they ship zero JS to the client, can directly call APIs, and are better for SEO. I only add `'use client'` when I need one of three things: (1) React hooks like `useState` or `useEffect`, (2) event handlers like `onClick` or `onChange`, or (3) browser-only APIs like `window` or `localStorage`.
+
+The key principle is to push the `'use client'` boundary as deep as possible. For example, I wouldn't make an entire `ProductPage` a client component just because it has a "Add to Cart" button. Instead, only the `AddToCartButton` component becomes a client component, while the rest stays as a Server Component.
+
+```tsx
+// ✅ Good — minimal client boundary
+// app/product/page.tsx (Server Component)
+export default async function ProductPage({ params }) {
+  const { slug } = await params;
+  const product = await cms.getEntry('product', slug);
+
+  return (
+    <div>
+      <h1>{product.title}</h1>         {/* Server - no JS */}
+      <p>{product.description}</p>      {/* Server - no JS */}
+      <Image src={product.image} ... /> {/* Server - no JS */}
+      <AddToCartButton id={product.uid} price={product.price} />
+      {/* ↑ Only this ships JS to client */}
+    </div>
+  );
+}
+
+// components/AddToCartButton.tsx (Client Component)
+'use client';
+import { useState } from 'react';
+
+export function AddToCartButton({ id, price }) {
+  const [added, setAdded] = useState(false);
+  return (
+    <button onClick={() => { addToCart(id); setAdded(true); }}>
+      {added ? 'Added ✓' : `Add to Cart — ₹${price}`}
+    </button>
+  );
+}
+```
+
+---
+
+### Q5: How would you implement a page builder system where content editors can compose pages from reusable blocks in the CMS?
+
+**A:** I'd use Contentstack's Modular Blocks feature. In the CMS, I create a "Page" content type with a modular block field that allows editors to pick from blocks like Hero, Feature Grid, CTA, Testimonials, FAQ, etc. On the frontend, I maintain a component registry that maps each block's `_content_type_uid` to a React component. When the page renders, I iterate through the blocks array and dynamically render the corresponding components.
+
+```tsx
+// lib/block-registry.ts
+import dynamic from 'next/dynamic';
+
+const blockRegistry: Record<string, React.ComponentType<any>> = {
+  hero_banner: dynamic(() => import('@/components/blocks/HeroBanner')),
+  feature_grid: dynamic(() => import('@/components/blocks/FeatureGrid')),
+  cta_section: dynamic(() => import('@/components/blocks/CTASection')),
+  testimonial_carousel: dynamic(() => import('@/components/blocks/Testimonials')),
+  faq_accordion: dynamic(() => import('@/components/blocks/FAQ')),
+  rich_text_block: dynamic(() => import('@/components/blocks/RichText')),
+};
+
+// app/[...slug]/page.tsx
+export default async function DynamicPage({ params }) {
+  const { slug } = await params;
+  const page = await cms.getEntry('page', slug.join('/'));
+
+  return (
+    <main>
+      {page.modular_blocks.map((block, index) => {
+        const Component = blockRegistry[block._content_type_uid];
+        if (!Component) {
+          console.warn(`Unknown block type: ${block._content_type_uid}`);
+          return null;
+        }
+        return <Component key={`${block._content_type_uid}-${index}`} {...block} />;
+      })}
+    </main>
+  );
+}
+```
+
+This pattern is highly scalable — new block types only require creating the CMS content type and adding a new component. No routing changes needed.
+
+---
+
+### Q6: How do you handle error boundaries and error states in Next.js 15 App Router?
+
+**A:** Next.js App Router has file-based error handling. I create `error.tsx` files at different route levels for granular error catching. The key points: `error.tsx` must be a Client Component (`'use client'`), it receives `error` and `reset` props, and it catches errors from its child route segments. For global errors (including the root layout), I use `global-error.tsx`. For "not found" cases, I use `not-found.tsx` with the `notFound()` function.
+
+```tsx
+// app/blog/error.tsx — catches errors in all /blog/* routes
+'use client';
+
+export default function BlogError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    // Log to error monitoring service (Sentry, etc.)
+    captureException(error);
+  }, [error]);
+
+  return (
+    <div role="alert">
+      <h2>Something went wrong loading this article</h2>
+      <p>Our team has been notified. Please try again.</p>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  );
+}
+
+// app/blog/[slug]/page.tsx
+import { notFound } from 'next/navigation';
+
+export default async function BlogPost({ params }) {
+  const { slug } = await params;
+  const post = await cms.getEntry('blog_post', slug);
+  if (!post) notFound(); // → triggers not-found.tsx
+  return <Article post={post} />;
+}
+```
+
+---
+
+## SECTION B: Headless CMS Deep Dive
+
+---
+
+### Q7: Explain Contentstack's content model hierarchy and how you would design models for a corporate website.
+
+**A:** Contentstack organizes content into Stacks → Content Types → Entries. A Stack is a workspace (think project). Content Types are schemas (like database tables). Entries are instances. Additionally, Global Fields are reusable field groups shared across types, and Modular Blocks allow flexible composition.
+
+For a corporate website, I'd design:
+
+- **Global Fields:** SEO fields (title, meta description, OG image), CTA fields (text, URL, style)
+- **Content Types:**
+  - `Page` — with modular blocks for flexible composition
+  - `Blog Post` — title, slug, author (reference), categories (reference), body (rich text), featured image
+  - `Author` — name, bio, photo, social links
+  - `Category` — name, slug, description
+  - `Navigation` — singleton type with nested menu items
+  - `Site Settings` — singleton with logo, footer content, social links
+
+Key decisions: I keep content types granular and content-focused (not page-layout-focused). Authors and Categories are separate types referenced by Blog Posts, enabling reuse and independent updates. The Page type uses modular blocks so editors can compose landing pages without developer involvement.
+
+---
+
+### Q8: How do you handle content localization with Contentstack and Next.js?
+
+**A:** Contentstack supports entry-level localization with a fallback chain. I set up locales in the CMS (e.g., en-us → hi-in → de-de), configure fields as localizable or non-localizable, and build the frontend to handle locale routing.
+
+```tsx
+// lib/contentstack.ts
+export async function getLocalizedEntry(
+  contentType: string,
+  slug: string,
+  locale: string
+) {
+  return Stack.ContentType(contentType)
+    .Query()
+    .where('url', `/${slug}`)
+    .language(locale)       // Fetch localized version
+    .includeFallback()      // Fall back to parent locale if field isn't translated
+    .includeReference(['author'])
+    .toJSON()
+    .findOne();
+}
+
+// app/[locale]/blog/[slug]/page.tsx
+export default async function BlogPost({ params }) {
+  const { locale, slug } = await params;
+  const post = await getLocalizedEntry('blog_post', slug, locale);
+  return <Article post={post} />;
+}
+
+// middleware.ts — locale detection
+import { match } from '@formatjs/intl-localematcher';
+import Negotiator from 'negotiator';
+
+const locales = ['en-us', 'hi-in', 'de-de'];
+const defaultLocale = 'en-us';
+
+export function middleware(request) {
+  const negotiator = new Negotiator({
+    headers: { 'accept-language': request.headers.get('accept-language') || '' }
+  });
+  const preferred = negotiator.languages();
+  const locale = match(preferred, locales, defaultLocale);
+
+  if (!locales.some(l => request.nextUrl.pathname.startsWith(`/${l}`))) {
+    return NextResponse.redirect(
+      new URL(`/${locale}${request.nextUrl.pathname}`, request.url)
+    );
+  }
+}
+```
+
+**Important Contentstack caveat:** Localizing an entry in Contentstack creates an independent copy with its own versioning and publishing queue. So updating the master entry doesn't automatically update localized entries — I handle this by setting up webhook notifications when master content changes so the localization team knows what needs updating.
+
+---
+
+### Q9: Compare Contentstack's Content Delivery API (CDA) vs Content Management API (CMA). When do you use each?
+
+**A:**
+
+| | Content Delivery API (CDA) | Content Management API (CMA) |
+|---|---|---|
+| **Access** | Read-only | Full CRUD |
+| **Caching** | CDN-cached, fast | Not cached |
+| **Token** | Delivery Token | Management Token |
+| **Use case** | Frontend apps, production | Admin tools, content migration, preview |
+| **Rate limits** | Higher (designed for scale) | Lower (designed for admin ops) |
+
+I use CDA for all production frontend data fetching — it's fast, CDN-cached, and read-only (more secure). I use CMA only for: (1) preview/draft mode (fetching unpublished content), (2) content migration scripts, (3) admin dashboards that create/update content programmatically, and (4) webhook processing where I need to validate content.
+
+---
+
+### Q10: How would you migrate content from WordPress to Contentstack?
+
+**A:** I'd approach it in phases:
+
+1. **Content Audit:** Export WordPress content via WP REST API or WP-CLI. Analyze content types, taxonomies, custom fields, and media.
+2. **Model Design:** Design Contentstack content types that map to WordPress entities — but don't replicate WordPress's structure blindly. Improve the model (e.g., replace WordPress categories/tags with a proper taxonomy structure).
+3. **Migration Script:** Write a Node.js script using Contentstack's CMA to:
+   - Upload media assets to Contentstack
+   - Create entries with proper references and localization
+   - Handle rate limiting (Contentstack has API rate limits)
+   - Map old WordPress slugs to new URLs for 301 redirects
+4. **Redirect Map:** Create a comprehensive 301 redirect map from old WordPress URLs to new URLs. Implement in Next.js middleware or Vercel config.
+5. **Validation:** Compare content counts, verify media integrity, test all localized entries.
+6. **SEO Monitoring:** Track rankings post-migration, verify canonical URLs, submit updated sitemap.
+
+---
+
+### Q11: How would you implement content versioning and scheduled publishing with Contentstack?
+
+**A:** Contentstack has built-in versioning — every save creates a version, and you can compare or revert. For scheduled publishing, I use Contentstack's Publishing Queue with future publish dates. On the frontend side:
+
+- **Version previews:** I build a version selector in the preview environment that uses CMA to fetch specific versions: `Stack.ContentType('blog_post').Entry('entry_uid').version(3).fetch()`
+- **Scheduled content:** I rely on ISR with short revalidation periods (60-120 seconds) so scheduled content appears shortly after the CMS publishes it. For instant updates, I use on-demand revalidation via webhook that fires when content is published.
+- **Rollback:** If bad content goes live, editors can revert in the CMS, which triggers a webhook → `revalidateTag()` → updated page within seconds.
+
+---
+
+## SECTION C: Performance Optimization (Practical Questions)
+
+---
+
+### Q12: A page with CMS content has poor LCP. How do you diagnose and fix it?
+
+**A:** First, I'd use Lighthouse and Chrome DevTools Performance tab to identify the LCP element. Common CMS-related causes: unoptimized hero images served from CMS (fix: use `next/image` with Contentstack's image delivery API for format/size optimization, add `priority`), SSR delay from slow CMS API calls (fix: switch to ISR or add caching layer), render-blocking CSS from CMS rich text styles (fix: inline critical CSS, defer the rest), or large JavaScript bundles from CMS SDK (fix: lazy-load SDK, use REST API directly for simple fetches). I'd also check if the CMS CDN is geographically close to users.
+
+---
+
+### Q13: Walk me through how you would optimize a Next.js application for Core Web Vitals.
+
+**A:**
+
+**LCP (target ≤ 2.5s):**
+- Mark hero images with `priority` prop on `next/image`
+- Preload critical fonts with `<link rel="preload">`
+- Use ISR/SSG over SSR where possible to reduce TTFB
+- Optimize CMS image delivery — use Contentstack's built-in image transformations (format, quality, resize via URL params)
+- Avoid client-side data fetching for above-the-fold content
+
+**CLS (target ≤ 0.1):**
+- Always set explicit `width` and `height` on `<Image />` or use `aspect-ratio` CSS
+- Reserve space for dynamic content (ads, embeds, CMS modular blocks)
+- Never inject content above existing content after load
+- Use CSS `contain: layout` for components with dynamic sizes
+
+**INP (target ≤ 200ms):**
+- Move heavy computation off the main thread (Web Workers)
+- Use `React.lazy()` and `next/dynamic` for code splitting
+- Use `useTransition` for non-urgent state updates
+- Keep event handlers lean — debounce expensive operations
+
+**Measurement:**
+- Vercel Analytics for real-user metrics
+- Lighthouse CI in the GitHub Actions pipeline
+- Custom Web Vitals reporting via `next/web-vitals`
+
+---
+
+### Q14: Your CMS-powered website has 10,000+ pages. Build times are taking 30+ minutes. How do you fix this?
+
+**A:** Several strategies:
+
+1. **Don't pre-build everything.** Use `fallback: 'blocking'` (Pages Router) or empty `generateStaticParams` with on-demand generation. Only pre-build the top 100-200 highest-traffic pages.
+
+2. **Use ISR instead of full SSG.** Pages generate on first visit and revalidate in the background. No need to build all 10K at once.
+
+3. **On-demand revalidation via webhooks.** Instead of time-based ISR (`revalidate: 60`), use webhook-triggered `revalidateTag()` so pages only rebuild when content actually changes.
+
+4. **Parallelize where possible.** Optimize `generateStaticParams` to fetch page lists efficiently (batch API calls, pagination).
+
+5. **Use Turbopack for development** and monitor Turbopack for production builds (beta in v15.5).
+
+```tsx
+// Only pre-build top pages, generate rest on-demand
+export async function generateStaticParams() {
+  // Only return top 200 pages by traffic
+  const topPages = await cms.getEntries('page', {
+    limit: 200,
+    order: '-analytics.pageviews',
+  });
+  return topPages.map(p => ({ slug: p.url.split('/').filter(Boolean) }));
+}
+// All other pages generate on first visit and are cached
+```
+
+---
+
+### Q15: How do you handle images from a headless CMS efficiently?
+
+**A:** I build a wrapper around `next/image` that automatically applies CMS image transformations:
+
+```tsx
+// components/CMSImage.tsx
+import Image from 'next/image';
+
+interface CMSImageProps {
+  asset: {
+    url: string;
+    title: string;
+    dimension?: { width: number; height: number };
+  };
+  width?: number;
+  height?: number;
+  priority?: boolean;
+  className?: string;
+}
+
+export function CMSImage({ asset, width, height, priority, className }: CMSImageProps) {
+  // Contentstack image transformation via URL params
+  const optimizedUrl = `${asset.url}?auto=webp&quality=80${
+    width ? `&width=${width}` : ''
+  }`;
+
+  return (
+    <Image
+      src={optimizedUrl}
+      alt={asset.title}
+      width={width || asset.dimension?.width || 800}
+      height={height || asset.dimension?.height || 600}
+      priority={priority}
+      className={className}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+    />
+  );
+}
+
+// next.config.ts — allow CMS image domain
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.contentstack.io' },
+    ],
+  },
+};
+```
+
+Key optimizations: Contentstack's image delivery API supports format conversion (WebP/AVIF), quality adjustment, and resizing via URL parameters. Combined with `next/image`'s lazy loading and responsive `sizes`, this delivers optimal images across all viewports.
+
+---
+
+## SECTION D: Next.js 15 Specific Questions
+
+---
+
+### Q16: What are the major breaking changes in Next.js 15? Why were they made?
+
+**A:** Two critical breaking changes:
+
+1. **Async Request APIs:** `cookies()`, `headers()`, `draftMode()`, `params`, and `searchParams` now return Promises. **Why:** This enables Partial Prerendering. By making these APIs async, Next.js can prerender the static parts of a page at build time and only wait for request-specific data at runtime. If these were synchronous, the entire component tree would have to wait for the request.
+
+2. **Caching defaults flipped:** `fetch()` and GET Route Handlers are no longer cached by default. **Why:** The previous "cached by default" confused many developers — data would appear stale and people didn't understand why. The new default (uncached) is more predictable. You explicitly opt into caching, which means you understand and manage your caching strategy.
+
+---
+
+### Q17: How would you migrate a Next.js 14 application to Next.js 15?
+
+**A:** Step-by-step:
+
+1. **Run the codemod:** `npx @next/codemod@canary next-async-request-api .` — automatically converts synchronous API calls to async.
+2. **Fix codemod errors:** Search for `@next-codemod-error` comments where the codemod couldn't auto-migrate (usually custom utility functions).
+3. **Audit fetch caching:** Since fetch is now uncached by default, find all `fetch()` calls that relied on implicit caching. Add `cache: 'force-cache'` or `next: { revalidate: N }` where you want caching.
+4. **Update React hooks:** Replace `useFormState` with `useActionState` (React 19).
+5. **Test Client Router Cache:** Navigation between pages may feel slower since pages aren't cached on client by default. Add `staleTimes` config if needed.
+6. **Update config names:** `experimental.bundlePagesExternals` → `bundlePagesRouterDependencies`, `experimental.serverComponentsExternalPackages` → `serverExternalPackages`.
+7. **Thorough testing:** The caching change is the sneaky one — pages that were fast before might now make fresh API calls on every visit.
+
+---
+
+### Q18: Explain how `unstable_after` works and give a real-world use case.
+
+**A:** `unstable_after` lets you schedule work that runs after the response has been sent to the user. The user doesn't wait for this work to complete, so it doesn't affect page load time.
+
+Real-world use cases:
+- **Analytics logging:** Track page views without adding latency
+- **Audit trails:** Log who accessed what content
+- **Cache warming:** Pre-fetch related content after serving a page
+- **CMS sync:** Update a search index after content renders
+
+```tsx
+import { unstable_after as after } from 'next/server';
+
+export default async function ProductPage({ params }) {
+  const { slug } = await params;
+  const product = await fetchProduct(slug);
+
+  // Schedule post-response work
+  after(async () => {
+    await analytics.trackPageView({ page: `/product/${slug}`, product: product.uid });
+    await searchIndex.updateViewCount(product.uid);
+    // Pre-warm related product cache
+    await Promise.all(
+      product.related_ids.map(id => fetchProduct(id))
+    );
+  });
+
+  return <ProductDetail product={product} />;
+}
+```
+
+---
+
+### Q19: What is the `next/form` component and why was it introduced?
+
+**A:** `next/form` is a new `<Form>` component that enhances native HTML forms with client-side navigation. When a form is submitted, it navigates to the target URL using Next.js client-side routing instead of a full page reload. It also prefetches the target route's shared layout and loading state.
+
+The main use case is search forms. Previously, submitting a search form would cause a full page reload to `/search?q=term`. Now, with `next/form`, it's a smooth SPA-like transition.
+
+```tsx
+import Form from 'next/form';
+
+export function SearchBar() {
+  return (
+    <Form action="/search" className="flex gap-2">
+      <input name="q" placeholder="Search articles..." />
+      <button type="submit">Search</button>
+    </Form>
+  );
+  // Submitting navigates to /search?q=... via client-side routing
+  // No full page reload, instant transition
+}
+```
+
+---
+
+### Q20: How do React 19 Server Actions work in Next.js 15? Give a practical example.
+
+**A:** Server Actions are async functions that run on the server, defined with `'use server'` directive. In Next.js 15, they have improved security — unused actions are dead-code eliminated, and action IDs are non-deterministic.
+
+```tsx
+// app/actions.ts
+'use server';
+import { revalidateTag } from 'next/cache';
+
+export async function subscribeToNewsletter(prevState: any, formData: FormData) {
+  const email = formData.get('email') as string;
+
+  if (!email || !email.includes('@')) {
+    return { error: 'Please enter a valid email', success: false };
+  }
+
+  try {
+    await db.subscribers.create({ email });
+    revalidateTag('subscriber-count');
+    return { error: null, success: true };
+  } catch (e) {
+    return { error: 'Already subscribed or server error', success: false };
+  }
+}
+
+// components/NewsletterForm.tsx
+'use client';
+import { useActionState } from 'react'; // React 19
+import { subscribeToNewsletter } from '@/app/actions';
+
+export function NewsletterForm() {
+  const [state, formAction, isPending] = useActionState(
+    subscribeToNewsletter,
+    { error: null, success: false }
+  );
+
+  if (state.success) return <p>Thanks for subscribing!</p>;
+
+  return (
+    <form action={formAction}>
+      <input name="email" type="email" placeholder="you@example.com" required />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Subscribing...' : 'Subscribe'}
+      </button>
+      {state.error && <p className="text-red-500">{state.error}</p>}
+    </form>
+  );
+}
+```
+
+Key difference from v14: `useFormState` is deprecated → use `useActionState`. The third return value `isPending` is new and eliminates the need for `useFormStatus` in many cases.
+
+---
+
+## SECTION E: Practical Coding & Problem Solving
+
+---
+
+### Q21: Write a reusable data fetching utility for Contentstack that works with Next.js 15 caching.
+
+```tsx
+// lib/cms.ts
+import Contentstack from 'contentstack';
+
+const Stack = Contentstack.Stack({
+  api_key: process.env.CS_API_KEY!,
+  delivery_token: process.env.CS_DELIVERY_TOKEN!,
+  environment: process.env.CS_ENVIRONMENT!,
+});
+
+type FetchOptions = {
+  preview?: boolean;
+  locale?: string;
+  revalidate?: number | false;
+  tags?: string[];
+  includeRefs?: string[];
+};
+
+export async function fetchEntries<T>(
+  contentType: string,
+  options: FetchOptions = {}
+): Promise<T[]> {
+  const { locale = 'en-us', includeRefs = [], revalidate = 60 } = options;
+
+  // Build cache-aware fetch
+  const cacheConfig: RequestInit['next'] = {};
+  if (revalidate === false) {
+    // No caching
+  } else {
+    cacheConfig.revalidate = revalidate;
+  }
+  if (options.tags?.length) {
+    cacheConfig.tags = options.tags;
+  }
+
+  const query = Stack.ContentType(contentType).Query();
+  query.language(locale);
+  if (includeRefs.length) query.includeReference(includeRefs);
+
+  const result = await query.toJSON().find();
+  return result[0] as T[];
+}
+
+export async function fetchEntry<T>(
+  contentType: string,
+  slug: string,
+  options: FetchOptions = {}
+): Promise<T | null> {
+  try {
+    const query = Stack.ContentType(contentType).Query();
+    query.where('url', `/${slug}`);
+    query.language(options.locale || 'en-us');
+    if (options.includeRefs?.length) query.includeReference(options.includeRefs);
+
+    const result = await query.toJSON().findOne();
+    return result as T;
+  } catch {
+    return null;
+  }
+}
+```
+
+---
+
+### Q22: Implement a custom rich text renderer for Contentstack JSON RTE in React.
+
+```tsx
+// components/RichTextRenderer.tsx
+import Image from 'next/image';
+import Link from 'next/link';
+
+type Node = {
+  type: string;
+  children?: Node[];
+  text?: string;
+  attrs?: Record<string, any>;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  code?: boolean;
+};
+
+const nodeRenderers: Record<string, (node: Node, children: React.ReactNode) => React.ReactNode> = {
+  'doc': (_, children) => <>{children}</>,
+  'p': (_, children) => <p className="mb-4 leading-relaxed">{children}</p>,
+  'h1': (_, children) => <h1 className="text-3xl font-bold mt-8 mb-4">{children}</h1>,
+  'h2': (_, children) => <h2 className="text-2xl font-bold mt-8 mb-3">{children}</h2>,
+  'h3': (_, children) => <h3 className="text-xl font-semibold mt-6 mb-2">{children}</h3>,
+  'ul': (_, children) => <ul className="list-disc pl-6 mb-4">{children}</ul>,
+  'ol': (_, children) => <ol className="list-decimal pl-6 mb-4">{children}</ol>,
+  'li': (_, children) => <li className="mb-1">{children}</li>,
+  'blockquote': (_, children) => (
+    <blockquote className="border-l-4 border-gray-300 pl-4 italic my-4">{children}</blockquote>
+  ),
+  'code': (node, _) => (
+    <pre className="bg-gray-100 rounded p-4 overflow-x-auto mb-4">
+      <code>{node.children?.[0]?.text}</code>
+    </pre>
+  ),
+  'img': (node) => (
+    <Image
+      src={node.attrs?.src || ''}
+      alt={node.attrs?.alt || ''}
+      width={node.attrs?.width || 800}
+      height={node.attrs?.height || 400}
+      className="rounded-lg my-4"
+    />
+  ),
+  'a': (node, children) => {
+    const href = node.attrs?.href || '#';
+    const isExternal = href.startsWith('http');
+    return isExternal ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+        {children}
+      </a>
+    ) : (
+      <Link href={href} className="text-blue-600 underline">{children}</Link>
+    );
+  },
+};
+
+function renderMark(text: string, node: Node): React.ReactNode {
+  let result: React.ReactNode = text;
+  if (node.bold) result = <strong>{result}</strong>;
+  if (node.italic) result = <em>{result}</em>;
+  if (node.underline) result = <u>{result}</u>;
+  if (node.code) result = <code className="bg-gray-100 px-1 rounded">{result}</code>;
+  return result;
+}
+
+function renderNode(node: Node, index: number): React.ReactNode {
+  // Text node
+  if (node.text !== undefined) {
+    return <span key={index}>{renderMark(node.text, node)}</span>;
+  }
+
+  // Element node
+  const children = node.children?.map((child, i) => renderNode(child, i));
+  const renderer = nodeRenderers[node.type];
+  if (!renderer) {
+    console.warn(`Unknown node type: ${node.type}`);
+    return <>{children}</>;
+  }
+  return <span key={index}>{renderer(node, children)}</span>;
+}
+
+export function RichTextRenderer({ content }: { content: Node }) {
+  return <div className="prose max-w-none">{renderNode(content, 0)}</div>;
+}
+```
+
+---
+
+### Q23: Implement on-demand revalidation triggered by a Contentstack webhook.
+
+```tsx
+// app/api/revalidate/route.ts
+import { revalidateTag, revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
+import crypto from 'crypto';
+
+export async function POST(request: Request) {
+  const headersList = await headers();
+  const signature = headersList.get('x-contentstack-signature');
+  const body = await request.text();
+
+  // Verify webhook signature
+  const expectedSignature = crypto
+    .createHmac('sha256', process.env.CS_WEBHOOK_SECRET!)
+    .update(body)
+    .digest('hex');
+
+  if (signature !== expectedSignature) {
+    return Response.json({ error: 'Invalid signature' }, { status: 401 });
+  }
+
+  const payload = JSON.parse(body);
+  const contentType = payload.content_type?.uid;
+  const entrySlug = payload.entry?.url;
+
+  // Tag-based revalidation
+  if (contentType) {
+    revalidateTag(contentType); // e.g., 'blog_post'
+    console.log(`Revalidated tag: ${contentType}`);
+  }
+
+  // Path-based revalidation for specific pages
+  if (entrySlug) {
+    revalidatePath(entrySlug);
+    console.log(`Revalidated path: ${entrySlug}`);
+  }
+
+  // Always revalidate homepage and navigation (might reference this content)
+  revalidateTag('navigation');
+  revalidatePath('/');
+
+  return Response.json({
+    revalidated: true,
+    contentType,
+    slug: entrySlug,
+    timestamp: Date.now(),
+  });
+}
+```
+
+---
+
+### Q24: How do you implement a search feature for CMS content in Next.js?
+
+**A:** There are multiple approaches depending on scale:
+
+**Small sites (< 1000 entries):** Use Contentstack's built-in search API with debounced client-side queries.
+
+**Medium sites:** Build a search index at build time using a Server Action that queries the CMS and creates a lightweight JSON index. Use a client-side fuzzy search library like Fuse.js.
+
+**Large sites:** Integrate a dedicated search service like Algolia or MeiliSearch. Sync CMS content via webhooks.
+
+```tsx
+// Approach: Server-side search with Contentstack
+// app/search/page.tsx
+export default async function SearchPage({ searchParams }) {
+  const { q } = await searchParams;
+  if (!q) return <SearchForm />;
+
+  const results = await Stack.ContentType('blog_post')
+    .Query()
+    .search(q)
+    .toJSON()
+    .find();
+
+  return (
+    <div>
+      <SearchForm defaultValue={q} />
+      <p>{results[0].length} results for "{q}"</p>
+      {results[0].map(post => (
+        <SearchResultCard key={post.uid} post={post} />
+      ))}
+    </div>
+  );
+}
+
+// Using next/form for SPA-like search navigation
+import Form from 'next/form';
+
+function SearchForm({ defaultValue = '' }) {
+  return (
+    <Form action="/search">
+      <input name="q" defaultValue={defaultValue} placeholder="Search..." />
+      <button type="submit">Search</button>
+    </Form>
+  );
+}
+```
+
+---
+
+## SECTION F: SEO & Accessibility
+
+---
+
+### Q25: How do you generate a dynamic sitemap from CMS content in Next.js 15?
+
+```tsx
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+import { fetchEntries } from '@/lib/cms';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await fetchEntries<{ url: string; updated_at: string }>('blog_post', {
+    revalidate: 3600,
+    tags: ['sitemap'],
+  });
+
+  const pages = await fetchEntries<{ url: string; updated_at: string }>('page', {
+    revalidate: 3600,
+    tags: ['sitemap'],
+  });
+
+  const blogUrls = posts.map(post => ({
+    url: `https://example.com/blog${post.url}`,
+    lastModified: new Date(post.updated_at),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  const pageUrls = pages.map(page => ({
+    url: `https://example.com${page.url}`,
+    lastModified: new Date(page.updated_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  return [
+    { url: 'https://example.com', lastModified: new Date(), priority: 1.0 },
+    ...pageUrls,
+    ...blogUrls,
+  ];
+}
+```
+
+---
+
+### Q26: How do you implement structured data (JSON-LD) for SEO on CMS-driven pages?
+
+```tsx
+// components/StructuredData.tsx
+export function ArticleJsonLd({ post, url }: { post: BlogPost; url: string }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.meta_description,
+    image: post.featured_image?.url,
+    datePublished: post.publish_date,
+    dateModified: post.updated_at,
+    author: {
+      '@type': 'Person',
+      name: post.author?.name,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Your Company',
+      logo: { '@type': 'ImageObject', url: 'https://example.com/logo.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// Usage in page
+export default async function BlogPost({ params }) {
+  const { slug } = await params;
+  const post = await fetchEntry('blog_post', slug);
+  return (
+    <>
+      <ArticleJsonLd post={post} url={`https://example.com/blog/${slug}`} />
+      <Article post={post} />
+    </>
+  );
+}
+```
+
+---
+
+### Q27: What WCAG accessibility requirements do you follow? Give concrete examples.
+
+**A:** I follow WCAG 2.1 AA as the minimum standard. Concrete implementations:
+
+1. **Semantic HTML:** Use `<main>`, `<nav>`, `<article>`, `<section>` instead of `<div>` soup. Every page has exactly one `<h1>`.
+
+2. **Skip navigation link:**
+```tsx
+<a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-white focus:z-50">
+  Skip to main content
+</a>
+```
+
+3. **Image alt text from CMS:** Require alt text as a mandatory field in Contentstack's asset schema. Decorative images get `alt=""`.
+
+4. **Color contrast:** Maintain 4.5:1 ratio minimum. I use tools like axe DevTools during development.
+
+5. **Keyboard navigation:** All interactive elements reachable via Tab. Custom components (modals, dropdowns) implement proper focus trapping and Escape key handling.
+
+6. **ARIA for dynamic content:**
+```tsx
+<div role="alert" aria-live="polite">
+  {formError && <p>{formError}</p>}
+</div>
+```
+
+7. **Automated testing:** `jest-axe` in unit tests, Lighthouse accessibility audit in CI.
+
+---
+
+## SECTION G: CI/CD & Agile
+
+---
+
+### Q28: Describe the ideal CI/CD pipeline for a Next.js + headless CMS project.
+
+**A:**
+
+```
+Developer pushes code
+  → GitHub Actions triggers:
+    1. Lint (ESLint 9)
+    2. Type check (tsc --noEmit)
+    3. Unit tests (Jest + React Testing Library)
+    4. Build (next build)
+    5. E2E tests (Playwright) against preview deployment
+    6. Lighthouse CI (performance budget check)
+  → Vercel auto-deploys:
+    - PR → Preview deployment (editors can test with draft content)
+    - Main branch → Production deployment
+
+CMS content changes:
+  → Contentstack webhook fires
+  → /api/revalidate → revalidateTag('content-type')
+  → Affected pages regenerate within seconds
+```
+
+Key practices: Preview deployments for every PR let editors test content changes in context. Lighthouse CI enforces performance budgets (LCP < 2.5s, CLS < 0.1). E2E tests verify critical user flows against real CMS data.
+
+---
+
+### Q29: How do you participate in Agile/Scrum ceremonies as a senior frontend developer?
+
+**A:** As a senior developer, I go beyond just attending ceremonies:
+
+- **Sprint Planning:** I help break down stories into technical tasks, identify CMS content model changes that need to happen first, flag dependencies with the backend or design team, and estimate effort with consideration for testing and accessibility.
+- **Daily Standup:** Keep it focused — what I shipped, what's blocked. If a CMS API change is blocking frontend work, I escalate immediately.
+- **Sprint Retro:** I often propose process improvements — like adding Lighthouse CI to catch performance regressions, or setting up Storybook for better design-dev collaboration.
+- **Code Reviews:** I focus on architecture, reusability, and performance implications — not just syntax. I look for: proper caching strategy, correct Server vs Client component boundaries, accessible markup, and TypeScript type safety.
+- **Backlog Refinement:** I proactively flag technical debt, propose spikes for new patterns (like migrating to PPR), and help PMs understand the impact of content model changes.
+
+---
+
+## SECTION H: Behavioral & Situational
+
+---
+
+### Q30: Tell me about a time you optimized a frontend application's performance. What was the result?
+
+**A (STAR Framework):**
+
+**Situation:** On a previous project, our CMS-driven marketing site had an LCP of 4.8 seconds on mobile. The business was losing conversions — bounce rate was 45% on landing pages.
+
+**Task:** I was responsible for bringing LCP under 2.5 seconds without breaking the content editing workflow.
+
+**Action:**
+- Profiled with Chrome DevTools — found the hero image (served as full-size JPEG from CMS) was the LCP element at 2.4MB
+- Implemented `next/image` with CMS image transformations — auto-WebP, responsive sizes, explicit dimensions
+- Switched landing pages from SSR to ISR with 60-second revalidation — reduced TTFB from 800ms to 40ms
+- Code-split the testimonial carousel (only loaded below the fold) using `next/dynamic`
+- Preloaded the primary font with `<link rel="preload">`
+
+**Result:** LCP dropped from 4.8s to 1.7s. Bounce rate decreased from 45% to 28%. The approach became the team standard for all CMS-powered pages.
+
+---
+
+### Q31: How do you handle disagreements about technical decisions with your team?
+
+**A:** I approach technical disagreements as learning opportunities. Recently, a colleague wanted to make every component a Client Component "for simplicity," while I advocated for Server Components by default. Instead of insisting I was right, I:
+
+1. Built a small proof of concept showing both approaches
+2. Measured the bundle size difference (Server Components approach shipped 60% less JS)
+3. Presented the data in a team tech talk, showing the performance impact
+4. Compromised — we established clear guidelines for when to use each, documented in our ADR (Architecture Decision Records)
+
+The key is: use data over opinions, and always be willing to learn something new from the other perspective.
+
+---
+
+### Q32: How do you mentor junior developers on your team?
+
+**A:** I believe in structured mentoring:
+
+- **Code reviews as teaching moments:** Instead of just fixing issues, I explain the *why* — "This should be a Server Component because it doesn't use hooks, and keeping it server-side reduces the client bundle."
+- **Pair programming sessions:** Especially for complex features like CMS integration or implementing ISR.
+- **Internal documentation:** I maintain ADRs and a team wiki with patterns for common tasks (how to add a new CMS block, how to set up preview mode, caching strategy guidelines).
+- **Encourage ownership:** I assign meaningful features to juniors and guide them through the architecture decisions rather than handing them only bug fixes.
+
+---
+
+## SECTION I: Advanced & Differentiator Questions
+
+---
+
+### Q33: How would you implement A/B testing with a headless CMS and Next.js?
+
+**A:** I'd use Next.js middleware for traffic splitting and the CMS for variant content:
+
+```tsx
+// middleware.ts
+export function middleware(request) {
+  const bucket = request.cookies.get('ab-bucket')?.value
+    || (Math.random() < 0.5 ? 'A' : 'B');
+
+  const response = NextResponse.next();
+  if (!request.cookies.get('ab-bucket')) {
+    response.cookies.set('ab-bucket', bucket, { maxAge: 60 * 60 * 24 * 30 });
+  }
+  response.headers.set('x-ab-bucket', bucket);
+  return response;
+}
+
+// In page component
+import { headers } from 'next/headers';
+
+export default async function LandingPage() {
+  const headersList = await headers();
+  const bucket = headersList.get('x-ab-bucket') || 'A';
+
+  // Fetch variant-specific content from CMS
+  const page = await cms.getEntry('landing_page', 'home', {
+    variant: bucket, // CMS stores variant content
+  });
+
+  return <PageRenderer content={page} />;
+}
+```
+
+Important: With PPR, the static shell can be shared across variants while only the dynamic variant-specific sections differ.
+
+---
+
+### Q34: How do you handle content personalization in a CMS-driven Next.js app?
+
+**A:** Personalization conflicts with static caching, so I architect it in layers:
+
+1. **Static shell:** CMS content that's the same for everyone (header, hero layout, footer) — served from CDN
+2. **Edge personalization:** Middleware reads cookies/headers to determine user segment and rewrites to variant pages or sets headers
+3. **Client-side personalization:** Below-the-fold sections fetch personalized content via client components after the static shell loads
+4. **CMS-powered rules:** Content editors define personalization rules in the CMS (show block X to segment Y). The frontend evaluates these rules at render time.
+
+With PPR, this becomes elegant: the static shell is instant, and personalized sections stream in via Suspense boundaries.
+
+---
+
+### Q35: How would you implement a design system that integrates with CMS content?
+
+**A:** I'd build a token-based design system where tokens live in both the code and CMS:
+
+1. **Design tokens** (colors, spacing, typography) defined in Tailwind config and replicated as CMS Global Fields
+2. **Component library** in a shared package (monorepo with Turborepo), documented in Storybook
+3. **CMS block components** consume design tokens — editors pick from predefined styles (e.g., "primary" or "secondary" button style) rather than arbitrary values
+4. **Theme support:** CSS variables for brand-specific themes, switchable via CMS settings
+
+```tsx
+// CMS editor picks style variant → maps to design token
+const buttonStyles = {
+  primary: 'bg-brand-primary text-white hover:bg-brand-primary-dark',
+  secondary: 'bg-white text-brand-primary border border-brand-primary',
+  ghost: 'bg-transparent text-brand-primary hover:bg-gray-50',
+};
+
+function CTAButton({ style, text, url }: CMSButtonProps) {
+  return (
+    <Link href={url} className={`px-6 py-3 rounded-lg ${buttonStyles[style]}`}>
+      {text}
+    </Link>
+  );
+}
+```
+
+---
+
+### Q36: Explain how you'd handle a production incident where CMS content isn't updating on the live site.
+
+**A:** I'd follow a systematic debugging approach:
+
+1. **Check CMS publish status:** Is the entry actually published in Contentstack? (It could be stuck in workflow approval)
+2. **Check webhook delivery:** Contentstack's webhook log — was the webhook sent? Did it get a 200 response?
+3. **Check revalidation API:** Hit `/api/revalidate` manually with the content type tag and verify the response
+4. **Check cache headers:** Use `curl -I` on the page URL to check `Cache-Control`, `x-nextjs-cache` (HIT/MISS/STALE) headers
+5. **Check Vercel function logs:** Are there errors in the revalidation function? API token expired?
+6. **Emergency fix:** If ISR is stuck, deploy a no-op code change to force a full rebuild, which clears the cache
+
+Prevention: I set up monitoring on webhook delivery failures and revalidation API errors. I also add a "Cache-Bust" button in the CMS preview that editors can use to manually trigger revalidation.
+
+---
+
+### Q37: What's the difference between `revalidateTag` and `revalidatePath`? When do you use each?
+
+**A:**
+
+- **`revalidatePath('/blog/my-post')`** — invalidates the cache for one specific URL. Good when you know exactly which page was affected.
+- **`revalidateTag('blog_post')`** — invalidates all cached data tagged with 'blog_post'. This is broader — if you tagged your CMS fetch calls with `next: { tags: ['blog_post'] }`, all pages using blog posts will revalidate.
+
+I prefer `revalidateTag` for CMS webhooks because a single content change can affect multiple pages (the blog listing page, the individual post, the homepage featured posts, the sitemap). Tag-based revalidation catches all of them.
+
+```tsx
+// When CMS publishes a blog post, all these pages revalidate:
+// 1. /blog (listing page that fetches with tag: 'blog_post')
+// 2. /blog/[slug] (individual post)
+// 3. / (homepage that shows featured posts tagged 'blog_post')
+```
+
+---
+
+### Q38: How do you handle environment-specific configurations for CMS integration?
+
+```tsx
+// lib/config.ts
+const config = {
+  development: {
+    csApiKey: process.env.CS_API_KEY!,
+    csDeliveryToken: process.env.CS_PREVIEW_TOKEN!, // Use preview token in dev
+    csEnvironment: 'development',
+    previewMode: true,
+    revalidateDefault: 10, // Short for dev
+  },
+  staging: {
+    csApiKey: process.env.CS_API_KEY!,
+    csDeliveryToken: process.env.CS_STAGING_DELIVERY_TOKEN!,
+    csEnvironment: 'staging',
+    previewMode: false,
+    revalidateDefault: 30,
+  },
+  production: {
+    csApiKey: process.env.CS_API_KEY!,
+    csDeliveryToken: process.env.CS_PRODUCTION_DELIVERY_TOKEN!,
+    csEnvironment: 'production',
+    previewMode: false,
+    revalidateDefault: 60,
+  },
+};
+
+export const cmsConfig = config[process.env.NODE_ENV as keyof typeof config]
+  || config.development;
+```
+
+**Key points:**
+- Different delivery tokens per environment
+- Preview tokens only in development
+- Different revalidation intervals (shorter in dev for faster feedback)
+- Separate Contentstack environments (dev/staging/prod) so content editors can test in staging before publishing to production
+
+---
+
+### Q39: How would you handle SEO when CMS editors change a page's URL slug?
+
+**A:** This is critical — changing slugs without redirects kills SEO. My approach:
+
+1. **Store old slugs in CMS:** Add a "Previous URLs" field to content types that automatically captures the old slug when it changes
+2. **Implement redirect middleware:**
+```tsx
+// middleware.ts
+export async function middleware(request) {
+  const path = request.nextUrl.pathname;
+
+  // Check redirect map (cached, refreshed via webhook)
+  const redirect = await getRedirect(path);
+  if (redirect) {
+    return NextResponse.redirect(
+      new URL(redirect.destination, request.url),
+      { status: 301 } // Permanent redirect — preserves SEO
+    );
+  }
+  return NextResponse.next();
+}
+```
+3. **Submit updated sitemap** to Google Search Console after URL changes
+4. **Monitor 404s** via analytics to catch any missed redirects
+
+---
+
+### Q40: What questions would YOU ask the interviewer about this role?
+
+This shows initiative. Strong questions to ask:
+
+1. "What headless CMS are you currently using and are there plans to migrate or upgrade?"
+2. "How many locales/brands does the current site serve, and what's the content volume?"
+3. "What does the current deployment pipeline look like? Are you on Vercel, or self-hosting?"
+4. "How do content editors currently preview changes before publishing?"
+5. "What's the biggest frontend performance challenge you're facing right now?"
+6. "Are you using the Pages Router or App Router, and do you have plans to migrate?"
+7. "How large is the frontend team, and how do you handle code reviews and architectural decisions?"
+8. "What's the current tech debt situation, and is there dedicated time for addressing it?"
+
+---
+
+## Quick Revision Checklist (Night Before the Interview)
+
+- [ ] Can I explain SSR vs SSG vs ISR vs PPR with CMS examples?
+- [ ] Can I write `await params`, `await cookies()`, `await headers()` correctly (v15 syntax)?
+- [ ] Do I know why Next.js 15 changed caching defaults?
+- [ ] Can I explain Contentstack content types, entries, references, modular blocks?
+- [ ] Can I describe a CMS → webhook → revalidation pipeline?
+- [ ] Can I write a component registry for CMS modular blocks?
+- [ ] Can I explain LCP, INP, CLS and give specific fixes for each?
+- [ ] Do I have a STAR-format story about performance optimization?
+- [ ] Can I explain Server vs Client Components and when to use each?
+- [ ] Do I have thoughtful questions to ask the interviewer?
+
+---
