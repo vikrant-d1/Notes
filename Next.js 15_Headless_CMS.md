@@ -3398,4 +3398,165 @@ Is the page user-specific?
 > **Interview Answer:** "I'd use a hybrid approach: SSG for static content like blogs (fastest, zero cost), ISR for product and marketing pages (fresh enough, nearly as fast), SSR only for user-specific flows like checkout (must be real-time), and client-side rendering for dashboards (personal, real-time). This covers 99% of traffic with cached pages, keeping LCP under 2 seconds globally."
 ---
 
+# Real-Time Inventory Management in Next.js E-Commerce
+
+> **Context:** System design for a multinational e-commerce platform — 10M monthly users, 500K products, 15 countries, 99.99% availability, LCP < 2s globally.
+
+---
+
+## The Core Problem
+
+Product pages are cached via ISR, but stock levels change every few seconds. Rebuilding pages on every inventory change destroys the purpose of caching.
+
+**Solution:** Separate static content from dynamic content.
+
+---
+
+## Hybrid Architecture Overview
+
+```
+┌──────────────────────────────────────────────┐
+│           Product Page (ISR)                 │
+│                                              │
+│  STATIC LAYER (Contentstack — cached)        │
+│  → Title, description, images, specs         │
+│  → Reviews, ratings, SEO metadata            │
+│  → Revalidates every 2 hours via ISR         │
+│                                              │
+│  DYNAMIC LAYER (Inventory API — real-time)   │
+│  → Price (region-specific)                   │
+│  → Stock status (in-stock / low / out)       │
+│  → Delivery estimate, cart count             │
+│  → Fetched client-side on every page load    │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## Implementation Layers
+
+### Layer 1 — Static Product Content (Server Component + ISR)
+
+- The page itself is a **Server Component** fetching from Contentstack.
+- Uses `next: { revalidate: 7200 }` (2-hour ISR cache).
+- Also uses `tags: ['product']` for on-demand webhook revalidation.
+- Wraps dynamic sections in `<Suspense>` with skeleton fallbacks.
+
+**Key pattern:**
+```tsx
+// Static content renders instantly from CDN
+<h1>{product.title}</h1>
+<ProductImages images={product.images} />
+
+// Dynamic content loads separately
+<Suspense fallback={<InventorySkeleton />}>
+  <LiveInventory productId={product.uid} />
+</Suspense>
+```
+
+### Layer 2 — Real-Time Inventory (Client Component + SWR Polling)
+
+- Uses `useSWR` with `refreshInterval: 30000` (polls every 30s).
+- `revalidateOnFocus: true` — refreshes when user returns to tab.
+- `dedupingInterval: 10000` — prevents duplicate calls within 10s.
+- `errorRetryCount: 3` — retries on failure.
+
+**Stock display logic:**
+| Stock Level | Display |
+|---|---|
+| `> 10` | ✅ In Stock (green) |
+| `1–10` | ⚠️ Only X left — order soon! (orange) |
+| `0` | ❌ Out of Stock (red) |
+
+### Layer 3 — Live Price (Client Component — Region Aware)
+
+- SWR with `refreshInterval: 60000` (polls every 60s — price changes less often).
+- Handles sale price vs original price display.
+- Currency is region-specific.
+
+### Layer 4 — API Routes (Backend for Frontend)
+
+- Route: `/api/inventory/[productId]/route.ts`
+- Calls the internal inventory microservice.
+- Uses `cache: 'no-store'` — **never** caches inventory data server-side.
+- Sets response header: `Cache-Control: public, max-age=15, stale-while-revalidate=30` (browser caches 15s only).
+- **Graceful error handling:** If inventory API is down, returns a fallback message ("Contact store for availability") with status `200` so the UI doesn't break.
+
+---
+
+## Why Polling Over WebSocket?
+
+| Factor | WebSocket | SWR Polling (30s) |
+|---|---|---|
+| Complexity | High — connection mgmt, reconnection | Low — simple HTTP |
+| Server cost | Very high — open connections for millions | Low — stateless |
+| Scaling | Hard — sticky sessions, WS load balancers | Easy — any CDN works |
+| Accuracy needed | Millisecond precision | 30s delay is acceptable |
+| Infrastructure | Separate WS server needed | Uses existing APIs |
+| Offline handling | Complex reconnection logic | SWR retries automatically |
+
+**When WebSocket IS appropriate:** live auctions, sports scores, chat apps, collaborative editing.
+
+**For e-commerce inventory:** 30-second polling is sufficient. Nobody expects millisecond-accurate stock counts.
+
+---
+
+## Complete Data Flow
+
+```
+User visits /products/laptop-pro
+│
+├─ SERVER (instant from CDN cache):
+│  └─ ISR cached HTML with static content + skeleton placeholders
+│
+├─ CLIENT (after hydration):
+│  ├─ SWR → /api/inventory/laptop-pro → { stock: 5, delivery: "2-3 days" }
+│  │   └─ Polls every 30s
+│  └─ SWR → /api/pricing/laptop-pro → { price: 999, salePrice: 899 }
+│      └─ Polls every 60s
+│
+└─ USER SEES:
+   → Instant page load (static from CDN) — LCP < 1s
+   → Price & stock appear within 200–500ms
+   → Auto-refreshes without page reload
+```
+
+---
+
+## Bonus: PPR (Partial Prerendering — Next.js 15)
+
+With `experimental_ppr = true`, dynamic sections become **Server Components** streamed at request time instead of client-side fetches.
+
+**Advantages over client-side SWR approach:**
+- No client-side JavaScript for pricing/inventory.
+- No flash of loading state — streams directly into HTML.
+- Better for SEO — price is in the server-rendered HTML.
+- Still instant page load (static shell from CDN).
+
+**Pattern:**
+```tsx
+<Suspense fallback={<PriceSkeleton />}>
+  <ServerPrice productId={product.uid} />  {/* Server Component, no client JS */}
+</Suspense>
+```
+
+**Trade-off:** PPR gives fresh-on-every-request data but doesn't auto-refresh like SWR polling does while the user stays on the page. Best approach is to combine both — PPR for initial load, SWR for ongoing updates.
+
+---
+
+## Interview-Ready Summary
+
+> "For real-time inventory on cached product pages, I'd use a **hybrid architecture**. Static product content from Contentstack is served via ISR with 2-hour revalidation. Dynamic data like stock levels and pricing is fetched separately — either client-side with SWR polling every 30 seconds, or with PPR in Next.js 15 where dynamic sections stream from the server. I'd avoid WebSockets because 30-second polling is sufficient for inventory accuracy and dramatically simpler to scale for millions of users. The API routes include proper error handling so if the inventory service goes down, users see a graceful fallback instead of a broken page."
+
+---
+
+## Key Takeaways
+
+1. **Never mix volatile data with cached pages** — separate static from dynamic.
+2. **ISR for content, client-side fetch for real-time** — best of both worlds.
+3. **SWR > WebSocket for e-commerce** — simpler, cheaper, scales better.
+4. **Always build graceful fallbacks** — inventory APIs will go down.
+5. **PPR is the future** — eliminates client JS for dynamic data while keeping static shells fast.
+6. **Cache-Control headers matter** — `max-age=15` on inventory API responses prevents stale data without hammering the backend.
+
 
