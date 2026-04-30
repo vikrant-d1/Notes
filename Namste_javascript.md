@@ -79,6 +79,126 @@ Commands are executed in a **specific order**. JavaScript moves to the next line
 
 ---
 
+
+# How the JavaScript Engine Executes Code Behind the Scenes
+
+## 1. The Execution Context
+
+Everything in JavaScript happens within an **Execution Context**. It consists of two parts:
+
+- **Memory Component** — where variables and functions are stored (also known as the *Variable Environment*).
+- **Code Component** — where code is executed line-by-line (also known as the *Thread of Execution*).
+
+---
+
+## 2. The Two Phases of Execution
+
+Every execution context goes through two phases before any code actually runs:
+
+### Phase 1: Memory Creation Phase
+
+JavaScript scans through the entire code and allocates memory for all variables and functions:
+
+- **Variables** are stored with the value `undefined`.
+- **Functions** are stored with their entire function body.
+
+```js
+var n = 5;
+function double(num) {
+  return num * 2;
+}
+```
+
+After the memory phase:
+
+| Variable   | Value                          |
+| ---------- | ------------------------------ |
+| `n`        | `undefined`                    |
+| `double`   | `function double(num) { ... }` |
+
+### Phase 2: Code Execution Phase
+
+JavaScript runs through the code again, line-by-line:
+
+- Variables are updated with their actual assigned values.
+- Function calls trigger the creation of new execution contexts.
+
+After this phase, `n` is updated from `undefined` to `5`.
+
+---
+
+## 3. Function Invocation
+
+When a function is invoked, a **brand new execution context** is created specifically for that function. It follows the same two-phase process:
+
+1. **Memory allocation** — parameters and local variables are stored with `undefined`.
+2. **Code execution** — the function body runs line-by-line, updating values.
+
+Once the function hits a `return` statement:
+
+- The return value is sent back to the calling context.
+- The function's execution context is **deleted**.
+
+### Example Walkthrough
+
+```js
+var n = 5;
+
+function double(num) {
+  var result = num * 2;
+  return result;
+}
+
+var output = double(n);
+```
+
+**Step-by-step:**
+
+1. Global execution context is created.
+2. Memory phase: `n = undefined`, `double = fn`, `output = undefined`.
+3. Code phase: `n = 5`, then `double(n)` is invoked.
+4. A new execution context is created for `double`:
+   - Memory phase: `num = undefined`, `result = undefined`.
+   - Code phase: `num = 5`, `result = 10`, returns `10`.
+5. The function's execution context is deleted.
+6. `output` is updated to `10` in the global context.
+
+---
+
+## 4. The Call Stack
+
+To manage the creation and deletion of multiple execution contexts, JavaScript uses a **Call Stack**.
+
+### How it works:
+
+- The **Global Execution Context** sits at the bottom of the stack.
+- When a function is called, its execution context is **pushed** onto the stack.
+- Once the function finishes executing, its context is **popped** off the stack.
+- The stack maintains the order of execution, ensuring the engine knows exactly where to return control after a function completes.
+
+### Visual Representation
+
+```
+|                    |
+|  double() Context  |  ← pushed when double() is called, popped when it returns
+|                    |
+| ────────────────── |
+|                    |
+|   Global Context   |  ← always at the bottom
+|                    |
+└────────────────────┘
+```
+
+### Other Names for the Call Stack
+
+The call stack is also referred to as:
+
+- Execution Context Stack
+- Program Stack
+- Control Stack
+- Runtime Stack
+- Machine Stack
+
 ## 2. JavaScript Hoisting
 
 Hoisting is JavaScript's default behavior of moving declarations to the top of their scope before code executes. It lets you use variables and functions *before* the line where you actually declared them.
