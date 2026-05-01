@@ -1,20 +1,905 @@
-# React Hooks — `useContext` & `useReducer`
+# React Hooks 
 
 ---
 
-## Table of Contents
+# React Hooks — Senior Engineer Interview Guide (9+ Years)
 
-1. [useContext](#usecontext)
-   - [Definition](#definition)
-   - [How It Works](#how-it-works)
-   - [Code Examples](#usecontext-code-examples)
-2. [useReducer](#usereducer)
-   - [Definition](#definition-1)
-   - [How It Works](#how-it-works-1)
-   - [Code Examples](#usereducer-code-examples)
-3. [Combining useContext + useReducer](#combining-usecontext--usereducer)
+> Covers all React hooks **except** `useReducer`, `useContext`, and `useCallback`.
+> Includes definition, signature, deep internals, gotchas, and production-grade examples.
 
 ---
+
+## 1. useState
+
+### Definition
+
+`useState` is the fundamental state-management hook. It returns a stateful value and a setter function. On re-render, React preserves state identity as long as the component occupies the same position in the fiber tree.
+
+### Signature
+
+```ts
+const [state, setState] = useState<T>(initialValue: T | (() => T));
+```
+
+### Key Internals (Interview Depth)
+
+- State is stored on the **fiber node** in a linked-list of hooks (each call maps to a slot by call order — this is why hooks must not be called conditionally).
+- `setState` enqueues an update object; React batches these by default in React 18+ (automatic batching across promises, timeouts, and native event handlers).
+- If you pass the **same reference** (Object.is comparison), React bails out of the re-render.
+
+### Example — Lazy Initializer & Functional Update
+
+```tsx
+function SearchFilter() {
+  // Lazy initializer: runs ONLY on mount, not on every render
+  const [filters, setFilters] = useState(() => {
+    const saved = sessionStorage.getItem("filters");
+    return saved ? JSON.parse(saved) : { query: "", category: "all" };
+  });
+
+  const updateQuery = (query: string) => {
+    // Functional update — safe in concurrent mode, avoids stale closures
+    setFilters((prev) => ({ ...prev, query }));
+  };
+
+  return <input value={filters.query} onChange={(e) => updateQuery(e.target.value)} />;
+}
+```
+
+### Common Interview Gotchas
+
+- **Stale closure**: Using `state` directly inside `setTimeout`/`setInterval` captures the value at render time. Use the functional updater `setState(prev => ...)` instead.
+- **Object identity**: `setState({ ...obj })` always triggers re-render even if values are the same because a new reference is created.
+- **Batching pre-React 18**: In legacy React, state updates inside `setTimeout` or native event listeners were NOT batched.
+
+---
+
+## 2. useEffect
+
+### Definition
+
+`useEffect` synchronizes a component with an external system (API calls, subscriptions, DOM manipulation, timers). It runs **after paint** (deferred), making it non-blocking for the browser's rendering pipeline.
+
+### Signature
+
+```ts
+useEffect(setup: () => (void | (() => void)), dependencies?: any[]);
+```
+
+### Execution Model
+
+| Dependency Array      | Behavior                                        |
+|-----------------------|-------------------------------------------------|
+| Omitted               | Runs after **every** render                     |
+| `[]`                  | Runs once on mount; cleanup on unmount          |
+| `[a, b]`             | Runs when `a` or `b` change (Object.is check)  |
+
+### Example — Race Condition Handling with Cleanup
+
+```tsx
+function UserProfile({ userId }: { userId: string }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    let cancelled = false; // cleanup flag to prevent setting state on stale request
+    const controller = new AbortController();
+
+    async function fetchUser() {
+      try {
+        const res = await fetch(`/api/users/${userId}`, {
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        if (!cancelled) setUser(data);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error(err);
+      }
+    }
+
+    fetchUser();
+
+    return () => {
+      cancelled = true;
+      controller.abort(); // cancel in-flight request
+    };
+  }, [userId]);
+
+  return user ? <h1>{user.name}</h1> : <p>Loading…</p>;
+}
+```
+
+### Senior-Level Interview Points
+
+- **useEffect is NOT `componentDidMount`**: It fires after paint, not before. For layout-critical work, use `useLayoutEffect`.
+- **Strict Mode double-invocation**: In development, React 18 intentionally mounts → unmounts → remounts to surface missing cleanups. Your effect should be resilient to this.
+- **Object/array deps**: Putting an object literal in deps causes infinite loops because a new reference is created every render. Destructure primitives or memoize.
+- **Data fetching**: In production codebases, prefer a dedicated solution (React Query, SWR, or React's `use()` with Suspense) over raw `useEffect` for data fetching.
+
+---
+
+## 3. useLayoutEffect
+
+### Definition
+
+Identical API to `useEffect`, but fires **synchronously after DOM mutations and before the browser paints**. Use it when you need to read layout (dimensions, scroll positions) or make DOM changes that must be visible on the first frame (avoiding flicker).
+
+### Signature
+
+```ts
+useLayoutEffect(setup: () => (void | (() => void)), dependencies?: any[]);
+```
+
+### Example — Tooltip Positioning Without Flicker
+
+```tsx
+function Tooltip({ anchorRef, children }: Props) {
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  useLayoutEffect(() => {
+    if (!anchorRef.current || !tooltipRef.current) return;
+
+    const anchorRect = anchorRef.current.getBoundingClientRect();
+    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+
+    setCoords({
+      top: anchorRect.top - tooltipRect.height - 8,
+      left: anchorRect.left + (anchorRect.width - tooltipRect.width) / 2,
+    });
+  }, [anchorRef]);
+
+  return (
+    <div
+      ref={tooltipRef}
+      style={{ position: "fixed", top: coords.top, left: coords.left }}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+### When to Choose `useLayoutEffect` Over `useEffect`
+
+| Scenario                                      | Hook              |
+|-----------------------------------------------|-------------------|
+| Measuring DOM elements for positioning        | `useLayoutEffect` |
+| Preventing visual flicker on DOM mutation     | `useLayoutEffect` |
+| Data fetching, subscriptions, logging         | `useEffect`       |
+| Animating based on layout measurements        | `useLayoutEffect` |
+
+### Gotcha
+
+- `useLayoutEffect` blocks painting. Heavy computation here causes visible jank.
+- On SSR, `useLayoutEffect` fires a warning because there is no DOM. Use `useEffect` or a conditional wrapper for SSR-safe code.
+
+---
+
+## 4. useMemo
+
+### Definition
+
+`useMemo` caches the **result** of an expensive computation between re-renders. React recomputes the value only when one of its dependencies changes.
+
+### Signature
+
+```ts
+const memoizedValue = useMemo<T>(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+### Example — Expensive Filtering + Referential Stability
+
+```tsx
+function AnalyticsDashboard({ transactions, dateRange, threshold }: Props) {
+  // Expensive: filters and aggregates 100k+ rows
+  const summary = useMemo(() => {
+    const filtered = transactions.filter(
+      (t) => t.date >= dateRange.start && t.date <= dateRange.end
+    );
+
+    return {
+      total: filtered.reduce((sum, t) => sum + t.amount, 0),
+      count: filtered.length,
+      flagged: filtered.filter((t) => t.amount > threshold),
+    };
+  }, [transactions, dateRange.start, dateRange.end, threshold]);
+
+  // summary is referentially stable — safe to pass as a prop
+  // without triggering unnecessary child re-renders
+  return <SummaryCard data={summary} />;
+}
+```
+
+### Senior-Level Points
+
+- **useMemo is a performance hint, not a guarantee**: React may discard cached values under memory pressure (React docs explicitly state this). Your code must work correctly without it.
+- **Don't memoize everything**: Memoization has overhead (storing the previous value, comparing deps). For cheap computations, the overhead can exceed the savings.
+- **Referential stability**: The primary use case at senior level is keeping object/array references stable to prevent unnecessary re-renders in child components wrapped in `React.memo`.
+- **React Compiler (React 19+)**: The React Compiler (formerly React Forget) auto-memoizes, potentially making manual `useMemo` calls unnecessary in the future.
+
+---
+
+## 5. useRef
+
+### Definition
+
+`useRef` returns a mutable ref object (`{ current: T }`) that persists for the full lifetime of the component. Changing `.current` does **not** trigger a re-render. It serves two purposes: holding a reference to a DOM node and storing any mutable value that should survive re-renders without causing them.
+
+### Signature
+
+```ts
+const ref = useRef<T>(initialValue: T);
+```
+
+### Example 1 — Imperative DOM Access
+
+```tsx
+function AutoFocusInput() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  return <input ref={inputRef} placeholder="Focused on mount" />;
+}
+```
+
+### Example 2 — Storing Previous Value (Instance Variable Pattern)
+
+```tsx
+function PriceTracker({ price }: { price: number }) {
+  const prevPriceRef = useRef(price);
+
+  useEffect(() => {
+    prevPriceRef.current = price;
+  }); // intentionally no deps — runs after every render
+
+  const diff = price - prevPriceRef.current;
+
+  return (
+    <span>
+      ${price} {diff > 0 ? "▲" : diff < 0 ? "▼" : "—"}
+    </span>
+  );
+}
+```
+
+### Example 3 — Stable Callback Ref (for dynamic elements)
+
+```tsx
+function MeasuredList({ items }: { items: string[] }) {
+  const [heights, setHeights] = useState<Record<string, number>>({});
+
+  // Callback ref: called when element mounts/unmounts
+  const measureRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      setHeights((prev) => ({
+        ...prev,
+        [node.dataset.id!]: node.getBoundingClientRect().height,
+      }));
+    }
+  }, []);
+
+  return items.map((item) => (
+    <div key={item} ref={measureRef} data-id={item}>
+      {item}
+    </div>
+  ));
+}
+```
+
+### Senior-Level Points
+
+- **`useRef` vs `useState`**: Use `useRef` when you need a mutable container that doesn't trigger re-renders (timers, previous values, WebSocket instances, animation frame IDs).
+- **Ref as instance variable**: `useRef` is the functional component equivalent of `this.instanceVar` in class components.
+- **Callback refs**: For cases where you need to be notified when a ref attaches/detaches (dynamic lists, conditional rendering), use a callback ref instead of `useRef`.
+
+---
+
+## 6. useImperativeHandle
+
+### Definition
+
+`useImperativeHandle` customizes the instance value exposed to parent components when using `React.forwardRef`. It restricts the API surface of a ref, exposing only specific imperative methods instead of the entire DOM node.
+
+### Signature
+
+```ts
+useImperativeHandle(ref, createHandle, dependencies?);
+```
+
+### Example — Exposing a Controlled API from a Complex Component
+
+```tsx
+interface ModalHandle {
+  open: () => void;
+  close: () => void;
+  isOpen: () => boolean;
+}
+
+const Modal = forwardRef<ModalHandle, { children: ReactNode }>((props, ref) => {
+  const [visible, setVisible] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      open() {
+        setVisible(true);
+        dialogRef.current?.showModal();
+      },
+      close() {
+        dialogRef.current?.close();
+        setVisible(false);
+      },
+      isOpen: () => visible,
+    }),
+    [visible]
+  );
+
+  return (
+    <dialog ref={dialogRef}>
+      {props.children}
+      <button onClick={() => ref && "current" in ref && ref.current?.close()}>
+        Close
+      </button>
+    </dialog>
+  );
+});
+
+// Parent usage:
+function App() {
+  const modalRef = useRef<ModalHandle>(null);
+  return (
+    <>
+      <button onClick={() => modalRef.current?.open()}>Open</button>
+      <Modal ref={modalRef}>
+        <p>Modal content</p>
+      </Modal>
+    </>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Principle of least privilege**: Expose the minimum imperative API. Avoid leaking the raw DOM node.
+- **React 19 change**: `forwardRef` is no longer required. Refs can be passed as a regular prop, and `useImperativeHandle` works with the ref prop directly.
+- **Use sparingly**: Imperative handles are an escape hatch. Prefer declarative props/state whenever possible.
+
+---
+
+## 7. useTransition
+
+### Definition
+
+`useTransition` lets you mark a state update as **non-urgent** (a "transition"), allowing React to keep the UI responsive by interrupting the transition render if a more urgent update (like typing) arrives. Part of React 18's concurrent rendering model.
+
+### Signature
+
+```ts
+const [isPending, startTransition] = useTransition();
+```
+
+### Example — Keeping Input Responsive During Heavy Filtering
+
+```tsx
+function ProductSearch({ products }: { products: Product[] }) {
+  const [query, setQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value); // urgent: update input immediately
+
+    startTransition(() => {
+      // non-urgent: can be interrupted, won't block the input
+      const filtered = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(value.toLowerCase()) ||
+          p.tags.some((t) => t.includes(value))
+      );
+      setFilteredProducts(filtered);
+    });
+  };
+
+  return (
+    <div>
+      <input value={query} onChange={handleChange} />
+      {isPending && <Spinner />}
+      <ProductList products={filteredProducts} />
+    </div>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Not the same as debouncing**: Debounce delays execution. `startTransition` runs immediately but at a lower priority — React may interrupt and restart it.
+- **Works with Suspense**: Transitions keep showing the current UI (instead of a fallback) while the new content loads.
+- **`isPending`**: Use it to show a loading indicator without hiding the current content.
+- **Cannot wrap async code directly**: The callback passed to `startTransition` must be synchronous. The state update inside it is what gets marked as a transition.
+
+---
+
+## 8. useDeferredValue
+
+### Definition
+
+`useDeferredValue` accepts a value and returns a "deferred" copy of it that lags behind during urgent updates. It tells React: "it's okay if this value is stale for a moment while you handle more urgent work." It is the value-level counterpart to `useTransition`.
+
+### Signature
+
+```ts
+const deferredValue = useDeferredValue(value: T);
+```
+
+### Example — Deferred Search Results with Visual Feedback
+
+```tsx
+function SearchResults({ query }: { query: string }) {
+  const deferredQuery = useDeferredValue(query);
+  const isStale = query !== deferredQuery;
+
+  const results = useMemo(
+    () => heavySearchComputation(deferredQuery),
+    [deferredQuery]
+  );
+
+  return (
+    <div style={{ opacity: isStale ? 0.6 : 1, transition: "opacity 0.2s" }}>
+      {results.map((r) => (
+        <ResultCard key={r.id} data={r} />
+      ))}
+    </div>
+  );
+}
+```
+
+### `useTransition` vs `useDeferredValue`
+
+| Aspect               | `useTransition`                              | `useDeferredValue`                        |
+|-----------------------|----------------------------------------------|-------------------------------------------|
+| Controls              | The **state update** itself                  | A **derived value**                       |
+| You need              | Access to the `setState` call                | Just the value (can't control the setter) |
+| Use when              | You own the state update                     | You receive a prop that changes often     |
+
+---
+
+## 9. useId
+
+### Definition
+
+`useId` generates a unique, stable, SSR-safe identifier string. It guarantees that the same ID is produced on both server and client, avoiding hydration mismatches.
+
+### Signature
+
+```ts
+const id = useId();
+```
+
+### Example — Accessible Form with Matching Labels
+
+```tsx
+function FormField({ label, type = "text" }: { label: string; type?: string }) {
+  const id = useId();
+  const errorId = `${id}-error`;
+
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+
+  return (
+    <div>
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        aria-describedby={error ? errorId : undefined}
+        aria-invalid={!!error}
+      />
+      {error && (
+        <span id={errorId} role="alert">
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Not for list keys**: `useId` is for DOM id attributes, not for `key` props.
+- **SSR hydration safe**: Unlike `Math.random()` or incrementing counters, `useId` produces deterministic IDs that match between server and client.
+- **Multiple IDs**: Call `useId()` once and derive multiple related IDs by appending suffixes (e.g., `${id}-label`, `${id}-error`).
+
+---
+
+## 10. useSyncExternalStore
+
+### Definition
+
+`useSyncExternalStore` subscribes a component to an **external store** (anything outside React's state model — browser APIs, third-party state managers, global variables). It guarantees consistency even during concurrent rendering by forcing synchronous reads.
+
+### Signature
+
+```ts
+const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?);
+```
+
+### Example — Online Status Hook
+
+```tsx
+function useOnlineStatus(): boolean {
+  return useSyncExternalStore(
+    // subscribe: register listener, return unsubscribe
+    (callback) => {
+      window.addEventListener("online", callback);
+      window.addEventListener("offline", callback);
+      return () => {
+        window.removeEventListener("online", callback);
+        window.removeEventListener("offline", callback);
+      };
+    },
+    // getSnapshot: returns current value (must return same ref if unchanged)
+    () => navigator.onLine,
+    // getServerSnapshot: SSR fallback
+    () => true
+  );
+}
+
+function StatusBanner() {
+  const isOnline = useOnlineStatus();
+  return isOnline ? null : <div className="offline-banner">You are offline</div>;
+}
+```
+
+### Example — Subscribing to a Redux-like Store
+
+```tsx
+const store = createStore(rootReducer);
+
+function useStoreSelector<T>(selector: (state: RootState) => T): T {
+  return useSyncExternalStore(
+    store.subscribe,
+    () => selector(store.getState()),
+    () => selector(store.getState())
+  );
+}
+
+function CartCount() {
+  const count = useStoreSelector((s) => s.cart.items.length);
+  return <span>Cart ({count})</span>;
+}
+```
+
+### Senior-Level Points
+
+- **Tearing prevention**: In concurrent mode, React may render parts of a tree at different times. Without `useSyncExternalStore`, reading from an external mutable source can lead to "tearing" — different components seeing different snapshots of the same store.
+- **`getSnapshot` must return a cached value**: If it returns a new object every time, the component will re-render infinitely. Use referential equality.
+- **Replaced `useSubscription`**: This hook supersedes the old `use-subscription` package and the legacy `store.subscribe` pattern.
+- **Library authors**: This is the recommended hook for state library authors (Zustand, Jotai, Redux) to integrate with concurrent features.
+
+---
+
+## 11. useDebugValue
+
+### Definition
+
+`useDebugValue` displays a label in React DevTools next to a custom hook. It is a **development-only** hook with zero runtime cost in production.
+
+### Signature
+
+```ts
+useDebugValue(value: any, format?: (value: any) => any);
+```
+
+### Example — Custom Hook with DevTools Label
+
+```tsx
+function useAuth() {
+  const [user, setUser] = useState<User | null>(null);
+
+  // Shown in DevTools: "Auth: john@example.com" or "Auth: Not logged in"
+  useDebugValue(user, (u) => (u ? `Auth: ${u.email}` : "Auth: Not logged in"));
+
+  const login = async (credentials: Credentials) => { /* ... */ };
+  const logout = async () => { /* ... */ };
+
+  return { user, login, logout };
+}
+```
+
+### Senior-Level Points
+
+- **Lazy formatting**: The second argument (formatter) is called only when DevTools is inspecting the hook, avoiding unnecessary computation in production.
+- **Only inside custom hooks**: Using `useDebugValue` inside a regular component does nothing.
+- **Don't overuse**: Only add it to shared/reusable custom hooks in libraries or design systems. Not needed for one-off hooks.
+
+---
+
+## 12. useInsertionEffect (React 18+)
+
+### Definition
+
+`useInsertionEffect` fires **synchronously before any DOM mutations**. It is designed exclusively for **CSS-in-JS libraries** to inject `<style>` tags at the right time — before `useLayoutEffect` reads layout.
+
+### Signature
+
+```ts
+useInsertionEffect(setup: () => (void | (() => void)), dependencies?);
+```
+
+### Execution Order
+
+```
+useInsertionEffect  →  DOM mutations  →  useLayoutEffect  →  browser paint  →  useEffect
+```
+
+### Example — CSS-in-JS Style Injection
+
+```tsx
+// This is how a CSS-in-JS library might use it internally
+let styleSheet: CSSStyleSheet | null = null;
+
+function useCSS(rule: string): string {
+  const className = useMemo(() => `css-${hashString(rule)}`, [rule]);
+
+  useInsertionEffect(() => {
+    if (!styleSheet) {
+      const style = document.createElement("style");
+      document.head.appendChild(style);
+      styleSheet = style.sheet!;
+    }
+    const index = styleSheet.insertRule(`.${className} { ${rule} }`);
+    return () => styleSheet?.deleteRule(index);
+  }, [rule, className]);
+
+  return className;
+}
+
+// Usage in a component:
+function StyledBox() {
+  const className = useCSS("background: coral; padding: 16px; border-radius: 8px;");
+  return <div className={className}>Styled!</div>;
+}
+```
+
+### Senior-Level Points
+
+- **Not for application code**: This hook is for library authors building CSS-in-JS solutions (Styled Components, Emotion, etc.). Application developers should never need it.
+- **No access to refs**: Since it fires before DOM mutations, refs are not yet attached.
+- **Cannot update state**: Calling `setState` inside `useInsertionEffect` is not supported.
+
+---
+
+## 13. use (React 19+)
+
+### Definition
+
+`use` is a new React API (not technically a hook — it can be called conditionally) that lets you read the value of a **Promise** or a **Context** directly during render. When given a Promise, it integrates with Suspense to handle the loading state.
+
+### Signature
+
+```ts
+const value = use(resource: Promise<T> | Context<T>);
+```
+
+### Example — Reading a Promise with Suspense
+
+```tsx
+// The promise must be created OUTSIDE the component (or cached)
+async function fetchUser(id: string): Promise<User> {
+  const res = await fetch(`/api/users/${id}`);
+  return res.json();
+}
+
+function UserProfile({ userPromise }: { userPromise: Promise<User> }) {
+  const user = use(userPromise); // suspends until resolved
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+
+// Parent wraps in Suspense
+function App() {
+  const [userId, setUserId] = useState("1");
+  const userPromise = useMemo(() => fetchUser(userId), [userId]);
+
+  return (
+    <Suspense fallback={<Spinner />}>
+      <UserProfile userPromise={userPromise} />
+    </Suspense>
+  );
+}
+```
+
+### Example — Conditional Context Reading
+
+```tsx
+function StatusMessage({ isAdmin }: { isAdmin: boolean }) {
+  // Unlike useContext, `use` CAN be called conditionally
+  if (isAdmin) {
+    const adminData = use(AdminContext);
+    return <p>Admin panel: {adminData.stats}</p>;
+  }
+  return <p>Welcome, user</p>;
+}
+```
+
+### Senior-Level Points
+
+- **Not a hook**: `use` breaks the rules-of-hooks intentionally — it can be called inside conditionals and loops.
+- **Promise caching is critical**: If you pass a new Promise on every render, the component will suspend infinitely. The Promise must be cached or created outside the render path.
+- **Replaces `useContext` for context**: `use(SomeContext)` is the modern replacement for `useContext(SomeContext)`, with the added benefit of conditional calling.
+- **Error handling**: Use an Error Boundary above the Suspense boundary to catch rejected promises.
+
+---
+
+## 14. useActionState (React 19+)
+
+### Definition
+
+`useActionState` (formerly `useFormState`) manages form action state and pending status. It's designed for the new React form actions pattern and works with both client and server actions.
+
+### Signature
+
+```ts
+const [state, formAction, isPending] = useActionState(action, initialState, permalink?);
+```
+
+### Example — Form with Server Action Handling
+
+```tsx
+async function submitFeedback(
+  prevState: { message: string; success: boolean },
+  formData: FormData
+) {
+  const text = formData.get("feedback") as string;
+
+  if (text.length < 10) {
+    return { message: "Feedback must be at least 10 characters.", success: false };
+  }
+
+  await saveFeedback(text); // server call
+  return { message: "Thank you for your feedback!", success: true };
+}
+
+function FeedbackForm() {
+  const [state, action, isPending] = useActionState(submitFeedback, {
+    message: "",
+    success: false,
+  });
+
+  return (
+    <form action={action}>
+      <textarea name="feedback" required disabled={isPending} />
+      <button type="submit" disabled={isPending}>
+        {isPending ? "Submitting…" : "Submit"}
+      </button>
+      {state.message && (
+        <p style={{ color: state.success ? "green" : "red" }}>{state.message}</p>
+      )}
+    </form>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Progressive enhancement**: When used with server actions and a `permalink`, the form works even before JavaScript loads.
+- **Replaces manual `isPending` + `useEffect` + `useState`**: Consolidates the common form submission pattern into a single hook.
+- **Renamed from `useFormState`**: Was renamed in React 19 RC to better reflect its broader applicability beyond forms.
+
+---
+
+## 15. useOptimistic (React 19+)
+
+### Definition
+
+`useOptimistic` provides a way to optimistically update the UI while an async action is in progress. The optimistic value automatically reverts to the actual value when the action completes.
+
+### Signature
+
+```ts
+const [optimisticValue, addOptimistic] = useOptimistic(actualValue, updateFn?);
+```
+
+### Example — Optimistic Like Button
+
+```tsx
+function LikeButton({ postId, likes, hasLiked }: Props) {
+  const [optimisticLikes, addOptimisticLike] = useOptimistic(
+    { count: likes, liked: hasLiked },
+    (current, newLiked: boolean) => ({
+      count: newLiked ? current.count + 1 : current.count - 1,
+      liked: newLiked,
+    })
+  );
+
+  async function toggleLike() {
+    const newLiked = !optimisticLikes.liked;
+    addOptimisticLike(newLiked); // instant UI update
+
+    // If this fails, React reverts to the real `likes` and `hasLiked` props
+    await fetch(`/api/posts/${postId}/like`, {
+      method: newLiked ? "POST" : "DELETE",
+    });
+  }
+
+  return (
+    <button onClick={toggleLike}>
+      {optimisticLikes.liked ? "❤️" : "🤍"} {optimisticLikes.count}
+    </button>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Automatic rollback**: If the parent re-renders with the same actual value (indicating failure), the optimistic state reverts automatically.
+- **Works with transitions and form actions**: Designed to integrate with `startTransition` and `useActionState`.
+- **Replaces manual optimistic patterns**: No more manual try/catch/rollback state management.
+
+---
+
+## 16. useFormStatus (React 19+ / react-dom)
+
+### Definition
+
+`useFormStatus` gives a child component information about the parent `<form>`'s submission status. It must be called from a component rendered **inside** a `<form>`.
+
+### Signature
+
+```ts
+const { pending, data, method, action } = useFormStatus();
+```
+
+### Example — Reusable Submit Button
+
+```tsx
+import { useFormStatus } from "react-dom";
+
+function SubmitButton({ children }: { children: React.ReactNode }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? "Submitting…" : children}
+    </button>
+  );
+}
+
+// Usage inside a form
+function ContactForm() {
+  return (
+    <form action={submitContactAction}>
+      <input name="email" type="email" required />
+      <textarea name="message" required />
+      <SubmitButton>Send Message</SubmitButton> {/* Reads form status */}
+    </form>
+  );
+}
+```
+
+### Senior-Level Points
+
+- **Must be a child of `<form>`**: Calling it in the same component that renders the `<form>` won't work — it reads from the nearest parent form.
+- **`data` property**: Gives access to the `FormData` being submitted, enabling contextual loading states.
+- **Part of `react-dom`**, not `react`: Import from `react-dom` since it's tied to DOM form behavior.
+
+---
+
+
 
 # useContext
 
@@ -747,6 +1632,54 @@ function Greeting() {
   );
 }
 ```
+
+
+## Quick Reference — Hook Selection Matrix
+
+| Need                                          | Hook                    |
+|-----------------------------------------------|-------------------------|
+| Component-level state                         | `useState`              |
+| Side effects after render                     | `useEffect`             |
+| DOM measurement before paint                  | `useLayoutEffect`       |
+| Expensive computation caching                 | `useMemo`               |
+| DOM refs or mutable instance variables        | `useRef`                |
+| Expose imperative API via ref                 | `useImperativeHandle`   |
+| Mark non-urgent updates                       | `useTransition`         |
+| Defer a frequently-changing value             | `useDeferredValue`      |
+| SSR-safe unique IDs                           | `useId`                 |
+| Subscribe to external store (concurrent-safe) | `useSyncExternalStore`  |
+| DevTools labels for custom hooks              | `useDebugValue`         |
+| CSS-in-JS style injection                     | `useInsertionEffect`    |
+| Read Promise/Context in render                | `use`                   |
+| Form action state + pending                   | `useActionState`        |
+| Optimistic UI updates                         | `useOptimistic`         |
+| Parent form submission status                 | `useFormStatus`         |
+
+---
+
+## Common Interview Questions (Senior Level)
+
+**Q: What is the order of execution of useInsertionEffect, useLayoutEffect, and useEffect?**
+`useInsertionEffect` → DOM mutations → `useLayoutEffect` → browser paint → `useEffect`. This order ensures CSS-in-JS styles are injected before layout is read, which is read before async side effects run.
+
+**Q: How does React determine if a `useMemo` dependency has changed?**
+React uses `Object.is` for comparison (same as `===` except `Object.is(NaN, NaN)` is `true` and `Object.is(+0, -0)` is `false`). This means object/array references must be stable or they will trigger recomputation every render.
+
+**Q: Why can't hooks be called conditionally?**
+React identifies hooks by their **call order** in the fiber's hook linked list. If a hook is skipped conditionally, subsequent hooks shift positions, mapping to the wrong slot and corrupting state.
+
+**Q: What problem does `useSyncExternalStore` solve that `useEffect` + `useState` doesn't?**
+It prevents "tearing" — a concurrent rendering issue where different parts of the component tree read different snapshots of the same external store because React yields between renders.
+
+**Q: How is `use()` different from all other hooks?**
+`use` can be called inside conditionals and loops, breaking the rules of hooks. This is because it's an API, not a hook — it doesn't allocate a slot in the hook linked list. It integrates with Suspense for promises and can replace `useContext` for context reading.
+
+**Q: When would you use `useTransition` vs `useDeferredValue`?**
+Use `useTransition` when you own the state setter and want to mark the update as non-urgent. Use `useDeferredValue` when you receive a value as a prop and can't control when it updates — you defer its consumption instead.
+
+---
+
+*Prepared for senior React engineer interviews — covers React 18 and React 19 hooks.*
 
 `greet` is re-created **only when `name` changes**, not on every render.
 
