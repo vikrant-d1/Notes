@@ -1,3 +1,174 @@
+# React Portals — Functional Component Examples
+
+## What Are Portals?
+
+Portals let you render a child component into a DOM node that exists **outside** the parent component's DOM hierarchy. This is useful when a parent has `overflow: hidden` or a restrictive `z-index`, but you need a child (like a modal) to visually "break out."
+
+```jsx
+import { createPortal } from 'react-dom';
+
+createPortal(child, domNode);
+```
+
+---
+
+## Setup
+
+Add a second root element in your `index.html`:
+
+```html
+<body>
+  <div id="root"></div>
+  <div id="portal-root"></div>
+</body>
+```
+
+---
+
+## Example 1 — Basic Portal
+
+```jsx
+import { createPortal } from 'react-dom';
+
+function MyPortal({ children }) {
+  return createPortal(
+    children,
+    document.getElementById('portal-root')
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>My App</h1>
+      <MyPortal>
+        <p>This is rendered inside #portal-root, not #root!</p>
+      </MyPortal>
+    </div>
+  );
+}
+```
+
+---
+
+## Example 2 — Modal Using a Portal
+
+```jsx
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+
+function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div style={overlayStyle}>
+      <div style={modalStyle}>
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>,
+    document.getElementById('portal-root')
+  );
+}
+
+const overlayStyle = {
+  position: 'fixed',
+  inset: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const modalStyle = {
+  background: '#fff',
+  padding: '2rem',
+  borderRadius: '8px',
+  minWidth: '300px',
+};
+
+function App() {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <div style={{ overflow: 'hidden', height: '200px' }}>
+      <h1>App with overflow: hidden</h1>
+      <button onClick={() => setShowModal(true)}>Open Modal</button>
+
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <h2>I broke out!</h2>
+        <p>This modal renders outside the overflow-hidden parent.</p>
+      </Modal>
+    </div>
+  );
+}
+```
+
+---
+
+## Example 3 — Tooltip Using a Portal
+
+```jsx
+import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
+
+function Tooltip({ targetRef, children }) {
+  if (!targetRef.current) return null;
+
+  const rect = targetRef.current.getBoundingClientRect();
+
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        top: rect.bottom + 8,
+        left: rect.left,
+        background: '#333',
+        color: '#fff',
+        padding: '6px 12px',
+        borderRadius: '4px',
+        fontSize: '14px',
+      }}
+    >
+      {children}
+    </div>,
+    document.getElementById('portal-root')
+  );
+}
+
+function App() {
+  const [hovered, setHovered] = useState(false);
+  const btnRef = useRef(null);
+
+  return (
+    <div>
+      <button
+        ref={btnRef}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        Hover me
+      </button>
+
+      {hovered && (
+        <Tooltip targetRef={btnRef}>
+          I'm a tooltip rendered via a portal!
+        </Tooltip>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+## Key Points
+
+- **Event bubbling still works** — even though the portal DOM node lives elsewhere, React events bubble up through the React tree as usual.
+- **Common use cases** — modals, tooltips, toasts/notifications, dropdown menus, and any UI that needs to escape `overflow: hidden` or `z-index` stacking contexts.
+- **Modern import** — use `createPortal` from `react-dom`, not `ReactDOM.createPortal`.
+
+
 # React Hooks 
 
 ---
