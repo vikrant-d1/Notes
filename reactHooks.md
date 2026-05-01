@@ -1962,3 +1962,239 @@ const handleDelete = useCallback((e) => {
 // Equivalent useMemo form
 const handleClick = useMemo(() => () => { /* ... */ }, []);
 ```
+
+# Web Workers in React — Practical Examples
+
+## The Problem
+
+JavaScript is single-threaded. When you process a massive dataset (sorting, filtering, parsing), the main thread gets blocked and your UI freezes.
+
+```jsx
+// ❌ BAD — This blocks the UI
+function App() {
+  const [result, setResult] = useState([]);
+
+  const handleClick = () => {
+    // Sorting 50,000 items freezes the UI
+    const sorted = hugeArray.sort((a, b) => {
+      // expensive comparison logic
+      return a.score - b.score;
+    });
+    setResult(sorted);
+  };
+
+  return <button onClick={handleClick}>Sort Data</button>;
+}
+```
+
+---
+
+## The Solution: Web Workers
+
+Web Workers run JavaScript on a **separate thread**, keeping your UI responsive.
+
+---
+
+## Step 1 — Create the Worker File
+
+Create a file called `sort.worker.js` in your `public` folder:
+
+```js
+// public/sort.worker.js
+
+// This runs on a SEPARATE thread
+self.onmessage = function (event) {
+  const data = event.data;
+
+  // Heavy computation happens here — UI won't freeze
+  const sorted = data.sort((a, b) => a.score - b.score);
+
+  // Send the result back to the main thread
+  self.postMessage(sorted);
+};
+```
+
+---
+
+## Step 2 — Use the Worker in Your React Component
+
+```jsx
+import { useState, useRef, useEffect } from "react";
+
+function App() {
+  const [result, setResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const workerRef = useRef(null);
+
+  useEffect(() => {
+    // Create the worker
+    workerRef.current = new Worker("/sort.worker.js");
+
+    // Listen for results from the worker
+    workerRef.current.onmessage = (event) => {
+      setResult(event.data);
+      setLoading(false);
+    };
+
+    // Handle errors
+    workerRef.current.onerror = (error) => {
+      console.error("Worker error:", error);
+      setLoading(false);
+    };
+
+    // Cleanup: terminate worker when component unmounts
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, []);
+
+  const handleSort = () => {
+    setLoading(true);
+
+    // Generate 50,000 items
+    const hugeArray = Array.from({ length: 50000 }, (_, i) => ({
+      id: i,
+      score: Math.random() * 10000,
+      name: `Item ${i}`,
+    }));
+
+    // Send data to the worker — this does NOT block the UI
+    workerRef.current.postMessage(hugeArray);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSort} disabled={loading}>
+        {loading ? "Sorting..." : "Sort 50,000 Items"}
+      </button>
+      <p>UI stays responsive while sorting!</p>
+      <p>Sorted items: {result.length}</p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+---
+
+## Step 3 — Custom Hook for Reusability
+
+```jsx
+import { useState, useRef, useEffect, useCallback } from "react";
+
+function useWebWorker(workerPath) {
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const workerRef = useRef(null);
+
+  useEffect(() => {
+    workerRef.current = new Worker(workerPath);
+
+    workerRef.current.onmessage = (event) => {
+      setResult(event.data);
+      setLoading(false);
+    };
+
+    workerRef.current.onerror = (err) => {
+      setError(err.message);
+      setLoading(false);
+    };
+
+    return () => workerRef.current.terminate();
+  }, [workerPath]);
+
+  const run = useCallback((data) => {
+    setLoading(true);
+    setError(null);
+    workerRef.current.postMessage(data);
+  }, []);
+
+  return { result, loading, error, run };
+}
+
+// Usage
+function App() {
+  const { result, loading, error, run } = useWebWorker("/sort.worker.js");
+
+  const handleSort = () => {
+    const data = Array.from({ length: 50000 }, () => ({
+      score: Math.random() * 10000,
+    }));
+    run(data);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSort} disabled={loading}>
+        {loading ? "Processing..." : "Sort Data"}
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {result && <p>Sorted {result.length} items</p>}
+    </div>
+  );
+}
+```
+
+---
+
+## How It Works — Visual Flow
+
+```
+Main Thread (UI)              Worker Thread (Background)
+─────────────────             ──────────────────────────
+                              
+1. User clicks button
+2. postMessage(data)  ──────► 3. Receives data
+                              4. Processes (sort/filter)
+   UI stays responsive        5. Heavy computation...
+   User can scroll, click     6. Done!
+                      ◄────── 7. postMessage(result)
+8. onmessage fires
+9. Update state
+10. Re-render with result
+```
+
+---
+
+## When to Use Web Workers
+
+| Use Web Workers For                  | Don't Use For                     |
+|--------------------------------------|-----------------------------------|
+| Sorting/filtering large datasets     | Simple state updates              |
+| Complex calculations                 | Small array operations            |
+| Data parsing (CSV, JSON)             | API calls (use async/await)       |
+| Image processing                     | DOM manipulation (no DOM access)  |
+| Search indexing                      | Tiny computations                 |
+
+---
+
+## Key Limitations
+
+- Workers **cannot access the DOM** — they can only process data and send results back.
+- Data is **copied** between threads via structured cloning, not shared. For very large data, use `Transferable` objects to avoid copying overhead.
+- There's startup overhead, so don't use workers for trivial tasks.
+- Each worker is a separate file (unless using inline blob workers).
+
+---
+
+## Bonus — Inline Worker (No Separate File)
+
+```jsx
+function createInlineWorker(fn) {
+  const blob = new Blob(
+    [`self.onmessage = function(e) { self.postMessage((${fn.toString()})(e.data)); }`],
+    { type: "application/javascript" }
+  );
+  return new Worker(URL.createObjectURL(blob));
+}
+
+// Usage — no separate file needed
+const worker = createInlineWorker((data) => {
+  return data.sort((a, b) => a.score - b.score);
+});
+
+worker.postMessage(hugeArray);
+worker.onmessage = (e) => console.log("Sorted:", e.data);
+```
