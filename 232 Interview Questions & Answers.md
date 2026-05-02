@@ -340,14 +340,14 @@
              4. Scenario based interview questions
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          1
 
 ---
              5. Machine coding round interview questions
 
 
-            1. Is javascript a dynamically typed language or a statically typed
-            language ?
+## 📘 JavaScript Theory Questions
+
+### Q1. Is javascript a dynamically typed language or a statically typed language ?
                  Javascript is a dynamically typed language.
 
                  It means all type checks are done at run time ( When program is executing ).
@@ -365,7 +365,7 @@
                console.log(a) // "Hello"
 
 
-            2. What are the different datatypes in javascript ? (Most asked)
+### Q2. What are the different datatypes in javascript ? (Most asked)
                  Primitive datatypes:
 
                        String
@@ -381,7 +381,6 @@
                        Bigint
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          2
 
 ---
                        symbol
@@ -395,7 +394,7 @@
                        Date
 
 
-            3. What is Hoisting in javascript ? (Most asked)
+### Q3. What is Hoisting in javascript ? (Most asked)
                  In other scripting/server side languages, variables or functions must be
                  declared before using it.
 
@@ -407,7 +406,7 @@
             interviewer will ask What is temporal dead zone. 😉
 
 
-            4. What are the various things hoisted in javascript ?
+### Q4. What are the various things hoisted in javascript ?
 
                Function declarations: Fully hoisted.
                var - Hoisted
@@ -420,10 +419,9 @@
             Ref: https://stackabuse.com/hoisting-in-javascript/
 
 
-            5. What is temporal dead zone ?
+### Q5. What is temporal dead zone ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        3
 
 ---
                  It is a specific time period in the execution of javascript code where the
@@ -433,7 +431,7 @@
                  Any attempt to access them result in reference errors.
 
 
-            6. What are the differences let, var and const ? (Most asked)
+### Q6. What are the differences let, var and const ? (Most asked)
                  Scope:
 
                        Variables declared with var are function scoped.( available through out the
@@ -456,7 +454,7 @@
                        assigned any value.(temporal dead zone)
 
 
-            7. List out some key features of ES6 ? (Most asked)
+### Q7. List out some key features of ES6 ? (Most asked)
              1. Arrow functions
 
              2. Let and Const declarations.
@@ -470,7 +468,6 @@
              6. Spread and Rest operators
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             4
 
 ---
              7. Promises
@@ -486,7 +483,7 @@
             these features so that you can kill 2-3 min of interview time 😉
 
 
-            8. What are limitations of arrow functions in javascript ?
+### Q8. What are limitations of arrow functions in javascript ?
             Arrow functions are introduced in ES6. They are simple and shorter way to write
             functions in javascript.
 
@@ -494,11 +491,9 @@
 
              2. Arrow function does not have access to arguments object
 
-             3. Arrow function does not have their own this. Instead, they inherit this from the
-                surrounding code at the time the function is defined.
+### Q3. Arrow function does not have their own this. Instead, they inherit this from the surrounding code at the time the function is defined.
 
-             4. Arrow functions cannot be used as constructors. Using them with the 𝙣𝙚𝙬
-                keyword to create instances throws a TypeError.
+### Q4. Arrow functions cannot be used as constructors. Using them with the 𝙣𝙚𝙬 keyword to create instances throws a TypeError.
 
              5. Arrow functions cannot be used as generator functions.
 
@@ -507,14 +502,13 @@
             explore on this combinations
 
 
-            9. What’s the spread operator in javascript ?
+### Q9. What’s the spread operator in javascript ?
             Spread operator is used to spread or expand the elements of an iterable like array
             or string into individual elements.
 
             Uses:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           5
 
 ---
              1. Concatenating arrays.
@@ -545,7 +539,7 @@
             interviews to make interviewer think that you are a practical person. 😉
 
 
-            10. What is rest operator in javascript ?
+### Q10. What is rest operator in javascript ?
             Rest operator is used to condense multiple elements into single array or object.
 
             This is useful when we dont know how many parameters a function may receive
@@ -556,13 +550,12 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       6
 
 ---
                Example(1,2,3,4);
 
 
-            11. What is destructuring ?
+### Q11. What is destructuring ?
                    It is introduced in Es6.
 
                    It allows us to assign the object properties and array values to distinct
@@ -582,7 +575,7 @@
                console.log(a,b) // 1,2
 
 
-            12. What are the differences between Map and Set ?
+### Q12. What are the differences between Map and Set ?
              Map                                             Set
 
              Map is the collection of key value pairs        Set is a collection of unique values
@@ -595,7 +588,6 @@
              let data = new Map();                           let data = new Set();
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            7
 
 ---
              data.set(”name”,”saikrishna”);                        data.add(1);
@@ -646,11 +638,10 @@
             Ref: https://javascript.info/map-set
 
 
-            13. What are modules in javascript ?
+### Q13. What are modules in javascript ?
                  Modules allows us to break down the large piece of code into smaller parts.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                        8
 
 ---
                  Modules helps us to write more reusable and maintenable code.
@@ -658,7 +649,7 @@
                  Modules can be imported and exported using import and export statements.
 
 
-            14. What is the difference between 'Pass by Value' and
+### Q14. What is the difference between 'Pass by Value' and
             'Pass by Reference'?
             In JavaScript, whenever a function is called, the arguments can be passed in two
             ways, either pass by value or pass by reference.
@@ -696,7 +687,6 @@
                let arr = [1, 2, 3];
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        9
 
 ---
                function addToArr(value) {
@@ -708,7 +698,7 @@
                console.log(arr); // Output: [1, 2, 3, 4]
 
 
-            15. What is the difference between map and filter ?
+### Q15. What is the difference between map and filter ?
             (Frequently asked)
                    Both map and filter are useful in JavaScript when working with an arrays.
 
@@ -717,7 +707,7 @@
                    only those elements which satisfies the specified condition.
 
 
-            16. What is the difference between map() and
+### Q16. What is the difference between map() and
             forEach() (Frequently asked)
                    map method is used to transform the elements of an array. Whereas forEach
                    method is used to loop through the elements of an array.
@@ -730,9 +720,8 @@
                    any array.
 
 
-            17. What is the difference between for-in and for-of ?
+### Q17. What is the difference between for-in and for-of ?
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             10
 
 ---
             Both for-in and for-of are used to iterate over the datastructure.
@@ -751,7 +740,7 @@
             for-of-statements?answertab=scoredesc#tab-top
 
 
-            18. What is difference between find vs findIndex ?
+### Q18. What is difference between find vs findIndex ?
                  find:
 
                          It will return the first element of array that passes specified condition.
@@ -776,7 +765,6 @@
                          condition.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                   11
 
 ---
                      function findMethod(){
@@ -792,7 +780,7 @@
                      2
 
 
-            19. What is the difference between Pure and Impure
+### Q19. What is the difference between Pure and Impure
             functions?
             Pure Functions:
 
@@ -819,7 +807,6 @@
                  This will modify non local state.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        12
 
 ---
                let message = "good morning";
@@ -831,7 +818,7 @@
             Ref: https://www.scaler.com/topics/pure-function-in-javascript/
 
 
-            20. What are the differences between call(), apply()
+### Q20. What are the differences between call(), apply()
             and bind() ? (Very Frequently asked)
             👉 Interview Tip: Here give below example and then execute the examples and
             explain differences.
@@ -851,7 +838,6 @@
             Brief examples:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           13
 
 ---
             The only difference between call and apply is that syntax of how we pass the
@@ -863,10 +849,9 @@
             fired but you know the desired context.
 
 
-            21. Different ways to create object in javascript ? (Most asked)
+### Q21. Different ways to create object in javascript ? (Most asked)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      14
 
 ---
             👉 Interview Tip: Give the examples and then explain it.
@@ -915,7 +900,6 @@
                let teacher= {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         15
 
 ---
                     teacher: "Saikrishna"
@@ -925,7 +909,7 @@
                let course = Object.assign({},lesson,teacher);
 
 
-            22. Whats the difference between Object.keys,values and entries
+### Q22. Whats the difference between Object.keys,values and entries
                     Object.keys(): This will return the array of keys
 
                     Object.values(): This will return the array of values
@@ -944,14 +928,13 @@
                Object.entries(data) // [["name","Sai"],["lang","English"]]
 
 
-            23. Whats the difference between Object.freeze() vs Object.seal()
+### Q23. Whats the difference between Object.freeze() vs Object.seal()
                     Object.freeze:
 
                        Will make the object immutable ( prevents the addition of new propeties
                        and prevents modification of existing properties)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               16
 
 ---
                           let data = {
@@ -992,10 +975,9 @@
                           }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        17
 
 ---
-            24. What is a polyfill in javascript ?
+### Q24. What is a polyfill in javascript ?
             👉 Interview Tip: If polyfill is asked, then 99% they will ask you to write a polyfill.
             So practice atleast 2-3 polyfills (map,foreach compulsary)
 
@@ -1033,7 +1015,6 @@
                  for(let i=0;i<=this.length-1;i++){
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             18
 
 ---
                    temp.push(callback(this[i]))
@@ -1047,7 +1028,7 @@
             javascript-1h13
 
 
-            25. What is prototype in javascript ?
+### Q25. What is prototype in javascript ?
                    If we want to add properties at later stage to a function which can be
                    accessible across all the instances. Then we will be using prototype.
 
@@ -1072,10 +1053,9 @@
                console.log(std2)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    19
 
 ---
-            26. What is generator function in javascript ?
+### Q26. What is generator function in javascript ?
                    A generator function is a function which can be paused and resumed at any
                    point during execution.
 
@@ -1108,10 +1088,9 @@
                console.log(generator.next()); // {value: 4,done:true}
 
 
-            27. What is IIFE ?
+### Q27. What is IIFE ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              20
 
 ---
                  IIFE means immediately invoked function expression.
@@ -1133,7 +1112,7 @@
                })()
 
 
-            28. What is CORS ? (Most asked)
+### Q28. What is CORS ? (Most asked)
             👉 Interview Tip: This defination is more than enough so prepare this below
             answer well.
 
@@ -1148,10 +1127,9 @@
             https://dev.to/lydiahallie/cs-visualized-cors-5b8h
 
 
-            29. What are the difference between typescript and javascript ?
+### Q29. What are the difference between typescript and javascript ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       21
 
 ---
             👉 Interview Tip: If your interview contains typescript then this is a 99% dam sure
@@ -1177,7 +1155,7 @@
                  Typescript takes longer time to compile code.
 
 
-            30. What is authentication vs authorization ? (Most asked)
+### Q30. What is authentication vs authorization ? (Most asked)
                  Authentication:
 
                        Its the process of verifying who the user is.
@@ -1194,10 +1172,9 @@
             https://www.youtube.com/watch?v=7Q17ubqLfaM
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            22
 
 ---
-            31. Difference between null and undefined ?
+### Q31. Difference between null and undefined ?
                  Null:
 
                        If we assign null to a variable, it means it will not have any value
@@ -1207,7 +1184,7 @@
                        means the variable has been declared but not assigned any value yet.
 
 
-            32. What is the difference between == and === in javascript ?
+### Q32. What is the difference between == and === in javascript ?
                  == will check for equality of values where as === willl check for equality as
                  well as datatypes.
 
@@ -1232,7 +1209,6 @@
                        we will use splice.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           23
 
 ---
                      let arr = [1,2,3,4,5,0,10];
@@ -1243,7 +1219,7 @@
                      console.log(newArr); // [3,4,5,0]
 
 
-                 34. What is setTimeOut in javascript ?
+### Q34. What is setTimeOut in javascript ?
                        setTimeOut is used to call a function or evaluate an expression after a
                        specific number of milliseconds.
 
@@ -1258,7 +1234,7 @@
                  syntax more. Practice some examples.
 
 
-                 35. What is setInterval in javascript ?
+### Q35. What is setInterval in javascript ?
                        setInterval method is used to call a function or evaluate an expression at
                        specific intervals.
 
@@ -1268,14 +1244,13 @@
                      },2000);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            24
 
 ---
                  👉 Interview Tip: Most asked in output based and problem solving so learn
                  syntax more. Practice some examples.
 
 
-                 36. What are Promises in javascript ?
+### Q36. What are Promises in javascript ?
                  👉 Interview Tip: When this is asked cover all below points so that he will not
                  ask any other question on promises 😈.
 
@@ -1316,7 +1291,6 @@
                      })
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                25
 
 ---
                      promise.then((response)=>{
@@ -1326,7 +1300,7 @@
                      })
 
 
-                 37. Differences between Promise.all, allSettled, any, race ?
+### Q37. Differences between Promise.all, allSettled, any, race ?
                        Promise.all:
 
                              Will wait for all of the promises to resolve or any one of the promise
@@ -1352,19 +1326,15 @@
                  this concept so prepare well from above link
 
 
-                 38. What is a callstack in javascript ? (Very rare)
+### Q38. What is a callstack in javascript ? (Very rare)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                26
 
 ---
                          Callstack will maintain the order of execution of execution contexts.
 
 
-                 39. What is a closure ? (Most asked in all the interviews 99%
-                 chance)
-                         Defination: A function along with its outer environment together forms a
-                         closure
+### Q39. What is a closure ? (Most asked in all the interviews 99% chance) Defination: A function along with its outer environment together forms a closure
 
                          Each and every function in javascript has access to its outer lexical
                          environment means access to the variables and functions present in the
@@ -1387,10 +1357,9 @@
                      Close();
 
 
-                 40. What are callbacks in javascript ?
+### Q40. What are callbacks in javascript ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            27
 
 ---
                        A callback is a function which is passed as an argument to another
@@ -1425,14 +1394,13 @@
                           Print method
 
 
-                 41. What are Higher Order Functions in javascript ?
+### Q41. What are Higher Order Functions in javascript ?
                        A function which takes another function as an argument or returns a
                        function as an output.
 
                        Advantages:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           28
 
 ---
                              callback functions
@@ -1450,10 +1418,7 @@
                              Concise and readable code
 
 
-                 42. What is the main difference between Local Storage and
-                 Session storage ? (Most asked)
-                       Local storage and session storage are two ways of storing data using key
-                       value pairs in web browsers.
+### Q42. What is the main difference between Local Storage and Session storage ? (Most asked) Local storage and session storage are two ways of storing data using key value pairs in web browsers.
 
                        LocalStorage is the same as SessionStorage but it persists the data even
                        when the browser is closed and reopened and on reload(i.e it has no
@@ -1479,11 +1444,9 @@
                  US/docs/Web/API/Web_Storage_API#concepts_and_usage
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          29
 
 ---
-                 43. What is the difference between Indexeddb and
-                 sessionstorage ?
+### Q43. What is the difference between Indexeddb and sessionstorage ?
                        IndexedDb:
 
                              It is used for storing large amount of structured data.
@@ -1501,79 +1464,72 @@
                              Available only for the duration of page session.
 
 
-                 44. Possible followup questions on local storage :
+### Q44. Possible followup questions on local storage :
                  👉 Interview Tip: When asked about local storage 100% compulsary they
                  will confuse you with practical questions.😖😖
                  All the scenarios are covered here so 100% sure nothing more than this will
                  be asked. 😊😊
 
 
-                 𝟏. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭. 𝐖𝐢𝐥𝐥 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞
-                 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q1. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭. 𝐖𝐢𝐥𝐥 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  Yes local storage data persists even when i close and reopen the browser
 
-                 𝟐. 𝐈 𝐰𝐚𝐧𝐭 𝐭𝐨 𝐚𝐜𝐜𝐞𝐬𝐬 𝐋𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐢𝐧 𝐚𝐧𝐨𝐭𝐡𝐞𝐫 𝐭𝐚𝐛 𝐨𝐟 𝐬𝐚𝐦𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐢𝐬 𝐢𝐭 𝐩𝐨𝐬𝐬𝐢𝐛𝐥𝐞 ?
+### Q2. 𝐈 𝐰𝐚𝐧𝐭 𝐭𝐨 𝐚𝐜𝐜𝐞𝐬𝐬 𝐋𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐢𝐧 𝐚𝐧𝐨𝐭𝐡𝐞𝐫 𝐭𝐚𝐛 𝐨𝐟 𝐬𝐚𝐦𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐢𝐬 𝐢𝐭 𝐩𝐨𝐬𝐬𝐢𝐛𝐥𝐞 ?
                  Yes we can access local storage data in another tab as well.
-                 𝟑. 𝐈 𝐫𝐞𝐥𝐨𝐚𝐝𝐞𝐝 𝐭𝐡𝐞 𝐩𝐚𝐠𝐞 𝐚𝐟𝐭𝐞𝐫 𝐜𝐫𝐞𝐚𝐭𝐢𝐧𝐠 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞. 𝐖𝐢𝐥𝐥 𝐢𝐭 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q3. 𝐈 𝐫𝐞𝐥𝐨𝐚𝐝𝐞𝐝 𝐭𝐡𝐞 𝐩𝐚𝐠𝐞 𝐚𝐟𝐭𝐞𝐫 𝐜𝐫𝐞𝐚𝐭𝐢𝐧𝐠 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞. 𝐖𝐢𝐥𝐥 𝐢𝐭 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  Yes local storage data persists on page reload.
-                 𝟒. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐭𝐚𝐛𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
+### Q4. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐭𝐚𝐛𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
                  I can access localstorage data in multiple tabs if its same url
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  30
 
 ---
                  𝟓. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐰𝐢𝐧𝐝𝐨𝐰𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬
                  I can access local storage data even for different windows with same url.
-                 𝟔. 𝐖𝐡𝐞𝐧 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐫𝐞𝐦𝐨𝐯𝐞𝐝 ?
+### Q6. 𝐖𝐡𝐞𝐧 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐫𝐞𝐦𝐨𝐯𝐞𝐝 ?
                  It stays indefnitely until its deleted manually by the user.
-                 𝟕. 𝐈𝐬 𝐋𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 𝐨𝐫 𝐚𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 ?
+### Q7. 𝐈𝐬 𝐋𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 𝐨𝐫 𝐚𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 ?
                  Localstorage is synchronous. If i perform operations on local storage, It blocks
                  the execution of other javascript code until the current operation is completed.
                  𝟖. 𝐈 𝐰𝐚𝐧𝐭 𝐚𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 𝐨𝐩𝐞𝐫𝐚𝐭𝐢𝐨𝐧𝐬 𝐚𝐧𝐝 𝐥𝐚𝐫𝐠𝐞 𝐝𝐚𝐭𝐚 𝐬𝐞𝐭𝐬 𝐭𝐨 𝐛𝐞 𝐬𝐭𝐨𝐫𝐞𝐝 𝐭𝐡𝐞𝐧 𝐰𝐡𝐚𝐭 𝐲𝐨𝐮 𝐰𝐢𝐥𝐥
                  𝐬𝐮𝐠𝐠𝐞𝐬𝐭 ?    👉 Remember this question )
                  I can go with Indexeddb where asynchronous operations are supported and
                  we can work with large data sets.
-                 𝟗. 𝐖𝐡𝐚𝐭 𝐢𝐬 𝐭𝐡𝐞 𝐦𝐚𝐱 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐥𝐢𝐦𝐢𝐭 𝐨𝐟 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 ?
+### Q9. 𝐖𝐡𝐚𝐭 𝐢𝐬 𝐭𝐡𝐞 𝐦𝐚𝐱 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐥𝐢𝐦𝐢𝐭 𝐨𝐟 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 ?
                  We can store max of 5mb.
 
-                 𝟏𝟎. 𝐈 𝐰𝐢𝐥𝐥 𝐭𝐫𝐲 𝐭𝐨 𝐬𝐭𝐨𝐫𝐞 𝐥𝐞𝐭𝐬 𝐬𝐚𝐲 𝐚𝐧 𝐢𝐦𝐚𝐠𝐞 𝐨𝐟 𝐬𝐢𝐳𝐞 𝐦𝐨𝐫𝐞 𝐭𝐡𝐚𝐧 𝟓𝐦𝐛 𝐢𝐧 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐭𝐡𝐞𝐧
-                 𝐰𝐡𝐚𝐭 𝐡𝐚𝐩𝐩𝐞𝐧𝐬 ?
+### Q10. 𝐈 𝐰𝐢𝐥𝐥 𝐭𝐫𝐲 𝐭𝐨 𝐬𝐭𝐨𝐫𝐞 𝐥𝐞𝐭𝐬 𝐬𝐚𝐲 𝐚𝐧 𝐢𝐦𝐚𝐠𝐞 𝐨𝐟 𝐬𝐢𝐳𝐞 𝐦𝐨𝐫𝐞 𝐭𝐡𝐚𝐧 𝟓𝐦𝐛 𝐢𝐧 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐭𝐡𝐞𝐧 𝐰𝐡𝐚𝐭 𝐡𝐚𝐩𝐩𝐞𝐧𝐬 ?
                  It will throw QuotaExceededException if it exceeds the limit.
-                 𝟏𝟏. 𝐖𝐡𝐚𝐭 𝐈𝐟 𝐈 𝐭𝐮𝐫𝐧 𝐨𝐟𝐟 𝐦𝐲 𝐥𝐚𝐩𝐭𝐨𝐩 𝐚𝐧𝐝 𝐫𝐞𝐨𝐩𝐞𝐧 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫, 𝐰𝐢𝐥𝐥 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚
-                 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q11. 𝐖𝐡𝐚𝐭 𝐈𝐟 𝐈 𝐭𝐮𝐫𝐧 𝐨𝐟𝐟 𝐦𝐲 𝐥𝐚𝐩𝐭𝐨𝐩 𝐚𝐧𝐝 𝐫𝐞𝐨𝐩𝐞𝐧 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫, 𝐰𝐢𝐥𝐥 𝐥𝐨𝐜𝐚𝐥 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  Yes localstorage data still persists even if i shutdown my laptop and reopen
                  the browser
 
 
-                 45. Possible followup questions on session storage :
+### Q45. Possible followup questions on session storage :
                  👉 Interview Tip: When asked about session storage 100% compulsary they
                  will confuse you with practical questions.😖😖
                  All the scenarios are covered here so 100% sure nothing more than this will
                  be asked. 😊😊
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 31
 
 ---
-                 𝟏. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭 𝐚𝐧𝐝 𝐫𝐞𝐬𝐭𝐨𝐫𝐞𝐝
-                 𝐭𝐚𝐛. 𝐖𝐢𝐥𝐥 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q1. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭 𝐚𝐧𝐝 𝐫𝐞𝐬𝐭𝐨𝐫𝐞𝐝 𝐭𝐚𝐛. 𝐖𝐢𝐥𝐥 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  No session storage data does not persists on browser close & reopen.
-                 𝟏. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭 𝐚𝐧𝐝 𝐫𝐞𝐬𝐭𝐨𝐫𝐞𝐝
-                 𝐭𝐚𝐛. 𝐖𝐢𝐥𝐥 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q1. 𝐈 𝐜𝐫𝐞𝐚𝐭𝐞𝐝 𝐚 𝐬𝐞𝐬𝐬𝐢𝐨𝐧𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐚𝐧𝐝 𝐜𝐥𝐨𝐬𝐞𝐝 𝐭𝐡𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 𝐚𝐧𝐝 𝐫𝐞𝐩𝐨𝐞𝐧𝐞𝐝 𝐢𝐭 𝐚𝐧𝐝 𝐫𝐞𝐬𝐭𝐨𝐫𝐞𝐝 𝐭𝐚𝐛. 𝐖𝐢𝐥𝐥 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  No session storage data does not persists on browser close & reopen.
-                 𝟐. 𝐂𝐚𝐧 𝐢 𝐚𝐜𝐜𝐞𝐬𝐬 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐢𝐧 𝐚𝐧𝐨𝐭𝐡𝐞𝐫 𝐭𝐚𝐛 𝐨𝐟 𝐬𝐚𝐦𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 ?
+### Q2. 𝐂𝐚𝐧 𝐢 𝐚𝐜𝐜𝐞𝐬𝐬 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐢𝐧 𝐚𝐧𝐨𝐭𝐡𝐞𝐫 𝐭𝐚𝐛 𝐨𝐟 𝐬𝐚𝐦𝐞 𝐛𝐫𝐨𝐰𝐬𝐞𝐫 ?
                  No we cannot access session storage data of one tab in another tab.
-                 𝟑. 𝐈 𝐫𝐞𝐥𝐨𝐚𝐝𝐞𝐝 𝐭𝐡𝐞 𝐩𝐚𝐠𝐞 𝐚𝐟𝐭𝐞𝐫 𝐜𝐫𝐞𝐚𝐭𝐢𝐧𝐠 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞. 𝐖𝐢𝐥𝐥 𝐢𝐭 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
+### Q3. 𝐈 𝐫𝐞𝐥𝐨𝐚𝐝𝐞𝐝 𝐭𝐡𝐞 𝐩𝐚𝐠𝐞 𝐚𝐟𝐭𝐞𝐫 𝐜𝐫𝐞𝐚𝐭𝐢𝐧𝐠 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞. 𝐖𝐢𝐥𝐥 𝐢𝐭 𝐩𝐞𝐫𝐬𝐢𝐬𝐭𝐬 ?
                  Yes session storage data persists on page reload.
-                 𝟒. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐭𝐚𝐛𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
+### Q4. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐭𝐚𝐛𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
                  We cannot access session storage data in multiple tabs even if its same url
-                 𝟓. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐰𝐢𝐧𝐝𝐨𝐰𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
+### Q5. 𝐈𝐟 𝐢 𝐨𝐩𝐞𝐧 𝐦𝐮𝐥𝐭𝐢𝐩𝐥𝐞 𝐰𝐢𝐧𝐝𝐨𝐰𝐬 𝐰𝐢𝐭𝐡 𝐬𝐚𝐦𝐞 𝐮𝐫𝐥 𝐡𝐨𝐰 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐛𝐞𝐡𝐚𝐯𝐞𝐬 ?
                  We cannot access session storage data in multiple windows even if its same
                  url
-                 𝟔. 𝐖𝐡𝐞𝐧 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐫𝐞𝐦𝐨𝐯𝐞𝐝 ?
+### Q6. 𝐖𝐡𝐞𝐧 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐝𝐚𝐭𝐚 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐫𝐞𝐦𝐨𝐯𝐞𝐝 ?
                  once tab closes or session ends session storage data will be removed.
-                 𝟕. 𝐈𝐬 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 𝐨𝐫 𝐚𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 ?
+### Q7. 𝐈𝐬 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 𝐨𝐫 𝐚𝐬𝐲𝐧𝐜𝐡𝐫𝐨𝐧𝐨𝐮𝐬 ?
                  Session storage is synchronous. If i perform operations on session storage, It
                  blocks the execution of other javascript code until the current operation is
                  completed.
@@ -1582,17 +1538,15 @@
                               Remember this question )
                  I can go with Indexeddb where asynchronous operations are supported and
                  we can work with large data sets.
-                 𝟗. 𝐖𝐡𝐚𝐭 𝐢𝐬 𝐭𝐡𝐞 𝐦𝐚𝐱 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐥𝐢𝐦𝐢𝐭 𝐨𝐟 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 ?
+### Q9. 𝐖𝐡𝐚𝐭 𝐢𝐬 𝐭𝐡𝐞 𝐦𝐚𝐱 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐥𝐢𝐦𝐢𝐭 𝐨𝐟 𝐬𝐞𝐬𝐬𝐢𝐨𝐧 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 ?
                  We can store max of 5mb.
-                 𝟏𝟎. 𝐈 𝐰𝐢𝐥𝐥 𝐭𝐫𝐲 𝐭𝐨 𝐬𝐭𝐨𝐫𝐞 𝐥𝐞𝐭𝐬 𝐬𝐚𝐲 𝐚𝐧 𝐢𝐦𝐚𝐠𝐞 𝐨𝐟 𝐬𝐢𝐳𝐞 𝐦𝐨𝐫𝐞 𝐭𝐡𝐚𝐧 𝟓𝐦𝐛 𝐢𝐧 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐭𝐡𝐞𝐧
-                 𝐰𝐡𝐚𝐭 𝐡𝐚𝐩𝐩𝐞𝐧𝐬 ?
+### Q10. 𝐈 𝐰𝐢𝐥𝐥 𝐭𝐫𝐲 𝐭𝐨 𝐬𝐭𝐨𝐫𝐞 𝐥𝐞𝐭𝐬 𝐬𝐚𝐲 𝐚𝐧 𝐢𝐦𝐚𝐠𝐞 𝐨𝐟 𝐬𝐢𝐳𝐞 𝐦𝐨𝐫𝐞 𝐭𝐡𝐚𝐧 𝟓𝐦𝐛 𝐢𝐧 𝐥𝐨𝐜𝐚𝐥𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐭𝐡𝐞𝐧 𝐰𝐡𝐚𝐭 𝐡𝐚𝐩𝐩𝐞𝐧𝐬 ?
                  It will throw QuotaExceededException if it exceeds the limit.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 32
 
 ---
-                 46. What are cookies ?
+### Q46. What are cookies ?
                        Cookies are used to store information about the user in the webpages.
 
                        Cookies are stored as key value pairs and hold 4kb of data.
@@ -1627,7 +1581,6 @@
                            substitution)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    33
 
 ---
                       𝟒. 𝐈𝐧 𝐬𝐭𝐫𝐢𝐜𝐭 𝐦𝐨𝐝𝐞, 𝐖𝐡𝐚𝐭 𝐰𝐢𝐥𝐥 𝐭𝐡𝐞 𝐯𝐚𝐥𝐮𝐞 𝐨𝐟 𝐭𝐡𝐢𝐬 𝐢𝐧𝐬𝐢𝐝𝐞 𝐚 𝐟𝐮𝐧𝐜𝐭𝐢𝐨𝐧 ?
@@ -1667,7 +1620,6 @@
                              𝐜𝐨𝐧𝐬𝐨𝐥𝐞.𝐥𝐨𝐠(𝐭𝐡𝐢𝐬)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 34
 
 ---
                                }
@@ -1686,7 +1638,7 @@
                          It will display [object HTMLElement]
 
 
-                 48. What are Interceptors ?
+### Q48. What are Interceptors ?
                           Interceptors allows us to modify the request or response before its sent to
                           the server or received from the server.
 
@@ -1703,20 +1655,15 @@
                      })
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  35
 
 ---
-                 49. What is eval() ? (Very rare)
-                       eval function evaluates javascript code represented as a string. The string
-                       can be javascript expression, variable, statement or a sequence of
-                       statements.
+### Q49. What is eval() ? (Very rare) eval function evaluates javascript code represented as a string. The string can be javascript expression, variable, statement or a sequence of statements.
 
 
                      console.log(eval("1 + 2")); // 3
 
 
-                 50. What is the difference between Shallow copy and deep
-                 copy ? (Most asked)
+### Q50. What is the difference between Shallow copy and deep copy ? (Most asked)
                  👉 Interview Tip: Give this example and explain that’s it.
                        Shallow copy:
 
@@ -1747,7 +1694,6 @@
                           deepCopy[2][0] = 100;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             36
 
 ---
                           console.log(originalArray); // Output: [1, 2, [3, 4]]
@@ -1756,8 +1702,7 @@
                           let array = _.cloneDeep(originalArray)
 
 
-                 51. What are the difference between undeclared and undefined
-                 variables ?
+### Q51. What are the difference between undeclared and undefined variables ?
                        undeclared:
 
                              These variables does not exist in the program and they are not
@@ -1775,7 +1720,7 @@
                              undefined.
 
 
-                 52. What is event bubbling ?
+### Q52. What is event bubbling ?
                        Event bubbling is a type of event propagation where the event first triggers
                        on the innermost target element, and then successively triggers on the
                        ancestors (parents) of the target element in the same nesting hierarchy till
@@ -1786,7 +1731,6 @@
                      <html>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              37
 
 ---
                      <head>
@@ -1825,10 +1769,9 @@
                      </html>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                       38
 
 ---
-                 53. What is event capturing ?
+### Q53. What is event capturing ?
                        Event capturing is a type of event propagation where the event is first
                        captured by the outermost element, and then successively triggers on the
                        descendants (children) of the target element in the same nesting hierarchy
@@ -1864,7 +1807,6 @@
                         'click', function() {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            39
 
 ---
                          console.log('Div 2 clicked');
@@ -1882,7 +1824,7 @@
                      </html>
 
 
-                 54. What are the various array methods in javascript ?
+### Q54. What are the various array methods in javascript ?
                        toString(): returns array as acomma separated string.
 
                        join(): same as toString but we can specify the separator. Eg:
@@ -1908,7 +1850,6 @@
                        flat(): creates a new array with all the sub array elements
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          40
 
 ---
                        fill(): will fill all the elements of an array from a start index ti an end index
@@ -1920,8 +1861,7 @@
                  Ref: https://www.w3schools.com/js/js_array_methods.asp
 
 
-                 55. What are the differences between some and every in
-                 javascript ?
+### Q55. What are the differences between some and every in javascript ?
                        some(): will check if atleast one of the element in the array satisfies the
                        specified condition. It returns true if any element passes the condition.
                        else returns false.
@@ -1948,10 +1888,9 @@
                      console.log(everyGreaterThan10); // false
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                   41
 
 ---
-                 56. What are the different types of errors in javascript ?
+### Q56. What are the different types of errors in javascript ?
                        Syntax errors: These are occured when code is not written according to
                        the javascript syntax rules.
 
@@ -1992,7 +1931,6 @@
                           }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        42
 
 ---
                           Eg2:
@@ -2020,7 +1958,7 @@
                           decodeURIComponent('%');
 
 
-                 57. What is tree shaking in javascript ?
+### Q57. What is tree shaking in javascript ?
                        It is one of the optimization technique in javascript which removes the
                        unused code from the bundle during the build process.
 
@@ -2032,7 +1970,6 @@
                               functions.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         43
 
 ---
                              Faster load time.
@@ -2042,10 +1979,9 @@
                              Cleaner and maintainable codebases.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri           44
 
 ---
-                 58. What is prototype inheritance in javascript ?
+### Q58. What is prototype inheritance in javascript ?
                        Prototype inheritance in javascript is the linking of prototypes of a parent
                        object to a child object so that we can share and utilize the properties of
                        a parent class using a child class.
@@ -2068,7 +2004,7 @@
                  javascript/
 
 
-                 59. What are the differences between fetch and axios ?
+### Q59. What are the differences between fetch and axios ?
                        fetch is inbuilt webapi method present in most of the modern browsers
                        where as axios is a third party library is built on top of XMLHttpRequest
                        object.
@@ -2080,7 +2016,6 @@
                        response before they are sent/received from the server.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              45
 
 ---
                        axios prevents csrf (cross site request forgery)attacks.
@@ -2118,12 +2053,9 @@
                       });
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          46
 
 ---
-                 60. What are DRY, KISS, YAGNI, SOLID Principles ? (rarely
-                 asked)
-                       DRY: Do not repeat yourself.
+### Q60. What are DRY, KISS, YAGNI, SOLID Principles ? (rarely asked) DRY: Do not repeat yourself.
 
                              Avoid duplicates. This make software more maintainable and less
                              error-prone.
@@ -2159,18 +2091,17 @@
                              low level modules. Both should depend on abstraction.
 
 
-                 61. What is Babel ?
+### Q61. What is Babel ?
                        Babel is a javascript compiler which is used to convert the modern
                        javascript code into the version that is understandable by all the modern
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               47
 
 ---
                        and older browsers.
 
 
-                 62. What are the main advantages of arrow functions ?
+### Q62. What are the main advantages of arrow functions ?
                        Arrow functions allow us to write shorter and concise syntax and reduces
                        the size of code.
 
@@ -2203,7 +2134,6 @@
                            Otherwise, by default this would be undefined.*/
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            48
 
 ---
                           // ES6
@@ -2230,7 +2160,7 @@
                  https://tc39wiki.calculist.org/es6/arrow-functions/
 
 
-                 63. What is clearInterval in javascript ?
+### Q63. What is clearInterval in javascript ?
                        This method takes the interval ID returned by setInterval as an argument and
                        stops the corresponding interval from executing further.
 
@@ -2240,7 +2170,6 @@
                       console.log(count++);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               49
 
 ---
                       if (count > 5) {
@@ -2254,7 +2183,7 @@
                  will stop.
 
 
-                 64. What are webworkers and give an example ?
+### Q64. What are webworkers and give an example ?
                        Webworkers allows us to run the jsvsacript code in the background with
                        out blocking the main thread of the web application.
 
@@ -2278,7 +2207,6 @@
                         // Send the result back to the main thread
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               50
 
 ---
                           self.postMessage(result);
@@ -2312,12 +2240,10 @@
                      }
 
 
-                 65. What are the differences between ^ and ~ symbol in
-                 package.json ?
+### Q65. What are the differences between ^ and ~ symbol in package.json ?
                  Caret (^)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            51
 
 ---
                       The caret ( ^ ) allows updates to the most recent minor version (1.x.x), but it
@@ -2346,8 +2272,7 @@
                                   minor versions (e.g., 1.3.0 ).
 
 
-                 66. Plain javascript basic questions:
-                       Write code to change style of div ?
+### Q66. Plain javascript basic questions: Write code to change style of div ?
 
 
                      let element = document.getElementById("newele");
@@ -2363,7 +2288,6 @@
                      "color:white;background-color: brown");
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                     52
 
 ---
                        Write code to add class to div ?
@@ -2376,8 +2300,7 @@
                      element.classList.add("newClass");
 
 
-                 67. Is javascript synchronous or asynchronous and single
-                 threaded or multithreaded ?
+### Q67. Is javascript synchronous or asynchronous and single threaded or multithreaded ?
                        Javascript is a synchronous single threaded language. This means that it
                        executes line by line in order and each line must finish executing before
                        the next line starts.
@@ -2396,13 +2319,14 @@
                  36 Output based questions:
 
 
-                 1. What is the output of 3+2+”7” ?
+## 📤 Output Based JavaScript Questions
+
+### Output Q1. What is the output of 3+2+”7” ?
                        “57”
 
                  Explaination:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            53
 
 ---
                        In javascript, the addition associativity is from left to right. Due to this
@@ -2417,7 +2341,7 @@
                        results in “57”.
 
 
-                 2. What is the output of below logic ?
+### Output Q2. What is the output of below logic ?
 
                      const a = 1<2<3;
                      const b = 1>2>3;
@@ -2444,10 +2368,9 @@
                              That's why console.log(a, b) prints true false .
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                       54
 
 ---
-                 3. Guess the ouput ?
+### Output Q3. Guess the ouput ?
 
                      const p = { k: 1, l: 2 };
                       const q = { k: 1, l: 2 };
@@ -2478,7 +2401,7 @@
                        So, console.log(isEqual, isStartEqual) will output false false .
 
 
-                 4. Guess the output ?
+### Output Q4. Guess the output ?
 
                      a) 2+2 = ?
                      b) "2"+"2" = ?
@@ -2487,7 +2410,6 @@
                      e) 4+"2"+2+4+"25"+2+2 ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                55
 
 ---
                        Output:
@@ -2515,7 +2437,7 @@
                      // "42242522"
 
 
-                 5. What is the output of below logic ?
+### Output Q5. What is the output of below logic ?
 
                      let a = 'jscafe'
                      a[0] = 'c'
@@ -2531,7 +2453,6 @@
                              characters by index where as we can create a new string with desired
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            56
 
 ---
                               modification as below.
@@ -2539,7 +2460,7 @@
                               a = “cscafe” // outputs “cscafe”
 
 
-                 6. Output of below logic ?
+### Output Q6. Output of below logic ?
 
                      var x=10;
                      function foo(){
@@ -2559,7 +2480,7 @@
 
                    1.    var x = 10; : Declares a global variable x   and initializes it with the value 10 .
 
-                   2.    function foo() { ... } : Defines a function named foo .
+### Output Q2. function foo() { ... } : Defines a function named foo .
 
 
                    3.    var x = 5; : Inside the function foo , declares a local variable x
@@ -2567,19 +2488,16 @@
                          it with the value 5 . This x is scoped to the function foo and is different
                          from the global x .
 
-                   4.    console.log(x); : Logs the value of the local variable x   (which is 5 ) to the
-                         console from within the foo function.
+### Output Q4. console.log(x); : Logs the value of the local variable x   (which is 5 ) to the console from within the foo function.
 
                    5.    foo(); : Calls the foo      function.
 
-                   6.    console.log(x); : Logs the value of the global variable x   (which is still 10 ) to
-                         the console outside the foo function.
+### Output Q6. console.log(x); : Logs the value of the global variable x   (which is still 10 ) to the console outside the foo function.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                       57
 
 ---
-                 7. Guess the output ?
+### Output Q7. Guess the output ?
 
                      console.log("Start");
                      setTimeout(() => {
@@ -2606,7 +2524,7 @@
                                   executed.
 
 
-                 8. This code prints 6 everytime. How to print 1,2,3,4,5,6 ?
+### Output Q8. This code prints 6 everytime. How to print 1,2,3,4,5,6 ?
                  (Most asked)
 
 
@@ -2616,7 +2534,6 @@
                       for(var i=1;i<=5;i++){
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    58
 
 ---
                              setTimeout(()=>{
@@ -2659,7 +2576,6 @@
                  explanation of how it works:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            59
 
 ---
                    1. The outer function x is called.
@@ -2687,7 +2603,7 @@
                  seconds.
 
 
-                 9. What will be the output or below code ?
+### Output Q9. What will be the output or below code ?
 
 
                      function x(){
@@ -2700,7 +2616,6 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             60
 
 ---
                      var z = x();
@@ -2711,18 +2626,15 @@
                  In JavaScript, this code demonstrates lexical scoping and closure. Let's break
                  it down:
 
-                   1.   function x() { ... } : Defines a function named x .
+### Output Q1. function x() { ... } : Defines a function named x .
 
 
                    2.   let a = 10; : Declares a variable a      inside the function x and initializes it with
                         the value 10 .
 
-                   3.   function d() { ... } : Defines a nested function named d      inside the function x .
+### Output Q3. function d() { ... } : Defines a nested function named d      inside the function x .
 
-                   4.   console.log(a); : Logs the value of the variable a
-                                                                       to the console. Since d is
-                        defined within the scope of x , it has access to the variable a defined in
-                        x.
+### Output Q4. console.log(a); : Logs the value of the variable a to the console. Since d is defined within the scope of x , it has access to the variable a defined in x.
 
 
                    5.   a = 500; : Changes the value of the variable a         to 500 .
@@ -2741,13 +2653,12 @@
                  function has completed execution.
 
 
-                 10. What’s the output of below logic ?
+### Output Q10. What’s the output of below logic ?
 
                      getData1()
                      getData();
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                         61
 
 ---
                      function getData1(){
@@ -2780,7 +2691,7 @@
 
                          with an arrow function expression assigned to it.
 
-                   2. When the code runs:
+### Output Q2. When the code runs:
 
                                       is a function declaration, so it's hoisted to the top and can be
                               getData1()
@@ -2794,10 +2705,9 @@
                              assigned to a variable.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 62
 
 ---
-                   3. When getData() is invoked:
+### Output Q3. When getData() is invoked:
 
                                 It will throw an error because getData is undefined , and you cannot call
                                 undefined   as a function.
@@ -2819,7 +2729,7 @@
                      getData(); // This will log "Hello"
 
 
-                 11. Whats the output of below code ?
+### Output Q11. Whats the output of below code ?
 
                      function func() {
                          try {
@@ -2834,7 +2744,6 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    63
 
 ---
                      func()
@@ -2842,7 +2751,7 @@
 
                  Output: 1 & 3
 
-                   1. The function func() is defined.
+### Output Q1. The function func() is defined.
 
                    2. Inside the try block:
 
@@ -2861,7 +2770,7 @@
                  So, when you run this code, it will only print 1 and 3 to the console.
 
 
-                 12. What’s the output of below code ?
+### Output Q12. What’s the output of below code ?
 
                      const nums = [1,2,3,4,5,6,7];
                      nums.forEach((n) => {
@@ -2876,14 +2785,13 @@
                  statement works only loops like for, while, do…while and not for map(),
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              64
 
 ---
                  forEach(). They are essentially functions by nature which takes a callback and
                  not loops.
 
 
-                 13. Whats the output of below code ?
+### Output Q13. Whats the output of below code ?
 
                      let a = true;
                      setTimeout(() => {
@@ -2916,7 +2824,6 @@
                  opportunity for the JavaScript event loop to process the setTimeout callback
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                                65
 
 ---
                  and update the value of a . So, even though a will eventually become false
@@ -2926,7 +2833,7 @@
                  like Promises, async/await, or handling the setTimeout callback differently.
 
 
-                 14. Whats the output of below code ?
+### Output Q14. Whats the output of below code ?
 
                      setTimeout(() => console.log(1), 0);
 
@@ -2952,7 +2859,7 @@
 
                    2.    console.log(2); : This immediately logs 2         to the console.
 
-                   3.    new Promise(res => { console.log(3); res(); }).then(() => console.log(4)); : This creates a new
+### Output Q3. new Promise(res => { console.log(3); res(); }).then(() => console.log(4)); : This creates a new
 
                         Promise. The executor function inside the Promise logs 3 to the console
                         and then resolves the Promise immediately with res() . The then() method is
@@ -2961,7 +2868,6 @@
                    4.    console.log(5); : This logs 5     to the console.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                                   66
 
 ---
                  When you run this code, the order of the output might seem a bit
@@ -2995,7 +2901,7 @@
                  questions-in-javascript-b64a707f34d2
 
 
-                 15. Output of below logic ?
+### Output Q15. Output of below logic ?
 
                      async function foo() {
                       console.log("A");
@@ -3004,7 +2910,6 @@
                       await new Promise(resolve => setTimeout(resolve, 0));
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  67
 
 ---
                          console.log("C");
@@ -3043,14 +2948,13 @@
                  execution of the next await .
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              68
 
 ---
                  console.log("C") : This line logs "C" to the console since it's a synchronous
                  operation. foo() function completes.
 
 
-                 16. Guess the output ?
+### Output Q16. Guess the output ?
 
                      let output = (function(x){
                         delete x;
@@ -3061,27 +2965,24 @@
                  Output: 3
                  Let me break it down for you:
 
-                   1. The code defines an immediately invoked function expression (IIFE) that
-                      takes a parameter x .
+### Output Q1. The code defines an immediately invoked function expression (IIFE) that takes a parameter x .
 
-                   2. Inside the function, delete x; is called. However, delete operator is used to
-                        delete properties from objects, not variables. When you try to delete a
+### Output Q2. Inside the function, delete x; is called. However, delete operator is used to delete properties from objects, not variables. When you try to delete a
                         variable, it doesn't actually delete the variable itself, but it's syntactically
                         incorrect and may not have any effect depending on the context (in strict
                         mode, it throws an error). So, delete x; doesn't do anything in this case.
 
-                   3. Finally, the function returns x . Since x was passed as 3 when calling the
+### Output Q3. Finally, the function returns x . Since x was passed as 3 when calling the
                         function (function(x){ ... })(3) , it returns 3 .
 
                    4. The returned value is assigned to the variable output .
 
-                   5.   console.log(output);   then logs the value of output , which is 3 .
+### Output Q5. console.log(output);   then logs the value of output , which is 3 .
 
 
-                 17. Guess the output of below code ?
+### Output Q17. Guess the output of below code ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                   69
 
 ---
                      for (var i = 0; i < 3; i++) {
@@ -3098,8 +2999,7 @@
 
                    1. The for loop initializes a variable i to 0 .
 
-                   2. It sets up a timeout for i milliseconds plus the current value of i , which
-                         means the timeouts will be 1000 , 1001 , and 1002 milliseconds.
+### Output Q2. It sets up a timeout for i milliseconds plus the current value of i , which means the timeouts will be 1000 , 1001 , and 1002 milliseconds.
 
                    3. After setting up the timeouts, the loop increments i .
 
@@ -3111,7 +3011,7 @@
                   3.
 
 
-                 18. Guess the output ?
+### Output Q18. Guess the output ?
 
                      let output = (function(x){
                           delete x;
@@ -3123,29 +3023,26 @@
                  Output: 3
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               70
 
 ---
                  Let me break it down for you:
 
-                   1. The code defines an immediately invoked function expression (IIFE) that
-                        takes a parameter x .
+### Output Q1. The code defines an immediately invoked function expression (IIFE) that takes a parameter x .
 
-                   2. Inside the function, delete x; is called. However, delete operator is used to
-                        delete properties from objects, not variables. When you try to delete a
+### Output Q2. Inside the function, delete x; is called. However, delete operator is used to delete properties from objects, not variables. When you try to delete a
                         variable, it doesn't actually delete the variable itself, but it's syntactically
                         incorrect and may not have any effect depending on the context (in strict
                         mode, it throws an error). So, delete x; doesn't do anything in this case.
 
-                   3. Finally, the function returns x . Since x was passed as 3 when calling the
+### Output Q3. Finally, the function returns x . Since x was passed as 3 when calling the
                         function (function(x){ ... })(3) , it returns 3 .
 
                    4. The returned value is assigned to the variable output .
 
-                   5.   console.log(output);   then logs the value of output , which is 3 .
+### Output Q5. console.log(output);   then logs the value of output , which is 3 .
 
 
-                 19. Guess the output ?
+### Output Q19. Guess the output ?
 
                      let c=0;
 
@@ -3166,7 +3063,6 @@
                         let c = 0; : Initializes a variable c    and sets its initial value to 0.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                   71
 
 ---
                          let id = setInterval(() => { console.log(c++) }, 200) : Sets up an interval that executes a
@@ -3183,7 +3079,7 @@
                  seconds have passed, at which point it stops logging.
 
 
-                 20. What would be the output of following code ?
+### Output Q20. What would be the output of following code ?
 
                      function getName1(){
                          console.log(this.name);
@@ -3209,7 +3105,6 @@
                  calling getnName2 which is defined under Object.prototype doesn't have any
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                               72
 
 ---
                  proprty named this.name. There should be name property under prototype.
@@ -3234,7 +3129,7 @@
                              personObj.getName2();
 
 
-                 21. What would be the output of following code ?
+### Output Q21. What would be the output of following code ?
 
                      function test() {
                       console.log(a);
@@ -3249,7 +3144,6 @@
                      test();
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                   73
 
 ---
                  Output: undefined and 2
@@ -3278,7 +3172,7 @@
                  function.
 
 
-                 22. What is the output of below logic ?
+### Output Q22. What is the output of below logic ?
 
                       function job(){
                        return new Promise((resolve,reject)=>{
@@ -3295,7 +3189,6 @@
                           console.log("22222222222")
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                       74
 
 ---
                      }).catch(()=>{
@@ -3329,7 +3222,7 @@
                      4444444444
 
 
-                 23. Guess the output ?
+### Output Q23. Guess the output ?
 
                      var a = 1;
 
@@ -3337,7 +3230,6 @@
                      function data() {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               75
 
 ---
                       if(!a) {
@@ -3376,7 +3268,6 @@
                  24. Tests your array basics
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                             76
 
 ---
                      function guessArray() {
@@ -3401,7 +3292,7 @@
                  each element individually.
 
 
-                 25. Test your basics on comparision ?
+### Output Q25. Test your basics on comparision ?
 
                      let a = 3;
                      let b = new Number(3);
@@ -3412,7 +3303,6 @@
                      console.log(b === c);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            77
 
 ---
                   new Number()     is a built-in function constructor. Although it looks like a number,
@@ -3424,7 +3314,7 @@
                  an object. Both return false.
 
 
-                 26. Guess the output ?
+### Output Q26. Guess the output ?
 
                      var x = 23;
                      (function(){
@@ -3454,7 +3344,6 @@
                         x++;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  78
 
 ---
                         console.log(x);
@@ -3500,7 +3389,6 @@
                    4. Inside the random function:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                79
 
 ---
                           x++;
@@ -3533,9 +3421,9 @@
                  Summary
                  When random function is executed, the following sequence occurs:
 
-                   1.   var x;    (hoisting, x is undefined at this point)
+### Output Q1. var x;    (hoisting, x is undefined at this point)
 
-                   2.   x++;     ( undefined++ results in NaN )
+### Output Q2. x++;     ( undefined++ results in NaN )
 
                    3.   console.log(x);     outputs NaN
 
@@ -3545,13 +3433,12 @@
                  Thus, the output of the code is:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                     80
 
 ---
                      NaN
 
 
-                 27. Answer below queries on typeOf operator in javascript ?
+### Output Q27. Answer below queries on typeOf operator in javascript ?
 
 
                      typeof [1,2,3,4]            // Returns object
@@ -3568,8 +3455,7 @@
                      typeof undefined     // Returns undefined
 
 
-                 28. Can you find is there any security issue in the javascript
-                 code?
+### Output Q28. Can you find is there any security issue in the javascript code?
 
 
                      const data = await fetch("api");
@@ -3577,7 +3463,6 @@
                      div.innerHTML = data;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          81
 
 ---
                  The provided JavaScript code seems straightforward, but there's a potential
@@ -3613,10 +3498,9 @@
                  external sources before inserting it into your DOM.
 
 
-                 29. Can you guess the output for below code ?
+### Output Q29. Can you guess the output for below code ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 82
 
 ---
                      console.log(typeof typeof 1)
@@ -3634,7 +3518,7 @@
                        “string”.
 
 
-                 30. Guess the output of below code ?
+### Output Q30. Guess the output of below code ?
 
                      x++;
                      console.log(x);
@@ -3657,10 +3541,9 @@
                        is logged to the console.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                83
 
 ---
-                 31. Guess the output ?
+### Output Q31. Guess the output ?
 
                      const x = [1];
                      const y = [2];
@@ -3702,7 +3585,6 @@
                               console.log(x+y);   prints the resulting string "12" to the console.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                84
 
 ---
                  Key Points:
@@ -3713,7 +3595,7 @@
                          strings and then concatenates them.
 
 
-                 32. Guess the output ?
+### Output Q32. Guess the output ?
 
 
                      const data = {
@@ -3732,7 +3614,7 @@
                  where keys must be unique.
 
 
-                 33. What is the output of below code ?
+### Output Q33. What is the output of below code ?
 
 
                      let x = 10+2*3
@@ -3742,7 +3624,6 @@
                  Output: 16
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            85
 
 ---
                  Video Explaination: https://www.instagram.com/p/DHqg2pXCXmw/
@@ -3757,7 +3638,7 @@
                              Then, add 10 to 6 , resulting in 16 .
 
 
-                 34. Guess the output ?
+### Output Q34. Guess the output ?
 
 
                      const x = [1,2,3];
@@ -3787,10 +3668,9 @@
                  Finally, console.log prints "1,2,31,3,4" this string to the console.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            86
 
 ---
-                 35. Guess the output ?
+### Output Q35. Guess the output ?
 
                      console.log(+true);
                      console.log(!"sai");
@@ -3824,10 +3704,9 @@
                         !"sai"   becomes false .
 
 
-                 36. What is the output of below code ?
+### Output Q36. What is the output of below code ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           87
 
 ---
                      console.log([]+[]);
@@ -3859,7 +3738,7 @@
                  In summary, the arrays are turned into strings before they are concatenated.
 
 
-                 37. Guess the output ?
+### Output Q37. Guess the output ?
 
 
                      function getAge(...args){
@@ -3873,7 +3752,6 @@
                  Video Explaination: https://www.instagram.com/p/DHdo1CLi4ud/
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    88
 
 ---
                  Explaination:
@@ -3889,7 +3767,7 @@
                          use typeof on an array (like args ), it returns "object" , not "array" .
 
 
-                 38. Guess the output ?
+### Output Q38. Guess the output ?
 
 
                      const obj = {
@@ -3912,7 +3790,6 @@
                  This is because.,
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 89
 
 ---
                    1. Duplicate Keys in Objects:
@@ -3920,7 +3797,7 @@
                           key will overwrite the previous value. This happens silently (no error is
                           thrown).
 
-                   2. What Happens Here:
+### Output Q2. What Happens Here:
 
                               The key a is first assigned "one" .
 
@@ -3936,7 +3813,7 @@
                      };
 
 
-                 39. Guess the output ?
+### Output Q39. Guess the output ?
 
                      var z = 1, y = z = typeof y;
                      console.log(y);
@@ -3953,7 +3830,6 @@
                           At this stage:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  90
 
 ---
                               z   is undefined (temporarily).
@@ -3994,10 +3870,9 @@
                        Overwriting: The initial value of z ( 1 ) is overwritten by typeof y .
 
 
-                 40. Guess the output ?
+### Output Q40. Guess the output ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                     91
 
 ---
                      console.log(false || null || "Hello");
@@ -4012,8 +3887,7 @@
 
                  Explanation:
 
-                 1. First Line: false || null || "Hello"
-                       Logical OR ( || ) returns the first truthy value it finds.
+### Output Q1. First Line: false || null || "Hello" Logical OR ( || ) returns the first truthy value it finds.
 
                        Check each value left-to-right:
 
@@ -4023,8 +3897,7 @@
 
                               "Hello"   → truthy (non-empty string) → return "Hello".
 
-                 2. Second Line: false && null && "Hello"
-                       Logical AND ( && ) returns the first falsy value it finds.
+### Output Q2. Second Line: false && null && "Hello" Logical AND ( && ) returns the first falsy value it finds.
 
                        Check each value left-to-right:
 
@@ -4039,10 +3912,9 @@
                        value is returned.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    92
 
 ---
-                 41. Guess the output ?
+### Output Q41. Guess the output ?
 
                      const numbers = [1,2,3,4,5];
                      const [x,...y] = numbers;
@@ -4077,7 +3949,7 @@
                        It captures all remaining elements into an array.
 
 
-                 42. Guess the output ?
+### Output Q42. Guess the output ?
 
                      const str = "abc"+ + "def";
                      console.log(str);
@@ -4086,7 +3958,6 @@
                  Video Explaination: https://www.instagram.com/p/DGNt9DOC5C3/
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                      93
 
 ---
                  Explaination:
@@ -4128,13 +3999,12 @@
                         NaN    becomes "NaN" when concatenated with a string.
 
 
-                 43. Guess the output ?
+### Output Q43. Guess the output ?
 
                      let newlist = [1].push(2);
                      console.log(newlist.push(3));
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               94
 
 ---
                  Video Explaination: https://www.instagram.com/p/DGLKah0iB9G/
@@ -4173,13 +4043,12 @@
                  the array variable.
 
 
-                 44. Guess the output ?
+### Output Q44. Guess the output ?
 
                      console.log(0 || 1);
                      console.log(1 || 2);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 95
 
 ---
                      console.log(0 && 1);
@@ -4225,7 +4094,6 @@
                        Output: 2
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              96
 
 ---
                  Key Rules:
@@ -4242,7 +4110,7 @@
                                 If all are truthy, returns the last value.
 
 
-                 45. Guess the output ?
+### Output Q45. Guess the output ?
 
                      console.log(data());
                      var data = function(){
@@ -4269,7 +4137,6 @@
                    2. Execution Order:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             97
 
 ---
                            console.log(data()); //         ❌ Called BEFORE `data` is assigned a function
@@ -4298,7 +4165,7 @@
                  callable functions. Function declarations ( function x(){} ) are fully hoisted.
 
 
-                 46. Guess the output ?
+### Output Q46. Guess the output ?
 
                      const arr = [1,2,3];
                      arr[5] = 6;
@@ -4308,7 +4175,6 @@
                  Explaination:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                       98
 
 ---
                  The output will be 6 .
@@ -4356,14 +4222,13 @@
                        Empty slots are not the same as undefined – they are gaps in the array.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               99
 
 ---
                          The length property reflects the highest assigned index + 1, even if there
                          are gaps.
 
 
-                 47. Guess the output ?
+### Output Q47. Guess the output ?
 
                      const obj = {
                          a:1
@@ -4401,7 +4266,6 @@
                              console.log(obj); // { a: 2 }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              100
 
 ---
                  Key Takeaways:
@@ -4410,7 +4274,7 @@
                          Objects declared with const can have their properties updated.
 
 
-                 48. Guess the output ?
+### Output Q48. Guess the output ?
 
                      let x = {
                          a: undefined,
@@ -4445,7 +4309,6 @@
                                  Property b (with value null ) is kept.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    101
 
 ---
                  Final Output:
@@ -4459,7 +4322,7 @@
                         null   is a valid JSON value and is preserved.
 
 
-                 49. Guess the output ?
+### Output Q49. Guess the output ?
 
                       console.log(true + 1);
                       console.log(true+"1");
@@ -4485,12 +4348,9 @@
 
                        Output: 2
 
-                 2. console.log(true + "1");
-                       String Concatenation: When + is used with a string ( "1" ), JavaScript
-                       converts both values to strings.
+### Output Q2. console.log(true + "1"); String Concatenation: When + is used with a string ( "1" ), JavaScript converts both values to strings.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         102
 
 ---
                               true   → "true"
@@ -4511,7 +4371,7 @@
                         +   with strings: Converts all values to strings and concatenates them.
 
 
-                 50. Guess the output ?
+### Output Q50. Guess the output ?
 
                      const str = "hello";
                      str.data = "val";
@@ -4529,7 +4389,7 @@
 
                              Primitives cannot have properties added to them.
 
-                   2. What Happens When You Try:
+### Output Q2. What Happens When You Try:
 
                              When you write str.data = "val" , JavaScript temporarily converts the
                              primitive string to a String object to allow the assignment.
@@ -4538,7 +4398,6 @@
                              property data is not saved.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             103
 
 ---
                    3. Accessing str.data :
@@ -4555,8 +4414,9 @@
 
                  27 Problem solving questions:
 
-                 1. Write a program to remove duplicates from an
-                 array ?
+## 🧩 Problem Solving Questions
+
+### Problem Q1. Write a program to remove duplicates from an array ?
                  (Most Most Asked question)
 
 
@@ -4577,7 +4437,6 @@
                      removeDuplicatesWay1([1, 2, 1, 3, 4, 2, 2, 1, 5, 6]);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           104
 
 ---
                      // -------------------------- (or)-----------------------------
@@ -4593,8 +4452,7 @@
                      removeDuplicates([1, 2, 1, 3, 4, 2, 2, 1, 5, 6]);
 
 
-                 2. Write a JavaScript function that takes an array of numbers
-                 and returns a new array with only the even numbers.
+### Problem Q2. Write a JavaScript function that takes an array of numbers and returns a new array with only the even numbers.
 
                      function findEvenNumbers(arr) {
                        const result = [];
@@ -4619,10 +4477,9 @@
                  Time complexity: O(N)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                               105
 
 ---
-                 3. How to check whether a string is palindrome or not ?
+### Problem Q3. How to check whether a string is palindrome or not ?
 
                      const checkPallindrome = (str) => {
                       const len = str.length;
@@ -4640,7 +4497,7 @@
                      console.log(checkPallindrome("madam"));
 
 
-                 4. Find the factorial of given number ?
+### Problem Q4. Find the factorial of given number ?
 
                      const findFactorial = (num) => {
                       if (num == 0 || num == 1) {
@@ -4654,11 +4511,9 @@
                      console.log(findFactorial(4));
 
 
-                 5. Program to find longest word in a given sentence
-                 ?
+### Problem Q5. Program to find longest word in a given sentence ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                   106
 
 ---
                      const findLongestWord = (sentence) => {
@@ -4679,8 +4534,7 @@
                      findLongestWord("Hi Iam Saikrishna Iam a UI Developer");
 
 
-                 6. Write a JavaScript program to find the maximum number in
-                 an array.
+### Problem Q6. Write a JavaScript program to find the maximum number in an array.
 
                      function findMax(arr) {
                           if (arr.length === 0) {
@@ -4699,7 +4553,6 @@
                                  // Update max if current element is greater
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                        107
 
 ---
                              }
@@ -4717,8 +4570,7 @@
                  Time complexity: O(N)
 
 
-                 7. Write a JavaScript function to check if a given number is
-                 prime.
+### Problem Q7. Write a JavaScript function to check if a given number is prime.
 
                      function isPrime(number) {
                          if (number <= 1) {
@@ -4744,7 +4596,6 @@
                      // Example usage:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                        108
 
 ---
                      console.log(isPrime(17)); // true
@@ -4754,8 +4605,7 @@
                  Time complexity: O(N)
 
 
-                 8. Program to find Reverse of a string without using
-                 built-in method ?
+### Problem Q8. Program to find Reverse of a string without using built-in method ?
 
                      const findReverse = (sampleString) => {
                          let reverse = "";
@@ -4770,7 +4620,7 @@
                      findReverse("Hello Iam Saikrishna Ui Developer");
 
 
-                 9. Find the smallest word in a given sentence ?
+### Problem Q9. Find the smallest word in a given sentence ?
 
                      function findSmallestWord() {
                          const sentence = "Find the smallest word";
@@ -4787,16 +4637,12 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                        109
 
 ---
                      findSmallestWord();
 
 
-                 10. Write a function sumOfThirds(arr), which takes an
-                 array arr as an argument. This function should return a sum of
-                 every third number in the array, starting from the first one.
-                 𝐃𝐢𝐫𝐞𝐜𝐭𝐢𝐨𝐧𝐬:
+### Problem Q10. Write a function sumOfThirds(arr), which takes an array arr as an argument. This function should return a sum of every third number in the array, starting from the first one. 𝐃𝐢𝐫𝐞𝐜𝐭𝐢𝐨𝐧𝐬:
 
                  If the input array is empty or contains less than 3 numbers then return 0.
                  The input array will contain only numbers.
@@ -4811,8 +4657,7 @@
                      };
 
 
-                 11. Write a JavaScript function that returns the Fibonacci
-                 sequence up to a given number of terms.
+### Problem Q11. Write a JavaScript function that returns the Fibonacci sequence up to a given number of terms.
 
                      function fibonacciSequence(numTerms) {
                        if (numTerms <= 0) {
@@ -4822,7 +4667,6 @@
                           }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      110
 
 ---
                              const sequence = [0, 1];
@@ -4846,7 +4690,7 @@
                  Time complexity: O(N)
 
 
-                 12. Find the max count of consecutive 1’s in an array
+### Problem Q12. Find the max count of consecutive 1’s in an array
 
                      const findConsecutive = (array) => {
                       let maxCount = 0;
@@ -4867,15 +4711,13 @@
                      };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    111
 
 ---
                      findConsecutive([1, 1, 9, 1, 9, 19, 7, 1, 1, 1, 2, 5, 1]);
                      // output: 3
 
 
-                 13. Given 2 arrays that are sorted [0,3,4,31] and [4,6,30].
-                 Merge them and sort [0,3,4,4,6,30,31] ?
+### Problem Q13. Given 2 arrays that are sorted [0,3,4,31] and [4,6,30]. Merge them and sort [0,3,4,4,6,30,31] ?
 
 
                      const sortedData = (arr1,arr2) => {
@@ -4908,7 +4750,6 @@
                       console.log(mergedArray)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          112
 
 ---
                      }
@@ -4916,10 +4757,7 @@
                      sortedData([1,3,4,5],[2,6,8,9])
 
 
-                 14. Create a function which will accepts two arrays arr1 and
-                 arr2. The function should return true if every value in arr1 has
-                 its corresponding value squared in array2. The frequency of
-                 values must be same. (Effecient)
+### Problem Q14. Create a function which will accepts two arrays arr1 and arr2. The function should return true if every value in arr1 has its corresponding value squared in array2. The frequency of values must be same. (Effecient)
 
 
                  Inputs and outputs:
@@ -4947,7 +4785,6 @@
                          }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            113
 
 ---
                          for(let val of arr2){
@@ -4970,10 +4807,7 @@
                      console.log(isSameFrequency([1,2,5],[25,4,1]))
 
 
-                 15. Given two strings. Find if one string can be formed by
-                 rearranging the letters of other string. (Effecient)
-                 Inputs and outputs:
-                 "aaz","zza" ==> false
+### Problem Q15. Given two strings. Find if one string can be formed by rearranging the letters of other string. (Effecient) Inputs and outputs: "aaz","zza" ==> false
 
                  "qwerty","qeywrt" ==> true
 
@@ -4987,7 +4821,6 @@
                          }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      114
 
 ---
                          for(let val of str2){
@@ -5004,7 +4837,7 @@
                      console.log(isStringCreated('anagram','nagaram'))
 
 
-                 16. Write logic to get unique objects from below array ?
+### Problem Q16. Write logic to get unique objects from below array ?
                  I/P: [{name: "sai"},{name:"Nang"},{name: "sai"},{name:"Nang"},{name:
                  "111111"}];
 
@@ -5024,7 +4857,6 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                115
 
 ---
                      let arr = [{name: "sai"},{name:"Nang"},{name: "sai"},
@@ -5032,8 +4864,7 @@
                      console.log(getUniqueArr(arr))
 
 
-                 17. Write a JavaScript program to find the largest element in a
-                 nested array.
+### Problem Q17. Write a JavaScript program to find the largest element in a nested array.
 
                      function findLargestElement(arr) {
                        let max = Number.NEGATIVE_INFINITY;
@@ -5063,7 +4894,6 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                             116
 
 ---
                      // Example usage:
@@ -5077,8 +4907,7 @@
                  Time complexity: O(N)
 
 
-                 18. Given a string, write a javascript function to count the
-                 occurrences of each character in the string.
+### Problem Q18. Given a string, write a javascript function to count the occurrences of each character in the string.
 
                      function countCharacters(str) {
                        // Object to store character counts
@@ -5107,11 +4936,9 @@
                  Time complexity: O(N)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            117
 
 ---
-                 19. Write a javascript function that sorts an array of numbers
-                 in ascending order.
+### Problem Q19. Write a javascript function that sorts an array of numbers in ascending order.
 
                      function quickSort(arr) {
                          // Check if the array is empty or has only one element
@@ -5150,7 +4977,6 @@
                      // Example usage:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          118
 
 ---
                      const unsortedArray = [5, 2, 9, 1, 3, 6];
@@ -5162,8 +4988,7 @@
                  Time complexity: O(n log n)
 
 
-                 20. Write a javascript function that sorts an array of numbers
-                 in descending order.
+### Problem Q20. Write a javascript function that sorts an array of numbers in descending order.
 
                      function quickSort(arr) {
                        if (arr.length <= 1) {
@@ -5191,7 +5016,6 @@
                      const sortedArr = quickSort(arr);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            119
 
 ---
                      console.log(sortedArr);
@@ -5201,8 +5025,7 @@
                  Time complexity: O(n log n)
 
 
-                 21. Write a javascript function that reverses the order of words
-                 in a sentence without using the built-in reverse() method.
+### Problem Q21. Write a javascript function that reverses the order of words in a sentence without using the built-in reverse() method.
 
                      const reverseWords = (sampleString) => {
                       let reversedSentence = "";
@@ -5235,7 +5058,6 @@
                       console.log(reversedSentence.trim());
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            120
 
 ---
                      };
@@ -5273,11 +5095,9 @@
                  Time complexity: O(N)
 
 
-                 22. Implement a javascript function that flattens a nested array
-                 into a single-dimensional array.
+### Problem Q22. Implement a javascript function that flattens a nested array into a single-dimensional array.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                             121
 
 ---
                      function flattenArray(arr) {
@@ -5307,9 +5127,7 @@
                      // Output: [1, 2, 3, 4, 5, 6]
 
 
-                 23. Write a function which converts string input into an object
-                 // stringToObject("a.b.c", "someValue");
-                 // output -> {a: {b: {c: "someValue"}}}
+### Problem Q23. Write a function which converts string input into an object // stringToObject("a.b.c", "someValue"); // output -> {a: {b: {c: "someValue"}}}
 
 
                      function stringToObject(str, finalValue) {
@@ -5318,7 +5136,6 @@
                          let current = result;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                           122
 
 ---
                          for (let i = 0; i < keys.length; i++) {
@@ -5338,8 +5155,7 @@
                      // Output: {a: {b: {c: "someValue"}}}
 
 
-                 24. Given an array, return an array where the each value is the
-                 product of the next two items: E.g. [3, 4, 5] -> [20, 15, 12]
+### Problem Q24. Given an array, return an array where the each value is the product of the next two items: E.g. [3, 4, 5] -> [20, 15, 12]
 
                      function productOfNextTwo(arr) {
                              const result = [];
@@ -5358,14 +5174,13 @@
                      const inputArray = [3, 4, 5];
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              123
 
 ---
                      const outputArray = productOfNextTwo(inputArray);
                      console.log(outputArray); // Output: [20, 15, 12]
 
 
-                 25. Find the 2nd largest element from a given array ?
+### Problem Q25. Find the 2nd largest element from a given array ?
                  [100,20,112,22]
 
                      function findSecondLargest(arr) {
@@ -5401,14 +5216,13 @@
                      // Example usage:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                124
 
 ---
                      const array = [10, 5, 20, 8, 12];
                      console.log(findSecondLargest(array)); // Output: 12
 
 
-                 26. Program challenge: Find the pairs from given input ?
+### Problem Q26. Program challenge: Find the pairs from given input ?
                  input1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
                  input2 = 10;
 
@@ -5442,11 +5256,9 @@
                      // [[1, 9], [2, 8], [3, 7], [4, 6], [5, 5]]
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                    125
 
 ---
-                 27. Write a javascript program to get below output from given
-                 input ?
+### Problem Q27. Write a javascript program to get below output from given input ?
                  I/P: abbcccddddeea
 
                  O/P: 1a2b3c4d2e1a
@@ -5482,18 +5294,19 @@
                      // Outputs: 1a2b3c4d2e1a
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                         126
 
 ---
                  52 Reactjs Interview questions &
                  Answers
 
-                 1. What is React?
+## ⚛️ React.js Theory Questions
+
+### React Q1. What is React?
                        React is an opensource component based JavaScript library which is used
                        to develop interactive user interfaces.
 
 
-                 2. What are the features of React ?
+### React Q2. What are the features of React ?
                        Jsx
 
                        Virtual dom
@@ -5505,7 +5318,7 @@
                        Supports server side rendering
 
 
-                 3. What is JSX ?
+### React Q3. What is JSX ?
                        JSX means javascript xml. It allows the user to write the code similar to
                        html in their javascript files.
 
@@ -5513,17 +5326,16 @@
                        when the application is built.
 
 
-                 4. What is DOM ?
+### React Q4. What is DOM ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             127
 
 ---
                        DOM means document object model. It is like a tree like structure that
                        represents the elements of a webpage.
 
 
-                 5. What is Virtual Dom ?
+### React Q5. What is Virtual Dom ?
                        When ever any underlying data changes or whenever user enters
                        something in textbox then entire UI is rerendered in a virtual dom
                        representation.
@@ -5544,7 +5356,7 @@
                             complexity and the potential for reflows and repaints.
 
 
-                 6. What is state in Reactjs?
+### React Q6. What is state in Reactjs?
                        State is an object which holds the data related to a component that may
                        change over the lifetime of a component.
 
@@ -5563,7 +5375,6 @@
                       return (
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             128
 
 ---
                              <div>
@@ -5595,16 +5406,14 @@
                      }
 
 
-                 7. What is the purpose of callback function as an argument
-                 of setState() ?
+### React Q7. What is the purpose of callback function as an argument of setState() ?
                          If we want to execute some logic once state is updated and component is
                          rerendered then we can add it in callback function.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           129
 
 ---
-                 8. What are props ?
+### React Q8. What are props ?
                          Props are inputs to the component.
 
                          They are used to send data from parent component to child component.
@@ -5645,7 +5454,6 @@
                            <h2>Child Component</h2>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             130
 
 ---
                            <p>Hello, {props.name}!</p>
@@ -5656,7 +5464,7 @@
                      export default ChildComponent;
 
 
-                 9. What are the differences between State and Props in react ?
+### React Q9. What are the differences between State and Props in react ?
                          Both props and state are used to manage the data of a component.
 
                          State is used to hold the data of a component whereas props are used to
@@ -5667,18 +5475,16 @@
                          Any change in state causes rerender of component and its children.
 
 
-                 10. What is props drilling ?
+### React Q10. What is props drilling ?
                          Props drilling is the process of sending the data from one component to
                          the component thats needs the data from several interconnected
                          components
 
 
-                 11. What are the disadvantages of props drilling and How we
-                 can avoid props drilling ?
+### React Q11. What are the disadvantages of props drilling and How we can avoid props drilling ?
                          Code complexity:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           131
 
 ---
                        Prop drilling can make code difficult to read and maintain, especially in
@@ -5714,15 +5520,14 @@
                  management libraries.
 
 
-                 12. What is useReducer hook ?
+### React Q12. What is useReducer hook ?
                        It is an alternative to useState hook which is used when state of the
                        component is complex and requires more than one state variable.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               132
 
 ---
-                 13. What is useMemo ?
+### React Q13. What is useMemo ?
                        useMemo is useful for performance optimization in react.
 
                        It is used to cache the result of a function between re-renders.
@@ -5763,10 +5568,9 @@
                  only when the data prop changes.
 
 
-                 14. What is useCallback ?
+### React Q14. What is useCallback ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          133
 
 ---
                        useCallback caches the function defination between the re-renders
@@ -5780,8 +5584,7 @@
                  function-directly
 
 
-                 15. What are the differences between useMemo and
-                 useCallback ?
+### React Q15. What are the differences between useMemo and useCallback ?
 
 
                        Both useMemo and useCallback are useful for performance optimization.
@@ -5790,8 +5593,7 @@
                        whereas useCallback will cache the function itself between re-renders.
 
 
-                 16. Which lifecycle hooks in class component are replaced
-                 with useEffect in functional components ?
+### React Q16. Which lifecycle hooks in class component are replaced with useEffect in functional components ?
 
 
                    1. componentDidMount(): equivalent to useEffect with empty array.
@@ -5806,7 +5608,6 @@
                       dependencies
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        134
 
 ---
                      useEffect(()=>{
@@ -5829,7 +5630,7 @@
                      })
 
 
-                 17. What is component life cycle of React class component ?
+### React Q17. What is component life cycle of React class component ?
                           React life cycle consists of 3 phases.
 
                                mounting
@@ -5850,7 +5651,6 @@
                                    It is a place to set the initial state and other initial values.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              135
 
 ---
                          2. getDerivedStateFromProps:
@@ -5901,7 +5701,6 @@
                          3. Render: same as above
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                      136
 
 ---
                          4. getSnapshotBeforeUpdate:
@@ -5933,7 +5732,7 @@
                                     dom.
 
 
-                 18. What are keys in React ?
+### React Q18. What are keys in React ?
                        Keys are used to uniquely identify the elements in the list.
 
                        react will use this to indentify, which elements in the list have been added,
@@ -5946,7 +5745,6 @@
                         { id: 2, name: "banana" },
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                137
 
 ---
                           { id: 3, name: "orange" }
@@ -5963,12 +5761,12 @@
                      }
 
 
-                 19. What are fragments in react ?
+### React Q19. What are fragments in react ?
                          React fragments allows us to wrap or group multiple elements without
                          adding extra nodes to the dom.
 
 
-                 20. What are Pure components in React ?
+### React Q20. What are Pure components in React ?
                          A component which renders the same output for the same props and state
                          is called as pure component.
 
@@ -5988,7 +5786,6 @@
                      class MyPureComponent extends PureComponent {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           138
 
 ---
                          render() {
@@ -6032,7 +5829,6 @@
                               </label>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      139
 
 ---
                               <label>
@@ -6047,8 +5843,7 @@
                      }
 
 
-                 21. What are the differences between controlled and
-                 uncontrolled components ?
+### React Q21. What are the differences between controlled and uncontrolled components ?
                          Controlled components:
 
                                In controlled components, the form data is handled by the react
@@ -6067,13 +5862,12 @@
                                Dom is the source of truth.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          140
 
 ---
                  Ref: https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/
 
 
-                 22. Whatare Ref’s in React?
+### React Q22. Whatare Ref’s in React?
                        ref’s are the way to access the dom elements created in the render
                        method.
 
@@ -6097,7 +5891,6 @@
                       const inputRef = useRef();
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       141
 
 ---
                          const focusOnInput = () => {
@@ -6143,7 +5936,6 @@
                           </div>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     142
 
 ---
                          );
@@ -6153,15 +5945,14 @@
                  Reference: https://www.memberstack.com/blog/react-refs
 
 
-                 23. What is meant by forward ref ?
+### React Q23. What is meant by forward ref ?
                          In React, forwardref is a technique which is used to send the ref from
                          parent component to one of its children. This is helpful when we want to
                          access the child component dom node from the parent component.
 
                  Example:
 
-                   1. Creating the Forward Ref Component: Define a component that forwards
-                      the ref to a child component.
+### React Q1. Creating the Forward Ref Component: Define a component that forwards the ref to a child component.
 
 
                      import React, { forwardRef } from 'react';
@@ -6190,7 +5981,6 @@
                            <button onClick={() => inputRef.current.focus()}>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            143
 
 ---
                               Focus Input
@@ -6210,7 +6000,7 @@
                  react-js
 
 
-                 24. What are Error boundaries ?
+### React Q24. What are Error boundaries ?
                          Error boundaries are one of the feature in react which allows the
                          developers to catch the errors during the rendering of component tree, log
                          those erros and handle those errors without crashing the entire application
@@ -6231,7 +6021,6 @@
                          }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                144
 
 ---
                       componentDidCatch(error, info) {
@@ -6262,7 +6051,7 @@
                      </ErrorBoundary>
 
 
-                 25. What are Higher order components in react ?
+### React Q25. What are Higher order components in react ?
                        Higher order component is a function which takes the component as an
                        argument and returns a new component that wraps the original
                        component.
@@ -6272,7 +6061,6 @@
                  a HOC that adds the style objects to the component that we pass to it.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            145
 
 ---
                      function withStyles(Component) {
@@ -6291,7 +6079,7 @@
                      const StyledText = withStyles(Text)
 
 
-                 26. What is Lazy loading in React ?
+### React Q26. What is Lazy loading in React ?
                          It is a technique used to improve the performance of a webapplication by
                          splitting the code into smaller chunks and loading them only when its
                          required intead of loading on initial load.
@@ -6312,13 +6100,12 @@
                      }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            146
 
 ---
                      export default App;
 
 
-                 27. What is suspense in React ?
+### React Q27. What is suspense in React ?
                  The lazy loaded components are wrapped by Suspense.The Suspense
                  component receives a fallback prop which is displayed until the lazy loaded
                  component in rendered.
@@ -6342,7 +6129,7 @@
                      export default App;
 
 
-                 28. What are custom hooks ?
+### React Q28. What are custom hooks ?
                          Custom hooks helps us to extract and reuse the stateful logic between
                          components.
 
@@ -6351,7 +6138,6 @@
                                Fetch data
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         147
 
 ---
                              To find user is in online or offline.
@@ -6395,7 +6181,6 @@
                       }, [url]); // Dependency array to watch for changes
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                         148
 
 ---
                          return { data, loading, error };
@@ -6434,13 +6219,12 @@
                      export default MyComponent;
 
 
-                 29. What is context api in react ?
+### React Q29. What is context api in react ?
                          Context api is a feature in react by using which we can share the data
                          across the application with out having to pass the data manually through
                          every level of component tree.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            149
 
 ---
                        It solves the problem of props drilling in react.
@@ -6468,7 +6252,7 @@
                        search request).
 
 
-                 30. Give an example of context api usage ?
+### React Q30. Give an example of context api usage ?
                  Example: Once user loggedin, I wanted to share the user information between
                  the components.
 
@@ -6486,7 +6270,6 @@
                      const UserConsumer = UserContext.Consumer;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           150
 
 ---
                      export {UserProvider, UserConsumer};
@@ -6531,7 +6314,6 @@
                      import {UserConsumer} from "./UserContext.js";
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              151
 
 ---
                      export const ComponentA = () => {
@@ -6542,7 +6324,7 @@
                      }
 
 
-                 31. What is Strict mode in react ?
+### React Q31. What is Strict mode in react ?
                  It identifies the commonly occured bugs in the development time itself.
 
                          Checks if there are any depricated apis usage.
@@ -6576,7 +6358,6 @@
                      =======================================================
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                   152
 
 ---
                      import { StrictMode } from 'react';
@@ -6600,8 +6381,7 @@
                  Good Ref: https://dev.to/codeofrelevancy/what-is-strict-mode-in-react-3p5b
 
 
-                 32. What are the different ways to pass data from child
-                 component to parent component in react ?
+### React Q32. What are the different ways to pass data from child component to parent component in react ?
                  There are 4 common ways to send data from child component to parent
                  component. They are.,
 
@@ -6614,10 +6394,9 @@
                    4. Redux
 
 
-                 33. How do you optimize your react application ?
+### React Q33. How do you optimize your react application ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      153
 
 ---
                        Code Splitting: Break down large bundles into smaller chunks to reduce
@@ -6656,12 +6435,11 @@
                        Networks (CDNs) to reduce latency and improve reliability.
 
 
-                 34. What are Portals in react ?
+### React Q34. What are Portals in react ?
                        Portals are the way to render the child components outside of the parent’s
                        dom hierarchy.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              154
 
 ---
                          We mainly need portals when a React parent component has a hidden
@@ -6706,10 +6484,9 @@
                      ReactDOM.render(<App />, document.getElementById('root'));
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             155
 
 ---
-                 35. What are synthetic events in react ?
+### React Q35. What are synthetic events in react ?
                        Synthetic events are the wrapper around native browser events.
 
                        By using this react will remove browser inconsistencies and provides a
@@ -6719,10 +6496,7 @@
                        objects.
 
 
-                 36. What are the difference between Package.json and
-                 Package.lock.json
-                       𝐏𝐚𝐜𝐤𝐚𝐠𝐞.𝐣𝐬𝐨𝐧: is a metadata file that contains information about your
-                       project, such as the name, version, description, author, and most
+### React Q36. What are the difference between Package.json and Package.lock.json 𝐏𝐚𝐜𝐤𝐚𝐠𝐞.𝐣𝐬𝐨𝐧: is a metadata file that contains information about your project, such as the name, version, description, author, and most
                        importantly, the list of dependencies required for your project to run. This
                        file is used by npm (Node Package Manager) to install, manage, and
                        update dependencies for your project.
@@ -6741,11 +6515,9 @@
                        project.
 
 
-                 37. What are the differences between client side and server
-                 side rendering
+### React Q37. What are the differences between client side and server side rendering
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               156
 
 ---
                        Rendering location: In csr, rendering occurs on the client side after
@@ -6766,7 +6538,7 @@
                        parse javascript heavy content.
 
 
-                 38. What is react-router ?
+### React Q38. What is react-router ?
                  React-router is a javascript library which is used to implement routing in react
                  applications.
                  It allows us to navigate between views or pages with out refreshing the page.
@@ -6786,7 +6558,6 @@
                        ensures only one route is rendered.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               157
 
 ---
                      import React from 'react';
@@ -6827,7 +6598,6 @@
                                               </Link>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             158
 
 ---
                                        </li>
@@ -6854,17 +6624,15 @@
                      export default App;
 
 
-                 39. What are protected routes in react ?
+### React Q39. What are protected routes in react ?
                          By using the protected routes, we can define which users/user roles have
                          access to specific routes or components.
 
 
-                 40. What is the difference between useEffect and
-                 useLayoutEffect ?
+### React Q40. What is the difference between useEffect and useLayoutEffect ?
                          useeffect is asynchronous where as uselayouteffect is synchronous
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            159
 
 ---
                        uselayouteffect runs after browser calculation of dom measurements and
@@ -6879,8 +6647,7 @@
                  https://mtg-dev.tech/blog/real-world-example-to-use-uselayouteffect
 
 
-                 41. Practical question: How to send data from child to parent
-                 using callback functions ?
+### React Q41. Practical question: How to send data from child to parent using callback functions ?
                        Define a function in the parent component that takes data as an argument.
 
                        Pass this function as a prop to the child component.
@@ -6910,7 +6677,6 @@
                         </div>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              160
 
 ---
                          );
@@ -6942,8 +6708,7 @@
                      export default ChildComponent;
 
 
-                 42. Practical question: How to send the data from child
-                 component to parent using useRef ?
+### React Q42. Practical question: How to send the data from child component to parent using useRef ?
                          It is used to store the data without re-rendering the components.
 
                          It will not trigger any event by itself whenever the data is updated.
@@ -6951,7 +6716,6 @@
                  Parent component:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         161
 
 ---
                      import React from "react";
@@ -6982,14 +6746,12 @@
                      }
 
 
-                 43. Practical question: Create a increment decrement counter
-                 using useReducer hook in react ?
+### React Q43. Practical question: Create a increment decrement counter using useReducer hook in react ?
 
 
                      import React, { useReducer } from 'react';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          162
 
 ---
                      // Initial state
@@ -7033,11 +6795,9 @@
                      export default Counter;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              163
 
 ---
-                 44. Practical question: create a custom hook for
-                 increment/decrement counter ?
+### React Q44. Practical question: create a custom hook for increment/decrement counter ?
                           Create a custom hook for counter:
 
 
@@ -7079,7 +6839,6 @@
                       return (
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                        164
 
 ---
                           <div>
@@ -7091,8 +6850,7 @@
                      };
 
 
-                 45. Machine coding question: Dynamic checkbox counter
-                 Display 4 checkboxes with different names and a button named selectall
+### React Q45. Machine coding question: Dynamic checkbox counter Display 4 checkboxes with different names and a button named selectall
                  User can select each checkbox
 
                  Select all button click will check all checkboxes
@@ -7117,7 +6875,6 @@
                       );
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  165
 
 ---
                      };
@@ -7159,7 +6916,6 @@
                       };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                           166
 
 ---
                       const selectedCheckboxes = checkboxes.filter(
@@ -7198,11 +6954,9 @@
                      render(<App />, document.getElementById('root'));
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          167
 
 ---
-                 46. Create a nested circles based on user input like below
-                 image.
+### React Q46. Create a nested circles based on user input like below image.
 
 
                  Solution:
@@ -7230,7 +6984,6 @@
                        <div className="nested-circles-container">
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    168
 
 ---
                            <input
@@ -7273,7 +7026,6 @@
                           >
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri            169
 
 ---
                            {numbCircles > 1 &&
@@ -7297,7 +7049,7 @@
                      }
 
 
-                 47. What are the various design patterns in react ?
+### React Q47. What are the various design patterns in react ?
                          Compound pattern
 
                          HOC Pattern
@@ -7307,12 +7059,11 @@
                          Container/Presentational pattern
 
 
-                 48. What is compound pattern ?
+### React Q48. What is compound pattern ?
                          By using this compound pattern we will create multiple components that
                          work together to perform a single task.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          170
 
 ---
                        We can achieve this using context api.
@@ -7321,7 +7072,7 @@
                        components, promotes reusability of logic and maintainability.
 
 
-                 49. What is render props pettern ?
+### React Q49. What is render props pettern ?
                        With the Render Props pattern, we pass components as props to other
                        components. The components that are passed as props can in turn
                        receive props from that component.
@@ -7331,7 +7082,7 @@
                  https://javascriptpatterns.vercel.app/patterns/react-patterns/render-props
 
 
-                 50. What is Container/Presentational pattern ?
+### React Q50. What is Container/Presentational pattern ?
                  It enforces separation of concerns by separating the view from the application
                  logic.
 
@@ -7350,10 +7101,9 @@
                  https://javascriptpatterns.vercel.app/patterns/react-patterns/conpres
 
 
-                 51. What is React.memo ?
+### React Q51. What is React.memo ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            171
 
 ---
                        React.memo is a Higher order component provided by react that
@@ -7374,8 +7124,7 @@
                           });
 
 
-                 52. Differences between dependencies and devdependencies
-                 ?
+### React Q52. Differences between dependencies and devdependencies ?
                        dependencies: These are the packages that your project needs to run in
                        production. These are essential for the application to function correctly.
 
@@ -7386,11 +7135,12 @@
 
 
             Reactjs Scenario based Questions:
-            1. How to send the data from parent component to
+## ⚛️ React.js Scenario Based Questions
+
+### React Scenario Q1. How to send the data from parent component to
             child component in react ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            172
 
 ---
             Ans. To send data from a parent component to a child component in React, We
@@ -7435,7 +7185,6 @@
                      <h1>{props.text}</h1>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      173
 
 ---
                      <p>Name: {props.userData.name}, Age: {props.userData.age}</p>
@@ -7459,7 +7208,7 @@
                }
 
 
-            2. How to call parent component method from child
+### React Scenario Q2. How to call parent component method from child
             component in reactjs ?
             To call a parent component's method from a child component in React, follow
             these steps:
@@ -7472,7 +7221,6 @@
             Example with Functional Components:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            174
 
 ---
                // ParentComponent.jsx
@@ -7515,7 +7263,6 @@
                import ChildComponent from './ChildComponent';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri               175
 
 ---
                class ParentComponent extends React.Component {
@@ -7550,7 +7297,6 @@
             Step 1: Define Array or Array of Objects in your component
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                           176
 
 ---
                import React, { useState } from 'react';
@@ -7595,7 +7341,6 @@
                       <select value={selectedCountryId} onChange={(e) => setSelectedCountryI
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       177
 
 ---
                d(e.target.value)}>
@@ -7631,11 +7376,10 @@
                     Selecting India sets selectedCountryId to 1 .
 
 
-            4. Create a lazy loaded component in react ?
-            1. Create your Lazy Loaded Component (e.g., MyComponent.jsx )
+### React Scenario Q4. Create a lazy loaded component in react ?
+### React Scenario Q1. Create your Lazy Loaded Component (e.g., MyComponent.jsx )
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        178
 
 ---
                // MyComponent.jsx
@@ -7677,7 +7421,6 @@
                export default App;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                 179
 
 ---
             Explanation:
@@ -7689,7 +7432,7 @@
                  spinner or loader) while the component loads.
 
 
-            5. How to display data entered by the user in another
+### React Scenario Q5. How to display data entered by the user in another
             textbox ?
             Step-by-step code:
 
@@ -7721,7 +7464,6 @@
                      placeholder="Displayed value..."
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        180
 
 ---
                       value={inputValue}
@@ -7746,7 +7488,7 @@
             This allows you to see the entered text mirrored immediately in another textbox.
 
 
-            6. How to conditionally render an element or text in
+### React Scenario Q6. How to conditionally render an element or text in
             react ?
             You can conditionally render elements or text in React using these common
             approaches:
@@ -7760,7 +7502,6 @@
                     {isLoggedIn ? <p>Welcome back!</p> : <p>Please log in.</p>}
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         181
 
 ---
                      </div>
@@ -7800,7 +7541,6 @@
             Inline conditional rendering (short-circuiting):
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      182
 
 ---
                function MyComponent({ notifications }) {
@@ -7814,7 +7554,7 @@
             Choose the approach based on clarity and complexity of your conditions.
 
 
-            7. How to perform debouncing in react ?
+### React Scenario Q7. How to perform debouncing in react ?
             Step-by-step example:
 
 
@@ -7842,7 +7582,6 @@
                     // Set new timer for debounce
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              183
 
 ---
                     timerRef.current = setTimeout(() => {
@@ -7889,10 +7628,9 @@
             calls.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 184
 
 ---
-            8. Create a component to fetch data from api in reactjs
+### React Scenario Q8. Create a component to fetch data from api in reactjs
             ?
 
 
@@ -7927,7 +7665,6 @@
                  }, [apiUrl]);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                  185
 
 ---
                  if (loading) return <p>Loading...</p>;
@@ -7962,12 +7699,10 @@
                  Displays fetched data in a formatted JSON block.
 
 
-            9. Given two dropdowns, select 2nd dropdown options
-            based on value selected in one dropdown in reactjs ?
+### React Scenario Q9. Given two dropdowns, select 2nd dropdown options based on value selected in one dropdown in reactjs ?
             (Load states based on country selected)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                 186
 
 ---
                import React, { useState } from "react";
@@ -8011,7 +7746,6 @@
                       <label>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      187
 
 ---
                       Country:{" "}
@@ -8054,7 +7788,6 @@
             How it works:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                188
 
 ---
                    When you select a country, it updates selectedCountry .
@@ -8067,7 +7800,7 @@
                    Selecting a new country resets the selected state.
 
 
-            10. How to display dynamic html data in reactjs ?
+### React Scenario Q10. How to display dynamic html data in reactjs ?
             To display dynamic HTML content (like a string containing HTML tags) safely in
             React, you use dangerouslySetInnerHTML .
 
@@ -8097,10 +7830,9 @@
                     dangerouslySetInnerHTML .
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 189
 
 ---
-            11. How to add data into useState array in functional
+### React Scenario Q11. How to add data into useState array in functional
             component in react ?
             To add data into a useState array in a React functional component, you update the
             state by creating a new array with the existing items plus the new item.
@@ -8139,11 +7871,9 @@
                    This ensures immutability and triggers a re-render.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                190
 
 ---
-            12. Change focus/enable/disable textbox in child
-            component based on parent component button click ?
+### React Scenario Q12. Change focus/enable/disable textbox in child component based on parent component button click ?
             To change focus or enable/disable a textbox in a child component based on a
             button click in the parent component in React, you can use props and refs.
             Here’s a minimal example showing both:
@@ -8179,7 +7909,6 @@
                    const [focusRequest, setFocusRequest] = useState(false);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  191
 
 ---
                    const toggleDisabled = () => {
@@ -8221,10 +7950,9 @@
                    again.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  192
 
 ---
-            13. How to display dropdown value selected by user in
+### React Scenario Q13. How to display dropdown value selected by user in
             another textbox ?
 
 
@@ -8263,7 +7991,6 @@
                    When the user selects a value, handleChange updates the state.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            193
 
 ---
                  The textbox’s value is set to the current selectedValue , showing the selected
@@ -8272,7 +7999,7 @@
                   readOnly    is used on the textbox so the user cannot edit it manually.
 
 
-            14. How to display number of characters remaining
+### React Scenario Q14. How to display number of characters remaining
             functionality for textarea using react useRef?
             React example showing how to display the number of characters remaining for a
             <textarea>    using useRef :
@@ -8304,7 +8031,6 @@
                       <div>{remaining} characters remaining</div>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          194
 
 ---
                     </div>
@@ -8326,7 +8052,7 @@
                    Display remaining count below the textarea.
 
 
-            15. Create a search textbox filter in reactjs
+### React Scenario Q15. Create a search textbox filter in reactjs
             Here's a simple ReactJS example of a search textbox filter that filters a list of
             items as you type:
 
@@ -8352,7 +8078,6 @@
                    const filteredItems = items.filter(item =>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  195
 
 ---
                   item.toLowerCase().includes(searchTerm.toLowerCase())
@@ -8392,11 +8117,9 @@
                  The filtered list displays below the input.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      196
 
 ---
-            16. Display radio button data selected by user in
-            another textbox
+### React Scenario Q16. Display radio button data selected by user in another textbox
             Here’s a simple React example showing how to display the selected radio button
             value inside a textbox:
 
@@ -8434,7 +8157,6 @@
                       </label>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     197
 
 ---
                         <br />
@@ -8453,7 +8175,7 @@
                export default RadioToTextbox;
 
 
-            17. Create an error boundary component in react ?
+### React Scenario Q17. Create an error boundary component in react ?
 
 
                import React from 'react';
@@ -8475,7 +8197,6 @@
                        } else {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                         198
 
 ---
                            console.error(error, info);
@@ -8518,7 +8239,6 @@
                    ErrorBoundary must be a class component.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                   199
 
 ---
                    It resets to fallback UI when a child throws.
@@ -8528,7 +8248,7 @@
                    Wrap any tree under it to catch runtime errors in rendering/lifecycle.
 
 
-            18. Create a counter component using useState ?
+### React Scenario Q18. Create a counter component using useState ?
 
 
                import React, { useState } from 'react';
@@ -8557,11 +8277,10 @@
                export default Counter;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    200
 
 ---
-            19. Create a counter component using useReducer ?
-            1. Counter Component Implementation
+### React Scenario Q19. Create a counter component using useReducer ?
+### React Scenario Q1. Counter Component Implementation
 
                import React, { useReducer } from 'react';
 
@@ -8597,7 +8316,6 @@
                          <button onClick={() => dispatch({ type: 'DECREMENT' })}>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              201
 
 ---
                         Decrement -
@@ -8641,7 +8359,6 @@
              2. Action Types:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           202
 
 ---
                         INCREMENT : Increases count by 1
@@ -8670,7 +8387,7 @@
                        Real-time display of current count
 
             3. How to Use:
-             1. Create a new file Counter.js with the above code
+### React Scenario Q1. Create a new file Counter.js with the above code
 
              2. Import and use it in your main App component:
 
@@ -8685,10 +8402,9 @@
                }
 
 
-            20. How to call a method on every rerender of a
+### React Scenario Q20. How to call a method on every rerender of a
             component ?
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      203
 
 ---
             To call a method on every re-render of a React component, you use the useEffect
@@ -8726,7 +8442,6 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      204
 
 ---
                export default ReRenderExample;
@@ -8744,7 +8459,7 @@
             dependencies wisely for performance.
 
 
-            21. Create a pure component in reactjs ?
+### React Scenario Q21. Create a pure component in reactjs ?
             🔹 What is a Pure Component?
             A Pure Component in React is a component that doesn’t re-render unless its
             props or state actually change.
@@ -8767,7 +8482,6 @@
                import React from 'react';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         205
 
 ---
                class Counter extends React.PureComponent {
@@ -8807,7 +8521,6 @@
 
 
             ✅ Functional Component Alternative
-232 Interview questions & Answers - Saikrishna Nangunuri                          206
 
 ---
             In functional components, you use React.memo() for the same purpose:
@@ -8823,7 +8536,7 @@
                export default Counter;
 
 
-            22. Create a controlled and uncontrolled component in
+### React Scenario Q22. Create a controlled and uncontrolled component in
             react ?
             In React, controlled and uncontrolled components refer to how form data is
             handled inside the component. Let's explore both with code examples and clear
@@ -8846,7 +8559,6 @@
                   setName(e.target.value);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    207
 
 ---
                    };
@@ -8886,7 +8598,6 @@
                    return (
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                   208
 
 ---
                     <div>
@@ -8917,7 +8628,7 @@
              React control                      Full control                Minimal control
 
 
-            23. Create a custom hook using reactjs ?
+### React Scenario Q23. Create a custom hook using reactjs ?
             A custom hook in React is a JavaScript function whose name starts with use and
             lets you reuse logic across components. Instead of repeating code (e.g., useState ,
              useEffect setups) in multiple components, you can extract that logic into a custom
@@ -8929,7 +8640,6 @@
              Step 1: Create the Custom Hook
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                 209
 
 ---
                // useWindowWidth.js
@@ -8968,7 +8678,6 @@
                       <h2>Custom Hook Example</h2>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                               210
 
 ---
                      <p>Current window width: {width}px</p>
@@ -8998,7 +8707,7 @@
                    Subscribing to global events (scroll, resize, visibility)
 
 
-            24. Give an emaple of optimization using useMemo ?
+### React Scenario Q24. Give an emaple of optimization using useMemo ?
             ✅ Example of Optimization using                       useMemo in React
             Let’s say you have a component that performs a heavy calculation every time it
             renders. This is inefficient if the inputs to the calculation haven’t changed.
@@ -9009,7 +8718,6 @@
                import React, { useState, useMemo } from 'react';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     211
 
 ---
                function ExpensiveComponent() {
@@ -9050,7 +8758,6 @@
                    array is empty [] .
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                       212
 
 ---
                  Without useMemo , this loop would execute on every re-render, even if the
@@ -9066,7 +8773,7 @@
                  You want to avoid recalculating when those variables haven't changed.
 
 
-            25. How to Share data between components using
+### React Scenario Q25. How to Share data between components using
             context api ?
             The Context API allows you to create a global state or shared values that can be
             accessed by any component in the tree, without passing props manually at every
@@ -9077,7 +8784,7 @@
 
             Step-by-Step Implementation
 
-            1. Create a Context
+### React Scenario Q1. Create a Context
 
                // UserContext.js
                import { createContext } from 'react';
@@ -9086,10 +8793,9 @@
                export const UserContext = createContext(null);
 
 
-            2. Create a Provider Component
+### React Scenario Q2. Create a Provider Component
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       213
 
 ---
                // UserProvider.js
@@ -9131,7 +8837,6 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      214
 
 ---
                export default App;
@@ -9171,7 +8876,6 @@
                   </div>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            215
 
 ---
                 );
@@ -9186,7 +8890,7 @@
             Use useContext() to consume the shared data in any component
 
 
-            26. Which lifecycle hooks in class component are
+### React Scenario Q26. Which lifecycle hooks in class component are
             replaced with useEffect in functional components ?
             In React, the useEffect hook in functional components replaces several lifecycle
             methods from class components. Here's a clear breakdown:
@@ -9216,7 +8920,6 @@
             1. componentDidMount
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                                        216
 
 ---
                // Class
@@ -9254,7 +8957,6 @@
                    console.log('Cleanup before unmount');
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri       217
 
 ---
                }
@@ -9280,7 +8982,7 @@
             cleanup function.
 
 
-            27. Create a popup using portal ?
+### React Scenario Q27. Create a popup using portal ?
             ✅ 1. Create the                Popup component using portal
 
 
@@ -9296,7 +8998,6 @@
                     <button onClick={onClose} style={closeBtn}>X</button>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                 218
 
 ---
                     {children}
@@ -9338,7 +9039,6 @@
             ✅ 2. Use the               Popup in your App
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                           219
 
 ---
                // App.js
@@ -9379,10 +9079,9 @@
                </body>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  220
 
 ---
-            28. How to call a method immediately after state is
+### React Scenario Q28. How to call a method immediately after state is
             updated or
             after component is rerendered in reactjs
             ✅ 1. Call a method immediately after state is updated
@@ -9416,7 +9115,6 @@
                  );
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    221
 
 ---
                }
@@ -9440,7 +9138,7 @@
                    Always rely on useEffect for post-update logic.
 
 
-            29. How to Force a component to rerender with out
+### React Scenario Q29. How to Force a component to rerender with out
             using useState in react ?
             To force a React component to re-render without using useState , you can use the
             useReducer or useRef + forceUpdate trick.
@@ -9455,7 +9153,6 @@
                const forceUpdateReducer = (x) => x + 1;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       222
 
 ---
                function MyComponent() {
@@ -9497,7 +9194,6 @@
             ✅ Option 3: Using                    this.forceUpdate() in Class Components
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  223
 
 ---
                class MyComponent extends React.Component {
@@ -9522,7 +9218,7 @@
             and I can recommend the cleanest solution.
 
 
-            30. How to rerender a component on value change in
+### React Scenario Q30. How to rerender a component on value change in
             react ?
             To re-render a React component when a value changes, the most common and
             recommended way is to use useState or useEffect with props/state.
@@ -9534,7 +9230,6 @@
                import React, { useState } from 'react';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          224
 
 ---
                function Counter() {
@@ -9576,7 +9271,6 @@
                function Parent() {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       225
 
 ---
                    const [name, setName] = useState("John");
@@ -9611,10 +9305,8 @@
                                      itself
 
 
-            31. Give an example of optimization using
-            usecallbacks in react ?
+### React Scenario Q31. Give an example of optimization using usecallbacks in react ?
             ✅ Scenario
-232 Interview questions & Answers - Saikrishna Nangunuri                                    226
 
 ---
             Suppose you have a parent component that renders a child component. The
@@ -9655,7 +9347,6 @@
                };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         227
 
 ---
                export default Parent;
@@ -9679,7 +9370,7 @@
                  Performance matters due to many children or heavy renders.
 
 
-            32. How to call a method when component is rendered
+### React Scenario Q32. How to call a method when component is rendered
             for the first time in react ?
             To call a method when a component is rendered for the first time in React (i.e.,
             on component mount), you should use the useEffect hook with an empty
@@ -9692,7 +9383,6 @@
 
 
             ✅ Example:
-232 Interview questions & Answers - Saikrishna Nangunuri                                            228
 
 ---
                import React, { useEffect } from 'react';
@@ -9731,7 +9421,6 @@
                    fetchData = () => {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                229
 
 ---
                     console.log('Fetching data...');
@@ -9743,7 +9432,7 @@
                }
 
 
-            33. How to change styles based on condition in react ?
+### React Scenario Q33. How to change styles based on condition in react ?
             ✅ 1. Using Inline Styles with Ternary Operator
             You can directly apply conditional styles using a ternary operator:
 
@@ -9766,7 +9455,6 @@
             You can apply different CSS classes conditionally:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          230
 
 ---
                function Button({ isPrimary }) {
@@ -9792,7 +9480,7 @@
                }
 
 
-            34. How do you access the dom element ?
+### React Scenario Q34. How do you access the dom element ?
             In React, you can access DOM elements using Refs.
 
             ✅ Method: Using                    useRef (Functional Components)
@@ -9801,7 +9489,6 @@
             Example:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                            231
 
 ---
                import React, { useRef, useEffect } from "react";
@@ -9840,7 +9527,6 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                           232
 
 ---
             🔎 When to use it?
@@ -9857,8 +9543,7 @@
             controlling behavior and appearance.
 
 
-            35. Perform type checking using prop-types in reactjs
-            ?
+### React Scenario Q35. Perform type checking using prop-types in reactjs ?
             In ReactJS, you can use the prop-types package to perform type checking on
             component props. It helps ensure that components are used with the correct data
             types and provides warnings in the console during development if types don't
@@ -9878,7 +9563,6 @@
                import PropTypes from 'prop-types';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      233
 
 ---
                const UserProfile = ({ name, age, isAdmin }) => {
@@ -9917,7 +9601,6 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri           234
 
 ---
                Product.propTypes = {
@@ -9952,10 +9635,9 @@
                })
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                   235
 
 ---
-            36. How to Implement a Theme Switcher Using
+### React Scenario Q36. How to Implement a Theme Switcher Using
             Context API
 
             Step 1: Create Theme Context
@@ -9990,7 +9672,6 @@
                export const useTheme = () => useContext(ThemeContext);
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       236
 
 ---
             Step 2: Wrap Your App with ThemeProvider
@@ -10029,7 +9710,6 @@
                };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  237
 
 ---
                export default ThemeSwitcher;
@@ -10071,7 +9751,6 @@
                export default App;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  238
 
 ---
             Explanation
@@ -10091,7 +9770,7 @@
             or update the theme easily.
 
 
-            37. How to update Document Title on Mount in a React
+### React Scenario Q37. How to update Document Title on Mount in a React
             Component
             To update the document title when a React component mounts, you typically use
             the useEffect hook in a functional component.
@@ -10114,7 +9793,6 @@
                function MyComponent() {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            239
 
 ---
                    useEffect(() => {
@@ -10159,7 +9837,6 @@
                    Use componentDidMount in class components.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                    240
 
 ---
                  This updates the browser tab’s title when the component mounts.
@@ -10168,7 +9845,7 @@
             dependencies in the array. But for just updating once on mount, keep it empty.
 
 
-            38. How to create a Higher-Order Component (HOC) to
+### React Scenario Q38. How to create a Higher-Order Component (HOC) to
             Log Props in reactjs ?
             ✅ What is a Higher-Order Component (HOC) in React?
             A Higher-Order Component (HOC) is a function that takes a component as input
@@ -10195,7 +9872,6 @@
                };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     241
 
 ---
                export default withPropsLogger;
@@ -10235,12 +9911,11 @@
                export default App;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      242
 
 ---
-            39. How will you Manage Environment-Specific
+### React Scenario Q39. How will you Manage Environment-Specific
             Configurations in Reactjs in your project ?
-            1. Using .env Files with Create React App (CRA)
+### React Scenario Q1. Using .env Files with Create React App (CRA)
             CRA supports environment variables through .env files.
 
                   .env   (default, for all envs)
@@ -10277,7 +9952,6 @@
                  const featureFlag = process.env.REACT_APP_FEATURE_FLAG === 'true';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         243
 
 ---
                    return (
@@ -10321,7 +9995,6 @@
                };
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                           244
 
 ---
                const config = process.env.NODE_ENV === "production" ? prodConfig : devC
@@ -10354,13 +10027,12 @@
                    For more flexibility, create your own config file and export based on NODE_ENV .
 
 
-            40. How to create a Custom Hook for Data Fetching
+### React Scenario Q40. How to create a Custom Hook for Data Fetching
             with Loading and Error States
             Creating a custom React hook for data fetching with loading and error states is a
             great way to encapsulate and reuse fetch logic cleanly across your app.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              245
 
 ---
             Why a Custom Hook for Data Fetching?
@@ -10372,8 +10044,7 @@
 
 
             How to Create It — Step by Step
-            1. Define the Hook
-            Create a function called useFetch which takes a URL (or any fetch parameter).
+### React Scenario Q1. Define the Hook Create a function called useFetch which takes a URL (or any fetch parameter).
             It manages:
 
                   data    — the fetched result
@@ -10404,7 +10075,6 @@
                   fetch(url)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    246
 
 ---
                       .then((response) => {
@@ -10447,7 +10117,6 @@
                     <ul>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         247
 
 ---
                      {data.map(user => (
@@ -10472,7 +10141,7 @@
                    The component using the hook can respond to these states accordingly.
 
 
-            41. Create a component to upload the file in reactjs ?
+### React Scenario Q41. Create a component to upload the file in reactjs ?
 
 
                import React, { useState } from "react";
@@ -10486,7 +10155,6 @@
                     setStatus("");
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         248
 
 ---
                  };
@@ -10530,7 +10198,6 @@
                   </div>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       249
 
 ---
                    );
@@ -10543,7 +10210,7 @@
             This sends the selected file as multipart/form-data via POST to your API.
 
 
-            42. How to cancel the api call when the timeout occurs
+### React Scenario Q42. How to cancel the api call when the timeout occurs
             using abort controller ?
             What is AbortController?
                     AbortController   is a browser API that lets you abort (cancel) a fetch request.
@@ -10569,7 +10236,6 @@
                    useEffect(() => {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               250
 
 ---
                   const controller = new AbortController(); // Create AbortController
@@ -10611,7 +10277,6 @@
                    controller.abort();
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            251
 
 ---
                     };
@@ -10657,7 +10322,6 @@
                    Handle AbortError to detect when fetch is canceled.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                             252
 
 ---
                  Always clear your timeouts to avoid leaks.
@@ -10666,7 +10330,9 @@
             15 Angular Scenario based interview
             questions
 
-            1. How do you send the data from parent component to
+## 🅰️ Angular Scenario Based Questions
+
+### Angular Q1. How do you send the data from parent component to
             child component in angular ?
             Ans. In Angular, you pass data from a parent component to a child component
             using @Input() properties. Here's a clear, step-by-step explanation:
@@ -10691,7 +10357,6 @@
                  @Input() userData!: { name: string, age: number
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      253
 
 ---
                };// Receives object
@@ -10720,7 +10385,7 @@
                 user = { name: 'Alice', age: 30 };// Object data}
 
 
-            2. How to call parent component method from child
+### Angular Q2. How to call parent component method from child
             component in angular ?
             In Angular's component-based architecture, parent-child communication is
             elegantly handled through @Output() decorators and EventEmitter . This maintains
@@ -10730,7 +10395,6 @@
              1. Child Component: Declares an @Output() event emitter (like raising a flag).
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           254
 
 ---
              2. Parent Component: Listens for this event and triggers its own method.
@@ -10772,7 +10436,6 @@
                  selector: 'app-parent',
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     255
 
 ---
                  template: `
@@ -10798,10 +10461,9 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                     256
 
 ---
-            3. How to bind array/array of objects to dropdown in
+### Angular Q3. How to bind array/array of objects to dropdown in
             angular ?
             Binding an array or array of objects to a dropdown ( <select> ) in Angular is
             straightforward. Here’s how you can do it clearly:
@@ -10820,7 +10482,6 @@
                export class DropdownComponent {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                    257
 
 ---
                    // Simple array
@@ -10860,7 +10521,6 @@
                <select [(ngModel)]="selectedCountryId">
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              258
 
 ---
                 <option *ngFor="let country of countries" [value]="country.id">
@@ -10903,13 +10563,12 @@
                  Selecting a fruit like "Banana" would set selectedFruit to "Banana" .
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        259
 
 ---
                  Selecting a country like "India" would set selectedCountryId to 1 .
 
 
-            4. Create a lazy loaded component in angular ?
+### Angular Q4. Create a lazy loaded component in angular ?
             ✅ Step 1: Create a component
                ng generate component lazy-component
 
@@ -10941,7 +10600,6 @@
                 declarations: [LazyComponentComponent],
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                260
 
 ---
                  imports: [
@@ -10984,7 +10642,6 @@
                const routes: Routes = [
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                261
 
 ---
                  {
@@ -11015,13 +10672,12 @@
                     This approach optimizes performance by reducing the initial load time.
 
 
-            5. How to display data entered by the user in another
+### Angular Q5. How to display data entered by the user in another
             textbox ?
             Step-by-step approach:
             1. Component HTML:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              262
 
 ---
                <input type="text" [(ngModel)]="userInput" placeholder="Enter something" /
@@ -11064,7 +10720,6 @@
                @NgModule({
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                263
 
 ---
                 imports: [FormsModule]
@@ -11076,7 +10731,7 @@
             one.
 
 
-            6. How to conditionally render an element or text in
+### Angular Q6. How to conditionally render an element or text in
             angular ?
             In Angular, you can conditionally render an element or text using built-in directives
             like *ngIf :
@@ -11103,7 +10758,6 @@
                </di
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                            264
 
 ---
             Using else block with ngIf :
@@ -11130,7 +10784,7 @@
             These simple patterns cover most conditional rendering scenarios in Angular.
 
 
-            7. How to perform debouncing in angular ?
+### Angular Q7. How to perform debouncing in angular ?
             Method 1: Using RxJS (Recommended)
 
             Import necessary modules:
@@ -11141,7 +10795,6 @@
                import { FormControl } from '@angular/forms';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                   265
 
 ---
                import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -11180,7 +10833,6 @@
             HTML:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                       266
 
 ---
                <input type="text" [formControl]="searchControl" placeholder="Search..." />
@@ -11222,10 +10874,9 @@
                rch..." />
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                   267
 
 ---
-            8. Create a component to fetch data from api in
+### Angular Q8. Create a component to fetch data from api in
             angular ?
             Step-by-step Implementation
 
@@ -11261,7 +10912,6 @@
                  fetchData(): Observable<any[]> {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          268
 
 ---
                        return this.http.get<any[]>(this.apiUrl);
@@ -11304,7 +10954,6 @@
                    }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                      269
 
 ---
                }
@@ -11334,13 +10983,11 @@
             Now your Angular component cleanly fetches and displays data from an API.
 
 
-            9. Given two dropdowns, select 2nd dropdown options
-            based on value selected in one dropdown in angular ?
+### Angular Q9. Given two dropdowns, select 2nd dropdown options based on value selected in one dropdown in angular ?
             (Load states based on country selected)
             a. Sample Data Setup
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                270
 
 ---
                // country-state.data.ts
@@ -11379,7 +11026,6 @@
                   const id = +countryId;
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                   271
 
 ---
                        this.filteredStates = this.allStates.filter(s => s.countryId === id);
@@ -11419,10 +11065,9 @@
                })
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        272
 
 ---
-            10. How to display dynamic html data in angular ?
+### Angular Q10. How to display dynamic html data in angular ?
             To display dynamic HTML data in Angular safely (i.e., HTML content coming from
             a variable), you should use Angular's [innerHTML] binding along with DomSanitizer
             to avoid security issues like XSS.
@@ -11457,7 +11102,6 @@
                })
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          273
 
 ---
                export class MyComponent {
@@ -11488,7 +11132,7 @@
                  as plain text.
 
 
-            11. How to update an array property in an Angular
+### Angular Q11. How to update an array property in an Angular
             component and reflect the changes in the template?
             To update an array property in an Angular component and have those changes
             reflected in the template, follow these key points:
@@ -11496,7 +11140,6 @@
             Basic steps:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           274
 
 ---
              1. Update the array property in the component (e.g., add, remove, modify
@@ -11505,7 +11148,7 @@
              2. Angular’s change detection will automatically update the view if you mutate
                 the array properly or replace it.
 
-             3. Use Angular template syntax like ngFor to display the array.
+### Angular Q3. Use Angular template syntax like ngFor to display the array.
 
             Example
             Component ( example.component.ts ):
@@ -11538,7 +11181,6 @@
                  }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                      275
 
 ---
                }
@@ -11573,13 +11215,11 @@
                    changes.
 
 
-            12. Change focus/enable/disable textbox in child
-            component based on parent component button click ?
+### Angular Q12. Change focus/enable/disable textbox in child component based on parent component button click ?
             To control focus, enable, or disable a textbox inside a child component from a
             parent component button click in Angular, follow these steps:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  276
 
 ---
              1. Pass a property from parent to child via @Input() to control enable/disable or
@@ -11620,7 +11260,6 @@
             b. Parent Component (parent.component.ts & html)
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         277
 
 ---
                // parent.component.ts
@@ -11660,7 +11299,6 @@
                    The parent toggles isTextboxDisabled to enable/disable the textbox in the child.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              278
 
 ---
                    The parent sets shouldFocusTextbox to true to trigger focus in the child input.
@@ -11671,7 +11309,7 @@
                    Resetting shouldFocusTextbox to false lets you focus again on subsequent clicks.
 
 
-            13. How to display dropdown value selected by user in
+### Angular Q13. How to display dropdown value selected by user in
             another textbox ?
             To display the dropdown value selected by the user in another textbox in Angular,
             you can:
@@ -11681,7 +11319,7 @@
 
              2. Bind the textbox’s value to the same property (or a derived one).
 
-             3. When user selects an option, the textbox updates automatically.
+### Angular Q3. When user selects an option, the textbox updates automatically.
 
             Simple Example Using ngModel
             app.component.ts
@@ -11701,7 +11339,6 @@
             app.component.html
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                              279
 
 ---
                <select [(ngModel)]="selectedValue">
@@ -11724,7 +11361,7 @@
                  Setting readonly prevents user editing the textbox directly.
 
 
-            14. How do you implement a character countdown
+### Angular Q14. How do you implement a character countdown
             functionality for a <textarea> in Angular? Explain how
             you can use a template reference variable or
              @ViewChild to track the number of characters entered
@@ -11741,7 +11378,6 @@
                  Bind to (input) event to track the current length.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                        280
 
 ---
                    Display remaining characters based on max limit.
@@ -11780,7 +11416,6 @@
                <p>{{ maxChars - currentLength }} characters remaining</p>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                    281
 
 ---
             b. Using @ViewChild to access the textarea DOM
@@ -11819,7 +11454,6 @@
                }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                     282
 
 ---
             component.html
@@ -11843,7 +11477,7 @@
                                                 manually in TS                  manipulation needed
 
 
-            15. Create a search textbox filter in angular
+### Angular Q15. Create a search textbox filter in angular
             Here’s a simple example to create a search textbox filter in Angular:
 
             a. Setup Angular Component
@@ -11860,7 +11494,6 @@
                export class AppComponent {
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                                  283
 
 ---
                    searchText: string = '';
@@ -11901,7 +11534,6 @@
                 <li *ngFor="let item of filteredItems">{{ item }}</li>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                 284
 
 ---
                </ul>
@@ -11937,11 +11569,9 @@
                  The filtered list is displayed dynamically.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          285
 
 ---
-            16. Display radio button data selected by user in
-            another textbox
+### Angular Q16. Display radio button data selected by user in another textbox
             Here is a simple Angular example showing how to display the selected radio
             button value inside a textbox:
 
@@ -11976,7 +11606,6 @@
                    </label>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                 286
 
 ---
                  <label>
@@ -12013,10 +11642,9 @@
                  selected radio button value dynamically.
 
 
-            17. Create an error boundary component in angular ?
+### Angular Q17. Create an error boundary component in angular ?
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                               287
 
 ---
             Angular doesn’t have a built-in concept called “Error Boundary” like React, but you
@@ -12057,7 +11685,6 @@
                import { BehaviorSubject } from 'rxjs';
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                          288
 
 ---
                @Injectable({ providedIn: 'root' })
@@ -12099,7 +11726,6 @@
                        </ng-template>
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                              289
 
 ---
                    `,
@@ -12141,7 +11767,6 @@
                    providers: [
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                  290
 
 ---
                   { provide: ErrorHandler, useClass: ErrorBoundaryHandler }
@@ -12174,13 +11799,12 @@
                  Wrap components in <app-error-boundary> to isolate error display
 
 
-            18. Create a counter component in angular ?
+### Angular Q18. Create a counter component in angular ?
 
             ✅ Step 1: Generate Component
             First, create a new Angular component via CLI:
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                         291
 
 ---
                ng generate component counter
@@ -12221,7 +11845,6 @@
                  }
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri    292
 
 ---
                    reset(): void {
@@ -12264,7 +11887,6 @@
 
 
             ✅
-232 Interview questions & Answers - Saikrishna Nangunuri                                               293
 
 ---
             ✅ Step 4: Add Styles (Optional)
@@ -12304,7 +11926,6 @@
 
 
             ✅ Output
-232 Interview questions & Answers - Saikrishna Nangunuri                                       294
 
 ---
             A fully working Angular counter that looks like this:
@@ -12316,7 +11937,7 @@
                [ - ] [ Reset ] [ + ]
 
 
-            19. How to call a method on every rerender of a
+### Angular Q19. How to call a method on every rerender of a
             component ?
             In Angular, if you want to call a method on every re-render (change detection
             cycle) of a component — the best place to do this is in the ngDoCheck() lifecycle
@@ -12344,7 +11965,6 @@
                  selector: 'app-my-component',
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                                           295
 
 ---
                 templateUrl: './my-component.component.html'
@@ -12385,7 +12005,6 @@
 
 
             ⚠️
-232 Interview questions & Answers - Saikrishna Nangunuri                                              296
 
 ---
             ⚠️ Note:
@@ -12394,6 +12013,5 @@
                  Don’t perform heavy logic here unless it’s necessary.
 
 
-232 Interview questions & Answers - Saikrishna Nangunuri                          297
 
 ---
