@@ -329,7 +329,7 @@ console.log('check the data',objCount);
     for(let item of arr) {
       sum+=item;
     }
-    x=(n*(n+1)/2)-sum;
+   let x=(n*(n+1)/2)-sum;
     return x;
    }
 
