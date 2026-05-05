@@ -301,31 +301,46 @@ Identical API to `useEffect`, but fires **synchronously after DOM mutations and 
 useLayoutEffect(setup: () => (void | (() => void)), dependencies?: any[]);
 ```
 
-### Example — Tooltip Positioning Without Flicker
+### Example — Positioning Without Flicker
 
 ```tsx
-function Tooltip({ anchorRef, children }: Props) {
-  const tooltipRef = useRef<HTMLDivElement>(null);
+import React, { useLayoutEffect, useRef, useState } from "react";
+
+export default function App() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
   useLayoutEffect(() => {
-    if (!anchorRef.current || !tooltipRef.current) return;
+    if (!buttonRef.current || !boxRef.current) return;
 
-    const anchorRect = anchorRef.current.getBoundingClientRect();
-    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+    const btn = buttonRef.current.getBoundingClientRect();
+    const box = boxRef.current.getBoundingClientRect();
 
     setCoords({
-      top: anchorRect.top - tooltipRect.height - 8,
-      left: anchorRect.left + (anchorRect.width - tooltipRect.width) / 2,
+      top: btn.top - box.height - 10,
+      left: btn.left + (btn.width - box.width) / 2,
     });
-  }, [anchorRef]);
+  }, []);
 
   return (
-    <div
-      ref={tooltipRef}
-      style={{ position: "fixed", top: coords.top, left: coords.left }}
-    >
-      {children}
+    <div style={{ padding: "100px" }}>
+      <button ref={buttonRef}>Click Me</button>
+
+      <div
+        ref={boxRef}
+        style={{
+          position: "fixed",
+          top: coords.top,
+          left: coords.left,
+          background: "blue",
+          color: "white",
+          padding: "10px",
+        }}
+      >
+        Simple Box
+      </div>
     </div>
   );
 }
