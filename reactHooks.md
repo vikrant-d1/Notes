@@ -374,26 +374,29 @@ export default function App() {
 const memoizedValue = useMemo<T>(() => computeExpensiveValue(a, b), [a, b]);
 ```
 
-### Example — Expensive Filtering + Referential Stability
+### Example 
 
 ```tsx
-function AnalyticsDashboard({ transactions, dateRange, threshold }: Props) {
-  // Expensive: filters and aggregates 100k+ rows
-  const summary = useMemo(() => {
-    const filtered = transactions.filter(
-      (t) => t.date >= dateRange.start && t.date <= dateRange.end
-    );
 
-    return {
-      total: filtered.reduce((sum, t) => sum + t.amount, 0),
-      count: filtered.length,
-      flagged: filtered.filter((t) => t.amount > threshold),
-    };
-  }, [transactions, dateRange.start, dateRange.end, threshold]);
+export default function App() {
+  const [numbers] = useState([1, 2, 3, 4, 5]);
+  const [multiplier, setMultiplier] = useState(1);
 
-  // summary is referentially stable — safe to pass as a prop
-  // without triggering unnecessary child re-renders
-  return <SummaryCard data={summary} />;
+  // Expensive calculation (simulated)
+  const total = useMemo(() => {
+    console.log("Calculating...");
+    return numbers.reduce((sum, n) => sum + n * multiplier, 0);
+  }, [numbers, multiplier]);
+
+  return (
+    <div style={{ padding: "40px" }}>
+      <h2>Total: {total}</h2>
+
+      <button onClick={() => setMultiplier(multiplier + 1)}>
+        Increase Multiplier
+      </button>
+    </div>
+  );
 }
 ```
 
