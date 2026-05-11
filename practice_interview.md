@@ -529,69 +529,79 @@ console.log('reduce Result:',rsData);
 ### 30.Call function pollyfill 
 
 ```javascript 
-
-function printName(city, country){
-    console.log( `${this.firstName} ${this.lastName}, ${city} - ${country}` );
+function printName(city, country) {
+    console.log(`${this.firstName} ${this.lastName}, ${city} - ${country}`);
 }
 
 const myName = {
-    firstName: 'Ankit',
-    lastName: 'Saxena'
+    firstName: "Ankit",
+    lastName: "Saxena"
 };
 
+Function.prototype.myCall = function (context, ...args) {
 
-Function.prototype.myCall = function(context, ...args){
-    let currentContext = context || globalThis;
-    let randomProp = Math.random();
-    while( currentContext[randomProp] !== undefined ){
-        randomProp = Math.random();
-    }
-    currentContext[randomProp] = this;
-    let result = currentContext[randomProp](...args);
-    delete currentContext[randomProp];
-    return result;
-}
+    // add function temporarily
+    context.fn = this;
+
+    // call function
+    context.fn(...args);
+
+    // remove temporary function
+    delete context.fn;
+};
 
 printName.myCall(myName, "Palia", "India");
 ```
 ### 31.Pollyfill of apply 
 ```javascript 
 
-Function.prototype.myApply = function(context, args){
-    let currentContext = context || globalThis;
-    let uniqueProp = Math.random();
-    while( currentContext[uniqueProp] !== undefined ){
-        uniqueProp = Math.random();
-    }
-    currentContext[uniqueProp] = this;
-    let result = currentContext[uniqueProp](...args);
-    delete currentContext[uniqueProp];
-    return result;
+function printName(city, country) {
+    console.log(`${this.firstName} ${this.lastName}, ${city} - ${country}`);
 }
+
+const myName = {
+    firstName: "Ankit",
+    lastName: "Saxena"
+};
+
+Function.prototype.myApply = function (context, args) {
+
+    // add function temporarily
+    context.fn = this;
+
+    // call function with array arguments
+    context.fn(...args);
+
+    // remove temporary function
+    delete context.fn;
+};
 
 printName.myApply(myName, ["Palia", "India"]);
 ````
 ### 32. PollyFill of the bind function
 ```javascript 
 let obj = {
-  name: 'Jack',
+  name: "Jack",
 };
 
-let myFunc = function (id, city) {
-  console.log(`${this.name}, ${id}, ${city}`);  // id will be undefined
-};
+function myFunc(id, city) {
+  console.log(`${this.name}, ${id}, ${city}`);
+}
 
-// Accepting any number of arguments passed to myBind
-Function.prototype.myBind = function (obj, ...args) {
-  let func = this;
-  // Accepting arguments passed to newFunc
+Function.prototype.myBind = function (context, ...args) {
+
+  let fn = this;
+
   return function (...newArgs) {
-    func.apply(obj, [...args, ...newArgs]);
+
+    fn.apply(context, [...args, ...newArgs]);
+
   };
 };
 
-let newFunc = myFunc.myBind(obj, 'a_random_id')
-newFunc('New York') // Jack, a_random_id, New York
+let newFunc = myFunc.myBind(obj, "a_random_id");
+
+newFunc("New York");
 ```
 
 ### 33. debouncing function
