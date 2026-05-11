@@ -598,23 +598,26 @@ newFunc('New York') // Jack, a_random_id, New York
 Debouncing is a technique that delays the execution of a function until the user stops performing a certain action for a specified amount of time. 
 ```javascript 
 function debounce(func, delay) {
-    let timerId;
-    return function () {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timerId);
-        timerId = setTimeout(function () {
-            func.apply(context, args);
+    let timer;
+
+    return function (...args) {
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            func(...args);
         }, delay);
     };
 }
 
 
-function delayFuncExec() { 
-    console.log("I AM GFG "); 
-} 
-  
-let timerId = setTimeout(delayFuncExec, 1000) 
+function search(text) {
+    console.log("Searching:", text);
+}
+
+const debouncedSearch = debounce(search, 1000);
+
+debouncedSearch("React");
 
 ```
 
