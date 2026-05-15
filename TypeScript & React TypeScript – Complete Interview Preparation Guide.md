@@ -380,4 +380,567 @@ ESLint + `@typescript-eslint`, strict tsconfig, pre-commit hooks, CI type checks
 
 ---
 
-*Good luck with your interview! 🚀*
+
+
+## PART 2 — React + TypeScript
+
+---
+
+### 7. Component Typing
+
+| Pattern | Definition |
+|---------|-----------|
+| **Inline props** | `function Btn({ label }: { label: string })` — preferred |
+| **`React.ReactNode`** | Most flexible children type |
+| **Discriminated union props** | Different props per `variant` — TS narrows automatically |
+| **Polymorphic `as` prop** | Component renders as any element with correct props |
+| **`forwardRef`** | `React.forwardRef<HTMLInputElement, Props>((props, ref) => ...)` |
+| **Generic component** | `function Table<T>({ data }: { data: T[] })` — type-safe for any data |
+
+### 8. Hooks Typing
+
+| Hook | How to Type |
+|------|------------|
+| `useState` | `useState<User \| null>(null)` |
+| `useRef` (DOM) | `useRef<HTMLInputElement>(null)` → `RefObject` (readonly) |
+| `useRef` (mutable) | `useRef<number \| null>(null)` → `MutableRefObject` |
+| `useReducer` | `State` + `Action` discriminated union |
+| `useContext` | `createContext<T \| undefined>(undefined)` + throw-if-undefined hook |
+| `useCallback` | Inferred, or `useCallback<(e: FormEvent) => void>(...)` |
+| `useMemo` | Return type inferred |
+
+### 9. Event Types
+
+| Event | Type |
+|-------|------|
+| Click | `React.MouseEvent<HTMLButtonElement>` |
+| Change | `React.ChangeEvent<HTMLInputElement>` |
+| Submit | `React.FormEvent<HTMLFormElement>` |
+| Key | `React.KeyboardEvent` |
+| Focus | `React.FocusEvent` |
+
+### 10. Advanced React Patterns
+
+| Pattern | Definition |
+|---------|-----------|
+| **HOC** | Function that takes component, returns enhanced component. Type both input & injected props. |
+| **Render Props** | Pass function-as-children that receives data, returns JSX. |
+| **Compound Components** | Parent shares state via context; children consume it. |
+| **React.memo** | `React.memo<Props>(Component, areEqual?)` — skip re-render if props unchanged |
+| **React.lazy** | `React.lazy(() => import("./Comp"))` — code-split at component level |
+
+### 11. State Management (Typed)
+
+| Library | Key Typing Pattern |
+|---------|-------------------|
+| **Redux Toolkit** | `PayloadAction<T>`, typed hooks via `RootState` & `AppDispatch` |
+| **Zustand** | `create<StoreInterface>((set) => ({...}))` |
+| **React Query** | `useQuery<Data, Error>`, `useMutation<Result, Error, Variables>` |
+| **React Hook Form + Zod** | `z.infer<typeof schema>` → single source of truth for runtime + compile-time |
+
+---
+
+## PART 3 — Next.js with TypeScript
+
+---
+
+### 12. Next.js Core Concepts
+
+| Concept | Definition |
+|---------|-----------|
+| **App Router** | New routing system using `app/` directory. Supports layouts, loading states, server components. |
+| **Pages Router** | Legacy `pages/` directory routing. Still common in production. |
+| **Server Components** | Render on server, zero client JS. Default in App Router. |
+| **Client Components** | `"use client"` directive. Handle interactivity, browser APIs, state. |
+| **SSR** | HTML generated per-request on server. `getServerSideProps` (pages) or async component (app). |
+| **SSG** | HTML generated at build time. `getStaticProps` + `getStaticPaths`. |
+| **ISR** | Static pages that revalidate in background after N seconds. |
+| **CSR** | Minimal HTML shell → JS renders on client. Traditional SPA. |
+| **Server Actions** | Async functions that run on server, called from client forms/buttons. |
+| **Middleware** | Runs before request completes — auth, redirects, logging. `middleware.ts` at root. |
+| **Edge vs Node Runtime** | Edge = low latency, sandbox limits. Node = full APIs, heavier compute. |
+
+### 13. Next.js TypeScript Typing
+
+```ts
+// Typed page props (App Router)
+export default async function UserPage({ params }: { params: { id: string } }) {
+  const user = await getUser(params.id);
+  return <Profile user={user} />;
+}
+
+// Typed API route (App Router)
+import { NextRequest, NextResponse } from "next/server";
+export async function GET(req: NextRequest) {
+  const data = await fetchData();
+  return NextResponse.json(data);
+}
+
+// Typed middleware
+import { NextRequest, NextResponse } from "next/server";
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("token");
+  if (!token) return NextResponse.redirect(new URL("/login", req.url));
+  return NextResponse.next();
+}
+
+// Typed Server Action
+"use server";
+export async function createPost(formData: FormData): Promise<{ success: boolean }> {
+  const title = formData.get("title") as string;
+  await db.posts.create({ title });
+  return { success: true };
+}
+```
+
+---
+
+## PART 4 — Node.js with TypeScript
+
+---
+
+### 14. Node.js Core Concepts
+
+| Concept | Definition |
+|---------|-----------|
+| **Event Loop** | Single-threaded loop that handles async I/O via callbacks/promises. |
+| **Non-blocking I/O** | Operations don't block the main thread — use callbacks/promises for results. |
+| **Streams** | Process data in chunks (readable, writable, transform, duplex). Memory-efficient. |
+| **Cluster Module** | Fork multiple worker processes to use all CPU cores. |
+| **Worker Threads** | True parallelism for CPU-intensive tasks without forking a process. |
+| **Event Emitter** | Pub/sub pattern — `emitter.on("event", handler)`. Core of Node architecture. |
+
+### 15. Node.js TypeScript Typing
+
+```ts
+// Typed Express app
+import express, { Request, Response, NextFunction } from "express";
+
+interface TypedRequest<B = {}, Q = {}> extends Request {
+  body: B;
+  query: Q & Record<string, string>;
+}
+
+app.post("/users", async (req: TypedRequest<{ name: string; email: string }>, res: Response) => {
+  const { name, email } = req.body; // fully typed
+  const user = await createUser({ name, email });
+  res.json(user);
+});
+
+// Typed error-handling middleware
+interface AppError extends Error {
+  statusCode: number;
+  isOperational: boolean;
+}
+
+function errorHandler(err: AppError, req: Request, res: Response, _next: NextFunction) {
+  res.status(err.statusCode || 500).json({ message: err.message });
+}
+
+// Typed environment variables
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  PORT: z.coerce.number().default(3000),
+  NODE_ENV: z.enum(["development", "production", "test"]),
+});
+const env = envSchema.parse(process.env);
+// env.PORT is number, env.DATABASE_URL is string — fully typed!
+```
+
+---
+
+## PART 5 — Scenario-Based Questions (Staff/Principal Level)
+
+---
+
+### S1: Design a type-safe API layer
+
+**Scenario:** You're building an API client shared across React, Next.js, and Node.js services. How do you ensure end-to-end type safety?
+
+**Answer:**
+- Define shared types in a **monorepo package** (`@company/types`).
+- Use Zod schemas as the **single source of truth** — derive TS types with `z.infer`.
+- Validate responses at runtime (API can lie; types alone can't catch that).
+- Use generics for the fetch wrapper: `async function api<T>(url: string): Promise<T>`.
+- Consider **tRPC** or **ts-rest** for contract-first API typing that auto-syncs client ↔ server.
+
+---
+
+### S2: Typing a plugin/middleware system
+
+**Scenario:** Design a type-safe middleware chain where each middleware can add properties to the context object.
+
+**Answer:**
+```ts
+type Middleware<In, Out> = (ctx: In) => Out | Promise<Out>;
+
+function compose<A, B, C>(m1: Middleware<A, B>, m2: Middleware<B, C>): Middleware<A, C> {
+  return async (ctx) => m2(await m1(ctx));
+}
+
+// Each middleware extends the context — types chain automatically
+const withAuth = (ctx: { req: Request }) => ({ ...ctx, userId: "123" });
+const withDb = (ctx: { userId: string }) => ({ ...ctx, db: getDb() });
+
+const handler = compose(withAuth, withDb);
+// handler input: { req: Request }
+// handler output: { req: Request; userId: string; db: Db }
+```
+
+---
+
+### S3: Fixing a massive `any` infestation
+
+**Scenario:** You inherit a 200k-line codebase with 3000+ `any` usages. What's your strategy?
+
+**Answer:**
+1. **Audit** — Run `tsc --noEmit | grep "any"` and categorize: API boundaries, third-party libs, lazy shortcuts.
+2. **Prioritize** — Fix shared modules, API layers, and utils first (highest blast radius).
+3. **Enable incrementally** — Turn on `noImplicitAny` per-package in a monorepo, or use `// @ts-strict` comments.
+4. **Automate** — Add ESLint rule `@typescript-eslint/no-explicit-any` as **warning** → gradually promote to **error**.
+5. **Track** — Dashboard showing `any` count per package. Celebrate wins.
+6. **CI gate** — No new `any` allowed. Existing ones tracked via baseline.
+
+---
+
+### S4: Server Component vs Client Component boundary
+
+**Scenario:** In a Next.js App Router project, how do you decide where to draw the server/client boundary? How does TypeScript help?
+
+**Answer:**
+- **Default to Server Components** — zero client JS, direct DB/API access.
+- **Push `"use client"` as deep as possible** — only wrap the interactive leaf (button, form, dropdown), not the page.
+- TypeScript helps: Server components can use server-only types (`db`, `fs`). If you accidentally import a server module in a client component, the build fails.
+- Use the `server-only` package — importing it in a client component gives a compile error.
+- Type pattern: separate `ServerProps` (can include non-serializable types like `Date`) from `ClientProps` (must be serializable / JSON-safe).
+
+---
+
+### S5: Type-safe environment variables across Node.js / Next.js
+
+**Scenario:** Environment variables are stringly typed and runtime-only. How do you make them type-safe?
+
+**Answer:**
+```ts
+// env.ts — single source of truth
+import { z } from "zod";
+
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  NEXT_PUBLIC_API_URL: z.string().url(),
+  JWT_SECRET: z.string().min(32),
+  PORT: z.coerce.number().default(3000),
+  NODE_ENV: z.enum(["development", "production", "test"]),
+});
+
+export const env = envSchema.parse(process.env);
+export type Env = z.infer<typeof envSchema>;
+```
+- **Fails fast at startup** if any variable is missing or wrong type.
+- **Autocomplete** everywhere: `env.DATABASE_URL` is `string`, `env.PORT` is `number`.
+- Works in Next.js, Node.js, and testing — import from one place.
+
+---
+
+### S6: Recursive / deeply nested types
+
+**Scenario:** Design a type for a permission system where permissions can be nested groups.
+
+**Answer:**
+```ts
+type Permission =
+  | { type: "action"; action: string }
+  | { type: "group"; name: string; children: Permission[] };
+
+// DeepReadonly for immutable permission trees
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K];
+};
+
+const permissions: DeepReadonly<Permission> = {
+  type: "group",
+  name: "admin",
+  children: [
+    { type: "action", action: "users.create" },
+    { type: "group", name: "billing", children: [
+      { type: "action", action: "invoices.read" },
+    ]},
+  ],
+};
+```
+
+---
+
+### S7: Typing a multi-tenant SaaS backend
+
+**Scenario:** Each API request belongs to a tenant. How do you enforce tenant context throughout the call stack?
+
+**Answer:**
+- Use **branded types** so `TenantId` can't be confused with `UserId`:
+  ```ts
+  type TenantId = string & { __brand: "TenantId" };
+  ```
+- Inject `TenantContext` at middleware level, pass through generics:
+  ```ts
+  interface TenantContext { tenantId: TenantId; dbSchema: string; }
+  ```
+- **Never accept raw `string`** for tenant — always require `TenantId`.
+- All DB queries take `TenantContext` as first param — compiler enforces you can't forget it.
+
+---
+
+### S8: Handling third-party SDK without types
+
+**Scenario:** You must integrate a vendor SDK that ships no TypeScript types and has no `@types/` package.
+
+**Answer:**
+1. Create `types/vendor-sdk.d.ts`:
+   ```ts
+   declare module "vendor-sdk" {
+     export function init(config: { apiKey: string }): void;
+     export function track(event: string, data?: Record<string, unknown>): void;
+   }
+   ```
+2. Start with **minimal types** covering only what you actually use.
+3. **Gradually expand** as you use more features.
+4. Wrap the SDK in your own **typed adapter** — isolate untyped code to one file.
+5. Contribute types to DefinitelyTyped when stable.
+
+---
+
+### S9: Type-safe feature flags
+
+**Scenario:** Design a feature flag system where TypeScript ensures you never check a non-existent flag.
+
+**Answer:**
+```ts
+const FLAGS = {
+  newDashboard: { default: false },
+  betaSearch: { default: true },
+  darkMode: { default: false },
+} as const;
+
+type FlagName = keyof typeof FLAGS;
+
+function isEnabled(flag: FlagName): boolean {
+  return getRemoteFlag(flag) ?? FLAGS[flag].default;
+}
+
+isEnabled("newDashboard"); // ✅
+isEnabled("typoFlag");     // ❌ compile error
+```
+
+---
+
+### S10: Typing a complex form with dynamic fields
+
+**Scenario:** A form where sections are added/removed dynamically (e.g., invoice line items). How do you keep it type-safe?
+
+**Answer:**
+- Use **Zod + React Hook Form** with `useFieldArray`:
+  ```ts
+  const invoiceSchema = z.object({
+    customer: z.string(),
+    items: z.array(z.object({
+      description: z.string(),
+      quantity: z.coerce.number().min(1),
+      price: z.coerce.number().min(0),
+    })).min(1, "At least one item"),
+    notes: z.string().optional(),
+  });
+
+  type InvoiceForm = z.infer<typeof invoiceSchema>;
+  ```
+- `useFieldArray<InvoiceForm, "items">` — fully typed append/remove/swap.
+- Zod validates at runtime; TypeScript validates at compile time — **both from one schema**.
+
+---
+
+### S11: Designing type-safe event bus / pub-sub
+
+**Scenario:** Multiple services communicate via events. How do you ensure producers and consumers agree on event shapes?
+
+**Answer:**
+```ts
+// Shared event map — single source of truth
+interface EventMap {
+  "user.created": { userId: string; email: string };
+  "order.placed": { orderId: string; total: number };
+  "payment.failed": { orderId: string; reason: string };
+}
+
+// Typed emitter
+class TypedEmitter {
+  on<K extends keyof EventMap>(event: K, handler: (data: EventMap[K]) => void): void { /* ... */ }
+  emit<K extends keyof EventMap>(event: K, data: EventMap[K]): void { /* ... */ }
+}
+
+const bus = new TypedEmitter();
+bus.emit("user.created", { userId: "1", email: "a@b.com" }); // ✅
+bus.emit("user.created", { orderId: "1" });                   // ❌ compile error
+```
+
+---
+
+### S12: SSR data fetching with type safety (Next.js)
+
+**Scenario:** A Next.js page fetches data from multiple APIs. How do you type the entire flow?
+
+**Answer:**
+```ts
+// Shared types
+interface Product { id: string; name: string; price: number; }
+interface Review { id: string; rating: number; comment: string; }
+
+// Server component (App Router) — types flow naturally
+export default async function ProductPage({ params }: { params: { id: string } }) {
+  const [product, reviews] = await Promise.all([
+    fetchJson<Product>(`/api/products/${params.id}`),
+    fetchJson<Review[]>(`/api/products/${params.id}/reviews`),
+  ]);
+
+  return <ProductDetail product={product} reviews={reviews} />;
+}
+
+// Generic fetch helper with runtime validation
+async function fetchJson<T>(url: string, schema?: z.ZodType<T>): Promise<T> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return schema ? schema.parse(data) : data as T;
+}
+```
+
+---
+
+### S13: Monorepo type sharing strategy
+
+**Scenario:** You have a monorepo with a Next.js frontend, Node.js API, and shared mobile app. How do you share types?
+
+**Answer:**
+1. **Shared package** — `packages/types/` or `packages/shared/` with its own `tsconfig.json`.
+2. **Export Zod schemas + inferred types** — runtime validation + compile-time types.
+3. **API contract package** — define request/response types per endpoint.
+4. Use **TypeScript project references** (`composite: true`) for incremental builds.
+5. **Turborepo/Nx** for build orchestration — types package builds first, consumers depend on it.
+6. Consider **tRPC** — auto-generates client types from server router definition. Zero manual syncing.
+
+---
+
+### S14: Typing a database layer (Prisma/Drizzle)
+
+**Scenario:** How do you maintain type safety from database schema to API response?
+
+**Answer:**
+- **Prisma**: Schema generates types automatically. `Prisma.UserCreateInput`, `Prisma.UserSelect`.
+- **Drizzle**: Schema-as-code in TypeScript — types derived from table definitions.
+- Pattern: **DB type → Service type → API response type** using `Pick`, `Omit`, and transforms.
+  ```ts
+  // DB model (generated)
+  type UserRow = { id: string; name: string; passwordHash: string; createdAt: Date };
+
+  // API response (derived — never expose passwordHash)
+  type UserResponse = Omit<UserRow, "passwordHash"> & { createdAt: string };
+  ```
+- **Never return raw DB types to clients** — always map through a typed transformer.
+
+---
+
+### S15: Error handling strategy
+
+**Scenario:** Design a type-safe error handling system across your full-stack app.
+
+**Answer:**
+```ts
+// Result type — forces handling both success and failure
+type Result<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+// Typed app errors
+class AppError extends Error {
+  constructor(
+    public code: "NOT_FOUND" | "UNAUTHORIZED" | "VALIDATION" | "INTERNAL",
+    public statusCode: number,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+// Usage
+async function getUser(id: string): Promise<Result<User, AppError>> {
+  const user = await db.users.find(id);
+  if (!user) return { success: false, error: new AppError("NOT_FOUND", 404, "User not found") };
+  return { success: true, data: user };
+}
+
+// Consumer MUST check success before accessing data
+const result = await getUser("123");
+if (!result.success) {
+  // result.error is AppError — fully typed
+  return res.status(result.error.statusCode).json({ message: result.error.message });
+}
+// result.data is User — fully typed
+```
+
+---
+
+## PART 6 — Common Mistakes (Senior Level)
+
+| ❌ Don't | ✅ Do |
+|----------|------|
+| Use `any` for API responses | Use `unknown` + Zod validation |
+| Use `as` to silence errors | Use proper type guards / narrowing |
+| Skip `strict: true` | Always enable strict mode |
+| Return raw DB types to clients | Map through typed transformers |
+| Trust API responses blindly | Validate at runtime with Zod/io-ts |
+| Put all types in one giant file | Colocate types with their domain |
+| Use `React.FC` everywhere | Prefer typed function props directly |
+| Ignore `null` / `undefined` | Use `?.` and `??` — enable `strictNullChecks` |
+| Share mutable state objects | Use `Readonly<T>`, `as const`, `DeepReadonly` |
+| Define types manually for APIs | Derive from Zod schemas or Prisma/Drizzle |
+| Over-abstract type utilities | Keep types readable; extract only when reused 3+ times |
+
+---
+
+## PART 7 — Leadership & Architecture Questions
+
+---
+
+### L1: How do you migrate 200k lines of JS to TS?
+1. Enable `allowJs: true` — mix JS/TS.
+2. Start `strict: false`, enable flags one by one.
+3. Prioritize **shared modules → API layer → UI components**.
+4. CI gate: block new `.js` files.
+5. Track progress: `any` count dashboard.
+6. Target: 6-12 months for full migration with a team.
+
+### L2: How do you enforce TS quality in a 50-person team?
+- `strict: true` + `noUncheckedIndexedAccess` in shared tsconfig.
+- ESLint with `@typescript-eslint/recommended-type-checked`.
+- Pre-commit hooks (Husky + lint-staged).
+- CI blocks on type errors — zero tolerance.
+- Shared utility types package in monorepo.
+- Weekly TS knowledge-sharing sessions.
+- Code review checklist: no `any`, no `as`, proper error typing.
+
+### L3: How do you decide between tRPC, GraphQL, and REST?
+| Factor | REST | GraphQL | tRPC |
+|--------|------|---------|------|
+| Type safety | Manual (Zod/OpenAPI) | Codegen | Automatic |
+| Client diversity | Any | Any | TS only |
+| Learning curve | Low | Medium | Low |
+| Overhead | Low | Medium | Lowest |
+| Best for | Public APIs, microservices | Complex data graphs, mobile | TS monorepos, internal APIs |
+
+### L4: How do you handle breaking type changes in a shared package?
+1. **Semantic versioning** — major bump for breaking changes.
+2. **Deprecation first** — mark old types with `@deprecated` JSDoc.
+3. **Codemods** — automated migration scripts (ts-morph / jscodeshift).
+4. **CI validation** — consumers run against canary versions before release.
+5. **Changeset-based releases** — document what changed and why.
+
+---
+
+*Practice these scenarios out loud — senior interviews test **how you think and communicate**, not just syntax. Good luck! 🚀*
