@@ -2569,4 +2569,927 @@ const resolvers = {
 
 ---
 
-> **Good luck with your interview! Remember: as a Tech Lead, they're testing your judgment (when NOT to use something) as much as your technical depth.**
+> * Apllo Client Question ans
+# GraphQL + React (Apollo Client) — Complete Interview Guide
+
+> **For 12+ Year Experienced Developers** — Definitions, Questions & Answers covering every concept an interviewer would explore.
+
+---
+
+## 1. GraphQL — Core Definitions
+
+| Term | Definition |
+|------|-----------|
+| **GraphQL** | A query language for APIs developed by Facebook (2015). Unlike REST, it lets the client request exactly the fields it needs from a single endpoint. It uses a strongly typed schema to define the API surface. |
+| **Schema** | The contract between client and server. It defines types, queries, mutations, and subscriptions using SDL (Schema Definition Language). |
+| **SDL** | Schema Definition Language — the syntax used to write a GraphQL schema. |
+| **Query** | A read operation to fetch data. |
+| **Mutation** | A write operation to create, update, or delete data. |
+| **Subscription** | A real-time operation that maintains a persistent connection (usually WebSocket) and pushes updates to the client. |
+| **Resolver** | A server-side function that determines how to fetch or compute the data for a single field in the schema. |
+| **Fragment** | A reusable unit of fields that can be shared across multiple queries to avoid repetition. |
+| **Directive** | An annotation that modifies query execution. Built-in: `@include(if:)`, `@skip(if:)`, `@deprecated`. Custom: `@client`, `@defer`, `@export`. |
+| **Introspection** | GraphQL's ability to describe its own schema. Tools like GraphiQL and Apollo DevTools use introspection to provide autocomplete and documentation. |
+| **Operation Name** | An explicit name given to a query/mutation for debugging, logging, and persisted queries. |
+| **Variable** | A dynamic value passed into a GraphQL operation, replacing hardcoded arguments. Defined with `$` syntax. |
+| **Alias** | Renaming a field in the response to avoid conflicts. |
+| **Inline Fragment** | Used for conditional field selection on union/interface types. |
+| **Union Type** | A type that can be one of several object types: `union SearchResult = User \| Post \| Comment` |
+| **Interface** | An abstract type that defines a set of fields that multiple types must implement. |
+| **Scalar** | A primitive type. Built-in: `Int`, `Float`, `String`, `Boolean`, `ID`. Custom scalars like `DateTime`, `JSON` can be defined. |
+| **Enum** | A type restricted to a specific set of values: `enum Role { ADMIN USER GUEST }` |
+| **Input Type** | A special type used for mutation/query arguments. |
+| **Non-null (`!`)** | Indicates a field can never return null. `String!` means the field must return a string. |
+
+### SDL Examples
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  posts: [Post!]!
+}
+
+fragment UserFields on User {
+  id
+  name
+  email
+}
+
+query GetUserProfile($id: ID!) {
+  user(id: $id) { name }
+}
+
+# Alias
+{
+  adminUser: user(role: ADMIN) { name }
+  regularUser: user(role: USER) { name }
+}
+
+# Inline Fragment
+{
+  search(term: "hello") {
+    ... on User { name email }
+    ... on Post { title body }
+  }
+}
+
+# Input Type
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+```
+
+---
+
+## 2. Apollo Client — Definitions
+
+| Term | Definition |
+|------|-----------|
+| **Apollo Client** | The most popular GraphQL client for JavaScript/React. It handles data fetching, caching, state management, and UI updates. |
+| **ApolloProvider** | A React context provider that makes the Apollo Client instance available to all components in the tree. |
+| **InMemoryCache** | Apollo's default normalized cache. It stores GraphQL results as a flat lookup table of objects identified by `__typename:id`. |
+| **Normalized Cache** | A caching strategy where each object is stored once by its unique identity. References (`{ __ref: 'User:123' }`) link objects, so updating one object automatically reflects everywhere it's referenced. |
+| **Apollo Link** | A modular middleware system for the network layer. Each link can inspect, modify, or handle a GraphQL operation before passing it to the next link. Think of it like Express middleware but for GraphQL requests. |
+| **HttpLink** | The terminating link that sends GraphQL operations over HTTP to your server. |
+| **Apollo DevTools** | A browser extension for inspecting queries, mutations, cache state, and active subscriptions in real time. |
+| **`__typename`** | A meta-field automatically added by Apollo to every object in a response. It holds the GraphQL type name and is used for cache normalization. |
+
+---
+
+## 3. Apollo Client Setup & Configuration
+
+### Q: How do you set up Apollo Client in a React app?
+
+```jsx
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
+
+const client = new ApolloClient({
+  link: new HttpLink({ uri: '/graphql' }),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: { fetchPolicy: 'cache-and-network' },
+  },
+});
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <MyApp />
+  </ApolloProvider>
+);
+```
+
+### Q: What is Apollo Link? How do you compose links?
+
+```js
+import { from, HttpLink } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
+import { RetryLink } from '@apollo/client/link/retry';
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) graphQLErrors.forEach(({ message }) => console.error(message));
+  if (networkError) console.error(`Network error: ${networkError}`);
+});
+
+const retryLink = new RetryLink({ delay: { initial: 300 }, attempts: { max: 3 } });
+const httpLink = new HttpLink({ uri: '/graphql' });
+
+const link = from([errorLink, retryLink, httpLink]);
+```
+
+### Link Types & Definitions
+
+| Link | Definition |
+|------|-----------|
+| **ErrorLink** | Catches GraphQL and network errors globally. Used for logging, toast notifications, or auth redirects. |
+| **RetryLink** | Automatically retries failed operations with configurable delay and max attempts. |
+| **AuthLink / `setContext`** | Injects authentication headers into every outgoing request. |
+| **BatchHttpLink** | Groups multiple operations into a single HTTP request to reduce network overhead. |
+| **SplitLink (`split`)** | Routes operations to different links based on a condition (e.g., queries go to HTTP, subscriptions go to WebSocket). |
+| **Terminating Link** | The last link in the chain that actually sends the request (e.g., `HttpLink`, `BatchHttpLink`). |
+| **Non-Terminating Link** | A link that processes the operation and passes it forward (e.g., `ErrorLink`, `RetryLink`). |
+
+### Q: How do you add auth headers to every request?
+
+```js
+import { setContext } from '@apollo/client/link/context';
+
+const authLink = setContext((_, { headers }) => ({
+  headers: {
+    ...headers,
+    authorization: `Bearer ${localStorage.getItem('token')}`,
+  },
+}));
+
+const client = new ApolloClient({
+  link: from([authLink, httpLink]),
+  cache: new InMemoryCache(),
+});
+```
+
+---
+
+## 4. Fetch Policies — Definitions & Usage
+
+**Fetch Policy**: A strategy that tells Apollo where to look for data (cache, network, or both) and in what order.
+
+| Policy | Definition | Use Case |
+|--------|-----------|----------|
+| `cache-first` | Read cache first; only fetch from network on cache miss. **Default.** | Stable data that rarely changes (user profile, config) |
+| `cache-and-network` | Immediately return cached data, then silently refetch from network and update. | Dashboards, lists — fast initial load + freshness |
+| `network-only` | Always fetch from network, ignore cache for reading but still write result to cache. | Post-mutation pages, data that must be fresh |
+| `cache-only` | Read only from cache, never make a network request. Errors if data isn't cached. | Offline mode, data you know is already fetched |
+| `no-cache` | Always fetch from network. Does NOT write results to cache at all. | Sensitive or one-off data (payment tokens) |
+| `standby` | Like `cache-first`, but the query does NOT automatically re-execute when cache changes. | Dependent/inactive queries that you trigger manually |
+
+### Q: When would you change fetch policy dynamically?
+
+After a mutation, you might refetch a query with `network-only` to guarantee fresh data:
+
+```jsx
+refetch(); // uses the component's current fetchPolicy
+// or override:
+refetch({ fetchPolicy: 'network-only' });
+```
+
+---
+
+## 5. Error Policy — Definitions
+
+**Error Policy**: Controls how Apollo treats GraphQL errors relative to data.
+
+| Policy | Definition | Use Case |
+|--------|-----------|----------|
+| `none` (default) | If any GraphQL error is returned, `data` is set to `undefined` and only `error` is populated. All-or-nothing. | Standard queries where partial data is meaningless |
+| `all` | Both `data` (partial) and `error` can be populated simultaneously. | Schema with nullable fields — render whatever succeeded |
+| `ignore` | GraphQL errors are silently discarded. Only `data` is returned. | Non-critical errors |
+
+```jsx
+const { data, error } = useQuery(GET_DASHBOARD, {
+  errorPolicy: 'all',
+});
+// data.userProfile may exist even if data.analytics errored
+```
+
+---
+
+## 6. Core Hooks
+
+### `useQuery`
+
+**Definition**: A React hook that executes a GraphQL query when the component mounts and re-renders the component when the result changes. It automatically subscribes to cache updates.
+
+```jsx
+const {
+  data,            // The query result data
+  loading,         // true while the request is in-flight
+  error,           // ApolloError object if something failed
+  refetch,         // Function to manually re-execute the query
+  fetchMore,       // Function for pagination (fetches additional data)
+  startPolling,    // Start polling at an interval (in ms)
+  stopPolling,     // Stop polling
+  subscribeToMore, // Attach a subscription that merges into this query's data
+  networkStatus,   // Fine-grained loading state enum (requires notifyOnNetworkStatusChange)
+  previousData,    // The last successful data (useful to show stale data during refetch)
+  client,          // The ApolloClient instance
+} = useQuery(GET_USERS, {
+  variables: { limit: 10 },
+  fetchPolicy: 'cache-and-network',
+  pollInterval: 5000,
+  skip: !isReady,
+  notifyOnNetworkStatusChange: true,
+  onCompleted: (data) => {},
+  onError: (error) => {},
+  context: { headers: { 'X-Custom': 'value' } },
+  errorPolicy: 'all',
+});
+```
+
+#### Key Options Defined
+
+| Option | Definition |
+|--------|-----------|
+| `variables` | Dynamic arguments passed to the query. |
+| `skip` | A boolean. When `true`, the query does not execute at all. Useful for conditional queries. |
+| `pollInterval` | Milliseconds between automatic refetches. Simplest form of real-time data. |
+| `notifyOnNetworkStatusChange` | When `true`, the component re-renders on every `networkStatus` change (loading, refetching, polling, etc.), not just on data/error changes. |
+| `context` | Custom metadata passed along the link chain. Common use: per-query headers. |
+| `previousData` | Holds the last successful `data` value. Prevents layout shift when you're refetching and `data` temporarily becomes `undefined`. |
+
+#### NetworkStatus Enum
+
+| Value | Meaning |
+|-------|---------|
+| 1 | `loading` — first load |
+| 2 | `setVariables` — variables changed |
+| 3 | `fetchMore` — pagination fetch |
+| 4 | `refetch` — manual refetch |
+| 6 | `poll` — polling refetch |
+| 7 | `ready` — data is available |
+| 8 | `error` — error occurred |
+
+### Q: How do you handle loading/error states in production?
+
+```jsx
+function UserList() {
+  const { data, loading, error, previousData, networkStatus, refetch } = useQuery(GET_USERS, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const users = data?.users ?? previousData?.users ?? [];
+  const isRefetching = networkStatus === NetworkStatus.refetch;
+
+  if (loading && !previousData) return <Skeleton />;
+  if (error) return <ErrorBoundary error={error} retry={() => refetch()} />;
+
+  return (
+    <div style={{ opacity: isRefetching ? 0.6 : 1 }}>
+      {users.map(u => <UserCard key={u.id} user={u} />)}
+    </div>
+  );
+}
+```
+
+---
+
+### `useLazyQuery`
+
+**Definition**: A variant of `useQuery` that does NOT execute on mount. Instead, it returns a trigger function that you call manually. Ideal for user-initiated actions like search, filter, or form submission.
+
+```jsx
+const [searchUsers, { data, loading, called, error }] = useLazyQuery(SEARCH_USERS);
+
+const handleSearch = (term) => {
+  searchUsers({ variables: { term } });
+};
+```
+
+- **`called`**: Boolean indicating whether the query has been triggered at least once.
+
+### Q: `useLazyQuery` vs `useQuery({ skip })` — when to use which?
+
+| Approach | Style | Best For |
+|----------|-------|----------|
+| `useLazyQuery` | Imperative — you call a function | Event-driven triggers (button click, form submit) |
+| `useQuery({ skip })` | Declarative — runs automatically when condition changes | Dependent data (run query B when query A finishes) |
+
+---
+
+### `useMutation`
+
+**Definition**: A React hook that returns a mutate function and a result object. Unlike `useQuery`, it does NOT execute on mount — you call the function explicitly.
+
+```jsx
+const [createTodo, { data, loading, error, called, reset }] = useMutation(CREATE_TODO);
+```
+
+- **`reset`**: Resets `data`, `error`, and `called` back to their initial state. Useful for forms that need to be reused.
+
+### Q: Complete mutation with optimistic UI, cache update, and error handling
+
+```jsx
+const [createTodo, { loading }] = useMutation(CREATE_TODO, {
+  optimisticResponse: {
+    createTodo: {
+      __typename: 'Todo',
+      id: `temp-${Date.now()}`,
+      text: newTodoText,
+      completed: false,
+    },
+  },
+
+  update(cache, { data: { createTodo } }) {
+    cache.modify({
+      fields: {
+        todos(existingTodos = []) {
+          const newTodoRef = cache.writeFragment({
+            data: createTodo,
+            fragment: gql`
+              fragment NewTodo on Todo { id text completed }
+            `,
+          });
+          return [...existingTodos, newTodoRef];
+        },
+      },
+    });
+  },
+
+  refetchQueries: [{ query: GET_TODO_COUNT }],
+
+  onError(err) { toast.error(err.message); },
+  onCompleted(data) { toast.success('Created!'); },
+});
+```
+
+#### Key Mutation Concepts Defined
+
+| Concept | Definition |
+|---------|-----------|
+| **Optimistic Response** | A fake, instant result applied to the cache immediately before the server responds. If the server returns an error, Apollo automatically rolls back the optimistic data. |
+| **`update` function** | A callback that gives you direct access to the cache after the mutation completes. You use it to manually insert, modify, or remove cache entries. |
+| **`refetchQueries`** | An array of queries to re-execute after the mutation. Simpler than manual cache updates but causes extra network requests. Can be `'active'` to refetch all active queries. |
+| **`awaitRefetchQueries`** | When `true`, the mutation's promise doesn't resolve until all refetched queries have completed. |
+
+### Q: `update` vs `refetchQueries` — when to use which?
+
+| Approach | Best When | Trade-off |
+|----------|-----------|-----------|
+| `update` | You know the exact shape of the change | Zero extra network requests. More code. |
+| `refetchQueries` | Mutation's impact is complex (sorts, aggregations, filters on server) | Less code, but causes network round trips. |
+| **Both** | Hybrid — update cache immediately for speed, then refetch for server reconciliation | Best UX, most code. |
+
+---
+
+### `useSubscription`
+
+**Definition**: A hook that establishes a persistent connection (WebSocket) to receive real-time updates from the server.
+
+#### Setup — WebSocket + HTTP Split
+
+```js
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+
+const wsLink = new GraphQLWsLink(createClient({
+  url: 'ws://localhost:4000/graphql',
+  connectionParams: { authToken: getToken() },
+}));
+
+const splitLink = split(
+  ({ query }) => {
+    const def = getMainDefinition(query);
+    return def.kind === 'OperationDefinition' && def.operation === 'subscription';
+  },
+  wsLink,   // subscriptions go here
+  httpLink, // queries/mutations go here
+);
+```
+
+```jsx
+const { data, loading, error } = useSubscription(MESSAGE_ADDED, {
+  variables: { chatId },
+  onData: ({ data }) => playNotificationSound(),
+});
+```
+
+### Q: `useSubscription` vs `subscribeToMore`?
+
+| Hook | Use Case |
+|------|----------|
+| `useSubscription` | Standalone. Independent real-time data (notifications, live scores). |
+| `subscribeToMore` | Returned from `useQuery`. Subscription data merged into an existing query's cache result (new messages appended to a chat list). |
+
+```jsx
+const { data, subscribeToMore } = useQuery(GET_MESSAGES, { variables: { chatId } });
+
+useEffect(() => {
+  const unsubscribe = subscribeToMore({
+    document: MESSAGE_ADDED_SUB,
+    variables: { chatId },
+    updateQuery: (prev, { subscriptionData }) => ({
+      messages: [...prev.messages, subscriptionData.data.messageAdded],
+    }),
+  });
+  return () => unsubscribe();
+}, [chatId]);
+```
+
+---
+
+### `useFragment`
+
+**Definition**: A hook (Apollo Client 3.8+) that subscribes a component to a specific fragment in the cache without executing a query. It reads data directly from the normalized cache by reference.
+
+```jsx
+const { data, complete } = useFragment({
+  fragment: gql`
+    fragment UserAvatar on User { id name avatarUrl }
+  `,
+  from: { __typename: 'User', id: userId },
+});
+```
+
+- **`complete`**: Boolean indicating whether all fields in the fragment are present in the cache.
+
+#### Why It Matters for Senior Developers
+
+- Enables **fragment colocation** (Relay-style) where each component declares exactly what data it needs.
+- **Minimizes re-renders** — the component only re-renders when the specific fields in its fragment change, not when any part of the parent query changes.
+- **Eliminates prop drilling** — components read their own data from cache.
+
+---
+
+### `useReactiveVar`
+
+**Definition**: A hook that subscribes to an Apollo **reactive variable** and re-renders the component whenever the variable's value changes.
+
+**Reactive Variable (`makeVar`)**: A container for local (client-side) state that lives outside the cache but integrates with Apollo's reactivity system.
+
+```jsx
+import { makeVar, useReactiveVar } from '@apollo/client';
+
+export const cartItemsVar = makeVar([]);           // create
+export const isDarkModeVar = makeVar(false);
+
+function Cart() {
+  const cartItems = useReactiveVar(cartItemsVar);  // subscribe
+  return <span>Items: {cartItems.length}</span>;
+}
+
+// Update from anywhere:
+cartItemsVar([...cartItemsVar(), newItem]);         // update
+```
+
+#### Why Use Reactive Variables Over React State or Context?
+
+- They work **outside React components** (in link chains, utility functions).
+- They integrate with Apollo's cache via type policies.
+- No provider/context boilerplate.
+- Any component using `useReactiveVar` re-renders automatically.
+
+---
+
+### `useApolloClient`
+
+**Definition**: A hook that returns the `ApolloClient` instance from context. Use it when you need direct cache access or to run imperative operations outside of the declarative hook pattern.
+
+```jsx
+const client = useApolloClient();
+
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  client.resetStore();  // clears cache and refetches all active queries
+  // or client.clearStore() — clears cache without refetching
+};
+```
+
+---
+
+## 7. Cache — `InMemoryCache` Deep Dive
+
+### Definitions
+
+| Term | Definition |
+|------|-----------|
+| **Normalization** | The process of breaking down nested query results into flat, individually identifiable objects. Each object is stored once in the cache using a key like `User:123`. |
+| **Cache Reference (`__ref`)** | A pointer to a normalized object: `{ __ref: 'User:123' }`. Queries store references, not copies, so one update propagates everywhere. |
+| **Type Policy** | Configuration that tells the cache how to identify, read, merge, and handle objects of a specific type. |
+| **`keyFields`** | Defines how a type is uniquely identified in the cache. Default is `['id']` or `['_id']`. You can customize for composite keys or disable normalization entirely. |
+| **`read` function** | A custom function that runs whenever a field is read from the cache. Use for computed/derived fields, filtering, or local-only transformations. |
+| **`merge` function** | A custom function that controls how incoming data combines with existing cache data. Critical for pagination, arrays, and nested objects. |
+| **`cache.modify`** | A method for surgically updating individual fields on a cached object without writing an entire query or fragment. |
+| **`cache.evict`** | Removes an object from the cache by its ID. |
+| **`cache.gc`** | Garbage collection — removes any objects that are no longer referenced by any query. |
+
+### Q: How does the normalized cache work internally?
+
+Every query result is flattened. Objects with `__typename` and `id` are stored in a flat map:
+
+```
+ROOT_QUERY
+  └─ users → [{ __ref: 'User:1' }, { __ref: 'User:2' }]
+
+User:1 → { __typename: 'User', id: '1', name: 'Alice' }
+User:2 → { __typename: 'User', id: '2', name: 'Bob' }
+```
+
+If `User:1` is updated by any mutation, every query referencing `User:1` automatically reflects the change.
+
+### Q: How do you customize cache identity?
+
+```js
+const cache = new InMemoryCache({
+  typePolicies: {
+    Product: {
+      keyFields: ['sku', 'warehouse'],
+      // Cache key: Product:{"sku":"A1","warehouse":"US"}
+    },
+    SearchResult: {
+      keyFields: false,
+      // Not normalized — embedded in its parent
+    },
+  },
+});
+```
+
+### Q: Explain `read` and `merge` functions
+
+```js
+typePolicies: {
+  Query: {
+    fields: {
+      todos: {
+        read(existing, { args }) {
+          // Transform on read: filter by completion status
+          if (args?.completed !== undefined) {
+            return existing?.filter(t => t.completed === args.completed);
+          }
+          return existing;
+        },
+        merge(existing = [], incoming, { args }) {
+          // Control how data merges: append for pagination
+          if (args?.offset === 0) return incoming;
+          return [...existing, ...incoming];
+        },
+      },
+    },
+  },
+}
+```
+
+### Q: How do you directly manipulate the cache?
+
+```js
+// Read a cached query
+const data = client.readQuery({ query: GET_TODOS });
+
+// Write to a cached query
+client.writeQuery({ query: GET_TODOS, data: { todos: updatedList } });
+
+// Read a single cached object
+const user = client.readFragment({ id: 'User:123', fragment: USER_FIELDS });
+
+// Modify specific fields
+cache.modify({
+  id: 'User:123',
+  fields: {
+    name: () => 'New Name',
+    friends(existingRefs, { readField }) {
+      return existingRefs.filter(ref => readField('id', ref) !== deletedId);
+    },
+  },
+});
+
+// Remove an object and clean up
+cache.evict({ id: 'User:123' });
+cache.gc();
+```
+
+---
+
+## 8. Pagination
+
+### Definitions
+
+| Term | Definition |
+|------|-----------|
+| **Offset-Based Pagination** | Uses `offset` and `limit` to skip and take items. Simple but has issues with data consistency when items are inserted/deleted. |
+| **Cursor-Based Pagination** | Uses an opaque cursor (usually an encoded ID or timestamp) to mark position. More reliable for real-time data. |
+| **Relay-Style Pagination** | A cursor-based pattern following the Relay specification with `edges`, `node`, `pageInfo`, `endCursor`, and `hasNextPage`. |
+| **`fetchMore`** | A function returned by `useQuery` that fetches additional data and merges it into the existing result. |
+| **`keyArgs`** | Tells the cache which query arguments create separate cache entries and which are just pagination parameters. Arguments listed in `keyArgs` create distinct cache entries. Arguments NOT listed (like `offset`, `limit`, `after`) are treated as pagination parameters that don't create separate entries. |
+
+### Q: Implement offset-based pagination
+
+```js
+// Cache config
+typePolicies: {
+  Query: {
+    fields: {
+      posts: {
+        keyArgs: ['category'],
+        merge(existing = [], incoming, { args }) {
+          if (args?.offset === 0) return incoming;
+          return [...existing, ...incoming];
+        },
+      },
+    },
+  },
+}
+```
+
+```jsx
+const { data, fetchMore } = useQuery(GET_POSTS, {
+  variables: { offset: 0, limit: 10, category: 'tech' },
+});
+
+const loadMore = () => {
+  fetchMore({ variables: { offset: data.posts.length } });
+};
+```
+
+### Q: Implement cursor-based with `relayStylePagination`
+
+```js
+import { relayStylePagination } from '@apollo/client/utilities';
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        feed: relayStylePagination(['type']),
+      },
+    },
+  },
+});
+```
+
+```jsx
+const { data, fetchMore } = useQuery(GET_FEED, { variables: { first: 10 } });
+
+const loadMore = () => {
+  fetchMore({ variables: { after: data.feed.pageInfo.endCursor } });
+};
+```
+
+### Q: What happens without proper `keyArgs`?
+
+Fetching page 2 would overwrite page 1 in the cache. Users would see items disappear. `keyArgs` ensures pagination arguments don't create separate cache entries, so pages merge together.
+
+---
+
+## 9. Local State Management
+
+### Definitions
+
+| Term | Definition |
+|------|-----------|
+| **`@client` Directive** | Marks a field as client-only. Apollo resolves it locally without sending it to the server. |
+| **Reactive Variable** | Created with `makeVar()`. A piece of local state that triggers re-renders in any component subscribed to it (via `useReactiveVar` or a `read` function in type policies). |
+| **Local Resolver** | (Deprecated in Apollo 3.x in favor of type policies) A function that resolves a `@client` field. |
+
+```js
+// Type policies approach (current)
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        isLoggedIn: {
+          read() { return !!localStorage.getItem('token'); },
+        },
+        cartItems: {
+          read() { return cartItemsVar(); },
+        },
+      },
+    },
+  },
+});
+
+export const cartItemsVar = makeVar([]);
+```
+
+```graphql
+query GetLocalState {
+  isLoggedIn @client
+  cartItems @client
+}
+```
+
+### Q: Can you mix `@client` and server fields in one query?
+
+Yes. Apollo resolves `@client` fields locally and sends the rest to the server:
+
+```graphql
+query GetUserWithLocalState {
+  user(id: "1") {    # fetched from server
+    id
+    name
+    isSelected @client  # resolved locally
+  }
+}
+```
+
+---
+
+## 10. Advanced Patterns
+
+### Definitions
+
+| Term | Definition |
+|------|-----------|
+| **Persisted Queries / APQ** | Instead of sending the full query string, the client sends a hash. The server maps the hash to the stored query. Reduces payload size and prevents arbitrary query attacks. |
+| **`@defer` Directive** | Allows parts of a query to be streamed incrementally. The server returns available data first and streams deferred fields later. |
+| **`@live` Directive** | (Experimental) Tells the server to push updates whenever the underlying data changes. |
+| **Schema Stitching** | Combining multiple GraphQL schemas into one at the gateway level. |
+| **Federation** | Apollo's approach to microservice GraphQL. Each service owns part of the schema, and the gateway composes them. |
+| **DataLoader** | A batching/caching utility (server-side) that solves the N+1 problem by collecting all IDs requested in a single tick and fetching them in one batch. |
+| **GraphQL Code Generator** | A tool that reads your schema and operations to generate TypeScript types, typed hooks, and typed document nodes. |
+
+### Persisted Queries Setup
+
+```js
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { sha256 } from 'crypto-hash';
+
+const persistedLink = createPersistedQueryLink({ sha256 });
+const link = from([persistedLink, httpLink]);
+```
+
+### `@defer` Example
+
+```graphql
+query GetUser {
+  user(id: "1") {
+    name
+    ... @defer {
+      analyticsData  # heavy field — arrives later
+    }
+  }
+}
+```
+
+### GraphQL Code Generator Config
+
+```yaml
+schema: "http://localhost:4000/graphql"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+```
+
+```ts
+const { data } = useQuery(GetUsersDocument);
+// data.users is fully typed as User[]
+```
+
+### Q: How do you handle file uploads?
+
+Apollo doesn't natively support multipart uploads. Use `apollo-upload-client`:
+
+```js
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+const uploadLink = createUploadLink({ uri: '/graphql' });
+```
+
+### Q: SSR with Next.js App Router?
+
+```jsx
+import { registerApolloClient } from '@apollo/experimental-nextjs-app-support';
+
+export const { getClient } = registerApolloClient(() => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({ uri: process.env.GRAPHQL_URL }),
+  });
+});
+
+export default async function Page() {
+  const { data } = await getClient().query({ query: GET_POSTS });
+  return <PostList posts={data.posts} />;
+}
+```
+
+### Q: Request batching?
+
+```js
+import { BatchHttpLink } from '@apollo/client/link/batch-http';
+
+const batchLink = new BatchHttpLink({
+  uri: '/graphql',
+  batchMax: 10,
+  batchInterval: 20,
+});
+```
+
+### Q: Token refresh flow?
+
+```js
+const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+  if (graphQLErrors?.some(e => e.extensions?.code === 'UNAUTHENTICATED')) {
+    return fromPromise(refreshToken()).flatMap((newToken) => {
+      operation.setContext({
+        headers: { authorization: `Bearer ${newToken}` },
+      });
+      return forward(operation);
+    });
+  }
+});
+```
+
+---
+
+## 11. Testing
+
+### Definitions
+
+| Term | Definition |
+|------|-----------|
+| **`MockedProvider`** | A test wrapper from `@apollo/client/testing` that intercepts GraphQL operations and returns predefined responses instead of making real network requests. |
+| **Mock Object** | A configuration that maps a specific request (query + variables) to a specific result (data, error, or network error). |
+
+### Basic Test Setup
+
+```jsx
+import { MockedProvider } from '@apollo/client/testing';
+
+const mocks = [
+  {
+    request: { query: GET_USERS, variables: { limit: 10 } },
+    result: {
+      data: { users: [{ id: '1', name: 'Alice', __typename: 'User' }] },
+    },
+  },
+];
+
+render(
+  <MockedProvider mocks={mocks} addTypename={false}>
+    <UserList />
+  </MockedProvider>
+);
+await screen.findByText('Alice');
+```
+
+### Testing Errors
+
+```jsx
+// Network error
+{ request: { query: GET_USERS }, error: new Error('Network error') }
+
+// GraphQL error
+{ request: { query: GET_USERS }, result: { errors: [{ message: 'Unauthorized' }] } }
+```
+
+### Testing Loading State
+
+```jsx
+render(<MockedProvider mocks={mocks}><Comp /></MockedProvider>);
+expect(screen.getByTestId('spinner')).toBeInTheDocument();  // loading
+await screen.findByText('Alice');                            // loaded
+expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+```
+
+---
+
+## 12. Performance & Architecture (Staff-Level)
+
+### Q: How do you prevent unnecessary re-renders?
+
+- `useFragment` for component-level cache subscriptions
+- `canonizeResults: true` to stabilize object identity across reads
+- Split large queries into smaller ones so updates don't cascade
+- Custom `read` functions to derive data without extra queries
+- `previousData` to avoid full unmount/remount cycles
+
+### Q: Describe your ideal large-scale GraphQL architecture
+
+- **Fragment colocation**: Each component owns a fragment; parent queries compose them.
+- **Generated types**: `graphql-codegen` with `TypedDocumentNode` for end-to-end type safety.
+- **Schema-first contract**: Frontend and backend agree on the schema before building.
+- **Layered links**: Auth → Error → Retry → Batch → HTTP.
+- **Type policies upfront**: Define `keyFields`, `merge`, `read` for every type as part of initial setup.
+- **Persisted queries** in production.
+- **Monitoring**: Apollo Studio or custom link that tracks query latency, cache hit rates, and error rates.
+
+### Q: Cache inconsistency after a mutation — how to debug?
+
+1. Open Apollo DevTools → Cache tab.
+2. Verify the mutation response includes `__typename` and `id`.
+3. Check `keyFields` match between client and server.
+4. Inspect `merge` functions for unintended overwrites.
+5. Check if the mutation response returns enough data for the cache to update automatically, or if `update` / `refetchQueries` is needed.
+
+### Q: Your app has 50+ queries. How do you manage them?
+
+- Colocate fragments with components.
+- Keep queries in `.graphql` files, not inline template literals.
+- Use `graphql-codegen` to auto-generate typed hooks.
+- Group shared fragments in a `fragments/` directory.
+- Use `keyArgs` and type policies to prevent cache duplication.
+- Monitor query performance in Apollo Studio.
