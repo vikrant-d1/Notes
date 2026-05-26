@@ -1,8 +1,4 @@
-# Microservices Interview Guide — Senior/Staff Backend Engineer (10+ Years)
-
-> A comprehensive Q&A reference covering architecture, messaging systems (RabbitMQ, Kafka, SQS), inter-service authentication, design patterns, and real-world production concerns.
-
----
+# Microservices Interview Guide
 
 ## Table of Contents
 
