@@ -1,6 +1,4 @@
-# Micro-Frontend Interview Guide — Senior/Staff Engineer (10+ Years)
-
-> A comprehensive Q&A reference covering architecture, composition strategies, Module Federation, Single-SPA, routing, shared state, authentication, CSS isolation, testing, deployment, performance, and real-world production concerns.
+# Micro-Frontend Interview 
 
 ---
 
