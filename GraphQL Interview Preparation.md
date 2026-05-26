@@ -1,8 +1,4 @@
-# GraphQL Interview Preparation — Tech Lead & Senior Developer
-
-> **Target Profile:** 4 years of GraphQL experience | 10+ years Node.js | Tech Lead / Senior Developer role
-
----
+# GraphQL Interview Preparation 
 
 ## Table of Contents
 
