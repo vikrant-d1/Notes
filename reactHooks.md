@@ -171,12 +171,6 @@ function App() {
 
 # React Hooks 
 
----
-
-# React Hooks — Senior Engineer Interview Guide (9+ Years)
-
-> Covers all React hooks **except** `useReducer`, `useContext`, and `useCallback`.
-> Includes definition, signature, deep internals, gotchas, and production-grade examples.
 
 ---
 
