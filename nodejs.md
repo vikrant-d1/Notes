@@ -632,10 +632,6 @@ const result = await pool.query(
 
 ---
 
-# Node.js Interview Preparation Guide
-## Lead / Staff Engineer · 9+ Years Experience
-
----
 
 ## 1. Node.js Internals & Core Concepts
 
