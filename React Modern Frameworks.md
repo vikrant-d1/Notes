@@ -1,8 +1,5 @@
 # React & Modern Frameworks – Interview Deep Dive
 
-> **Level:** Team Lead / Senior Full Stack Developer (9+ years)
-> **Format:** Concept → How It Works Internally → Code Examples → Real-World Application → Interview Tip
-
 ---
 
 ## Q1: Explain React's Fiber Architecture. How does it enable concurrent rendering?
