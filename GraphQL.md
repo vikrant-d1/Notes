@@ -1,4 +1,4 @@
-# GraphQL Interview Preparation 
+# GraphQL 
 
 ## Table of Contents
 
