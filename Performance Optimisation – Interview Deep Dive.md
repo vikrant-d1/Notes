@@ -1,8 +1,4 @@
-# Performance Optimisation – Interview Deep Dive
-
-> **Level:** Team Lead / Senior Full Stack Developer (9+ years)
-> **Format:** Concept → Diagnosis → Code/Config Examples → Real-World Impact → Interview Tip
-
+# Performance Optimisation 
 ---
 
 ## Q1: How do you measure and improve Core Web Vitals (LCP, FID/INP, CLS)?
