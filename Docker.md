@@ -1,6 +1,4 @@
-# 🐳 Docker Interview Preparation — Senior Full-Stack Developer
-
-
+# 🐳 Docker Interview Preparation
 
 ## Table of Contents
 
