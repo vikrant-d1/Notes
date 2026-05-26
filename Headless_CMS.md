@@ -1,8 +1,4 @@
-# Interview Preparation Guide: Senior Frontend Developer (Next.js 15 + Headless CMS)
-
----
-
-## 1. Next.js 15 — What's New (Top Interview Topic)
+# Interview Preparation Guide
 
 ### 1.1 Breaking Changes You MUST Know
 
