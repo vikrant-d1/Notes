@@ -1,8 +1,5 @@
-# Next.js Interview Preparation Guide
+# Next.js Interview Preparation
 
-> Simple language, clear definitions, rendering strategies with benefits and drawbacks, scenario-based decisions, version differences, and most-asked interview questions.
-
----
 
 ## Table of Contents
 
