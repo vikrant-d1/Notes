@@ -1,4 +1,28 @@
+### 0.1. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
 
+```javascript 
+let stocksArr = [7,6,4,3,1];
+ 
+ function findMaxmumProfit(stocks){
+     let buyDay = stocks[0];
+     let maximumProfit =0;
+   
+     for(let i=1; i<stocks.length; i++){
+       if(buyDay<stocks[i]){
+          maximumProfit = stocks[i];
+       }
+       
+       if(buyDay>stocks[i]){
+          buyDay = stocks[i];
+       }
+     }
+    
+    maximumProfit=(maximumProfit-buyDay)>0?maximumProfit-buyDay:0;
+    return maximumProfit;
+ }
+
+console.log(findMaxmumProfit(stocksArr));
+```
 
 
 ### 1. create a flat array
