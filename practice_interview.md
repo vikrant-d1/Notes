@@ -1,3 +1,147 @@
+### Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
+```javascript
+//Example 1:
+//Input: nums = [1,1,2]
+
+//Output: 2, nums = [1,2,_]
+
+// Example 2:
+// Input: nums = [0,0,1,1,1,2,2,3,3,4]
+
+// Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+
+ var removeDuplicates = function(nums) {
+      let x = 0;
+      for (let i = 0; i < nums.length; i++) {
+          if (nums[i] > nums[x]) {
+              x++;
+              nums[x] = nums[i];
+          }
+      }
+      return x + 1;
+  }; 
+
+```
+
+###  Given an integer array nums and an integer val, remove all occurrences of val in-place. The order of the elements may be changed. Then return the number of elements in nums which are not equal to val.
+
+```javascript
+//Example 1:
+//Input: nums = [3,2,2,3], val = 3
+
+//Output: 2, nums = [2,2,_,_]
+
+//Explanation: The first 2 elements should be 2. Underscores represent irrelevant values.
+
+//Example 2:
+//Input: nums = [0,1,2,2,3,0,4,2], val = 2
+
+//Output: 5, nums = [0,1,4,0,3,_,_,_]
+
+//Explanation: The first 5 elements should be any order of [0,1,4,0,3].
+
+var removeElement = function(nums, val) {
+  let x = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] != val) {
+      nums[x] = nums[i];
+      x++;
+    }
+  }
+  return x;
+};
+```
+
+```javascript
+/**
+ * Merge Sorted Array
+ *
+ * Example 1:
+ * Input:
+ * nums1 = [1,2,3,0,0,0], m = 3
+ * nums2 = [2,5,6], n = 3
+ *
+ * Explanation:
+ * nums1 contains the first 3 valid elements: [1,2,3]
+ * nums2 contains: [2,5,6]
+ *
+ * After merging both sorted arrays:
+ * Output: [1,2,2,3,5,6]
+ *
+ * --------------------------------------------------
+ *
+ * Example 2:
+ * Input:
+ * nums1 = [1], m = 1
+ * nums2 = [], n = 0
+ *
+ * Explanation:
+ * nums1 contains: [1]
+ * nums2 is empty
+ *
+ * After merging:
+ * Output: [1]
+ *
+ * --------------------------------------------------
+ *
+ * Example 3:
+ * Input:
+ * nums1 = [0], m = 0
+ * nums2 = [1], n = 1
+ *
+ * Explanation:
+ * nums1 has no valid elements (m = 0)
+ * nums2 contains: [1]
+ *
+ * After merging:
+ * Output: [1]
+ *
+ * --------------------------------------------------
+ *
+ * Goal:
+ * Merge nums2 into nums1 as one sorted array.
+ * The final sorted result must be stored inside nums1.
+ */
+
+ var merge = function(nums1, m, nums2, n) {
+    for (let i = m; i < nums1.length; i++) {
+      nums1[i] = nums2[i - m];
+    }
+    nums1.sort((a, b) => a - b);
+  };
+```
+### Write a recursive function isPowerOfTwo(n) that returns true if n is a power of 2, otherwise false.
+
+```javascript 
+function isPowerOfTwo(num){
+      if(num==1){
+        return true;
+      }
+      
+      if((num%2)!=0 || num<1) return false;
+      
+       return isPowerOfTwo(num/2);
+}
+
+console.log(isPowerOfTwo(3));
+```
+
+### The Fibonacci sequence is a famous mathematical series in which each number is the sum of two preceding ones It’s defined by the recurrence relation:
+```javascript
+//F(0) = 0
+//F(1) = 1
+//F(n) = F(n-1) + F(n-2) for n > 1
+
+function febo(n){
+    if(n<=1) return n;
+    return febo(n-1)+febo(n-2);
+}
+
+console.log(febo(10));
+```
+
+
+
 ### 0.1. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
 
 ```javascript 
