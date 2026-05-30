@@ -41,6 +41,27 @@ var maxProfit = function(prices) {
 console.log(maxProfit(stocksArr));
 ```
 
+### 0.2 swap string value in place
+ 
+ ```javascript 
+ let stringValue = ['h','e','l','l','o'];
+ 
+  function reverseString(str){
+       let strLen = str.length;
+       let halfLen  = Math.floor(strLen/2)
+      for(let i=0;i<halfLen; i++){
+          let temp = str[i];
+          str[i] =  str[strLen-1-i]; 
+          str[strLen-1-i] = temp
+      }
+      
+      return str;
+  }
+  
+  console.log(reverseString(stringValue))
+// Output:[“o”,”l”,”l”,”e”,”h”]
+```
+
 ### 1. create a flat array
 ```javascript 
 let arree = [3,4,[4,5],[[3]],[[[[[4]]]]],3,5];
