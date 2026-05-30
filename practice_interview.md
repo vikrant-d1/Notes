@@ -41,7 +41,7 @@ var maxProfit = function(prices) {
 console.log(maxProfit(stocksArr));
 ```
 
-### 0.2 swap string value in place
+### 0.2. swap string value in place
  
  ```javascript 
  let stringValue = ['h','e','l','l','o'];
@@ -60,6 +60,45 @@ console.log(maxProfit(stocksArr));
   
   console.log(reverseString(stringValue))
 // Output:[“o”,”l”,”l”,”e”,”h”]
+```
+
+### 0.3. Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+```javascript 
+// Example 1:
+// Input: nums = [2, 2, 1]
+
+// Output: 1
+
+// Example 2:
+// Input: nums = [4, 1, 2, 1, 2]
+
+// Output: 4
+
+// Example 3:
+// Input: nums = [1]
+
+// Output: 1
+
+ function findNundublicate(arr){
+     let unique = {};
+     for(let i=0; i<arr.length; i++){
+        if(!unique[arr[i]]){
+           unique[arr[i]]=1;
+        }else{
+          unique[arr[i]]+=1;
+        }
+     }
+     
+     for(let i=0; i<arr.length; i++){
+          if(unique[arr[i]]==1){
+            return arr[i];
+          }
+     }
+ }
+ 
+ let nums = [4, 1, 2, 1, 2]
+ 
+ console.log(findNundublicate(nums))
 ```
 
 ### 1. create a flat array
