@@ -1,3 +1,41 @@
+### Given an input string s, reverse the order of the words.
+
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+
+```javascript
+//Input: s = “the sky is blue”
+
+//Output: “blue is sky the”
+
+//Example 2:
+//Input: s = ” hello world “
+
+//Output: “world hello”
+
+var reverseWords = function(s) {
+    s = s.trim();
+
+    let wordArray = [];
+    let word = "";
+
+    for (let c of s) {
+        if (c !== " ") {
+            word += c;
+        } else if (word.length > 0) {
+            wordArray.unshift(word);
+            word = "";
+        }
+    }
+
+    // push the last word
+    if (word.length > 0) {
+        wordArray.unshift(word);
+    }
+
+    return wordArray.join(" ");
+};
+```
+
 ### A parentheses string is valid if and only if:
 
 It is the empty string,
