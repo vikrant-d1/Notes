@@ -23,6 +23,38 @@
 
 ```
 
+### Binary Search is an efficient algorithm used to find the position of a target value within a sorted array. Unlike linear search, it repeatedly divides the search interval in half, significantly reducing the number of comparisons.
+
+```javascript
+
+// Input: [1, 3, 5, 7, 9]
+
+// Output: 7
+
+let val = [1, 3, 5, 7, 9];
+
+function binarySearch(arr, target){
+   let left = 0;
+   let right = arr.length -1;
+   
+   while(right>=left){
+     let middle = Math.floor((left+right)/2);
+     if(target===arr[middle]){
+       return middle;
+     }else if(target< arr[middle]){
+          right = middle-1; 
+     }else{
+       left = middle+1;
+     }
+   }
+   
+   return -1;
+}
+
+console.log(binarySearch(val,7));
+//output index is 3
+```
+
 ###  Given an integer array nums and an integer val, remove all occurrences of val in-place. The order of the elements may be changed. Then return the number of elements in nums which are not equal to val.
 
 ```javascript
