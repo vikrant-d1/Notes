@@ -6,28 +6,11 @@
 <img width="2800" height="1370" alt="image" src="https://github.com/user-attachments/assets/2b1ef90e-03c2-4d82-ba6a-caaab6ada614" />
 <img width="2924" height="1076" alt="image" src="https://github.com/user-attachments/assets/86718096-5163-46f6-abff-1d7320d850b4" />
 
-```javascript
-// import react-testing methods
-import {render, screen} from '@testing-library/react'
-// userEvent library simulates user interactions by dispatching the events that would happen if the interaction took place in a browser.
-import userEvent from '@testing-library/user-event'
-// add custom jest matchers from jest-dom
-import '@testing-library/jest-dom'
-// the component to test
-import Fetch from './fetch'
+<img width="1698" height="872" alt="image" src="https://github.com/user-attachments/assets/e2c8e0b2-0128-44ef-a9d7-0a8c00b8842c" />
 
-test('loads and displays greeting', async () => {
-  // Render a React element into the DOM
-  render(<Fetch url="/greeting" />)
+<img width="2792" height="1098" alt="image" src="https://github.com/user-attachments/assets/0ea0fa68-8044-465a-9400-762f75a5ae87" />
 
-  await userEvent.click(screen.getByText('Load Greeting'))
-  // wait before throwing an error if it cannot find an element
-  await screen.findByRole('heading')
 
-  // assert that the alert message is correct using
-  // toHaveTextContent, a custom matcher from jest-dom.
-  expect(screen.getByRole('heading')).toHaveTextContent('hello there')
-  expect(screen.getByRole('button')).toBeDisabled()
-})
-```
+
+
 
