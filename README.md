@@ -2,25 +2,25 @@
 
 ## JavaScript Event Loop
 
-The JavaScript Event Loop is the runtime mechanism that keeps a single-threaded language non-blocking. Since JS can only do one thing at a time (one call stack), the Event Loop acts as a coordinator — it watches the call stack and two queues, and decides what runs next.
+The Event Loop is a mechanism in JavaScript that manages the execution of synchronous and asynchronous code. It continuously checks whether the Call Stack is empty and then moves pending tasks from queues to the Call Stack for execution.
 
-When async work (a timer, a network request, a click) finishes, its callback lands in a queue. The Event Loop waits for the call stack to be completely empty, then feeds the next callback in. The **Microtask Queue** (Promises, MutationObserver) gets cleared entirely before the **Callback Queue** (setTimeout, events) gets even one turn — that's the priority rule.
+Since JavaScript is single-threaded (it can execute only one task at a time), the Event Loop ensures that long-running asynchronous operations like timers, API calls, and user events do not block the application.
 
 ---
 
 ## Key Definitions
 
-### Event Loop
-The monitor that bridges synchronous JS (Call Stack) with async callbacks (queues). It pushes callbacks only when the stack is empty.
-
 ### Microtasks
-High-priority callbacks (Promises, MutationObserver) that live in the MicroTask Queue — always drained before the Callback Queue gets a turn.
+
+Microtasks are high-priority asynchronous callbacks stored in the Microtask Queue. Examples include Promise callbacks (.then(), .catch(), .finally()), queueMicrotask(), and MutationObserver. The Event Loop executes all microtasks before processing any callback from the Callback Queue.
 
 ### Web APIs
-Browser-provided superpowers (timers, fetch, DOM events) that run outside the JS engine, accessible via the `window` object.
 
-### Callback Queue
-The waiting room for lower-priority async callbacks (setTimeout, event listeners) — processed one-by-one only after microtasks are clear.
+Web APIs are browser-provided features that handle operations outside the JavaScript engine, such as timers, network requests, and DOM events. Examples include setTimeout, fetch, and event listeners. Once an operation completes, its callback is placed into the appropriate queue.
+
+### Callback Queue (Task Queue)
+
+The Callback Queue (also called the Task Queue or Macrotask Queue) stores asynchronous callbacks such as setTimeout, setInterval, and event-handler callbacks. These callbacks are executed only after the Call Stack is empty and all pending microtasks have been processed.
 
 ---
 
