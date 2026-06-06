@@ -2,6 +2,7 @@
 ```javascript
 function countDigit(number){
      let count = 0;
+     number = Math.abs(number);
      while(number>0){
        number = Math.floor(number/10);
        count++
@@ -9,7 +10,7 @@ function countDigit(number){
      return count;
 }
 
-console.log(countDigit(12348887773))
+console.log(countDigit(-12348887773))
 // output 11
 ```
 
