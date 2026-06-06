@@ -1,3 +1,19 @@
+### Count degits 
+```javascript
+function countDigit(number){
+     let count = 0;
+     while(number>0){
+       number = Math.floor(number/10);
+       count++
+     }
+     return count;
+}
+
+console.log(countDigit(12348887773))
+// output 11
+```
+
+
 ### Given an input string s, reverse the order of the words.
 
 A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
