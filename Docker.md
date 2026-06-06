@@ -19,6 +19,8 @@
 15. [Buzzwords & Trends for 2026](#15-buzzwords--trends-for-2026)
 
 ---
+<img width="1358" height="564" alt="image" src="https://github.com/user-attachments/assets/8e7d96d1-325e-444e-ab79-c43108c12438" />
+
 <img width="2940" height="1686" alt="image" src="https://github.com/user-attachments/assets/3430fa37-06fe-41df-affb-4f74c4057785" />
 
 
