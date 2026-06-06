@@ -24,17 +24,6 @@
 <img width="2940" height="1686" alt="image" src="https://github.com/user-attachments/assets/3430fa37-06fe-41df-affb-4f74c4057785" />
 
 
-## 1. Your Experience Narrative
-
-> Interviewers ALWAYS ask: *"Tell me about your Docker experience."*
-> Have a polished 2-minute story ready.
-
-### Sample Answer Template
-
-*"I've been working with Docker for about 6 years now. I started by containerizing a monolithic Node.js + PostgreSQL app to solve the classic 'works on my machine' problem across our 8-person team. Over time, I moved to multi-stage builds, wrote Docker Compose files for local dev that mirrored production, and integrated Docker into our CI/CD pipeline using GitHub Actions (or GitLab CI / Jenkins).*
-
-*In my recent role, I managed a microservices architecture — 12 services, each with its own Dockerfile — running behind an Nginx reverse proxy. I've handled production-grade concerns: image scanning with Trivy, non-root containers, secrets management with Docker secrets and Vault, health checks, and log aggregation with the ELK stack. I've also mentored junior developers on writing efficient Dockerfiles and debugging container issues."*
-
 ### Key Projects to Reference
 
 | Project | Docker Usage | Complexity |
@@ -90,10 +79,10 @@ Docker is a platform that packages applications and their dependencies into **co
 
 ### Interview Q&A
 
-**Q: What are namespaces and cgroups in Docker?**
+#### Q: What are namespaces and cgroups in Docker?
 A: Namespaces provide **isolation** — each container gets its own PID, network, mount, UTS, IPC, and user namespace so it thinks it's the only process running. Cgroups (control groups) provide **resource limiting** — they cap how much CPU, memory, disk I/O, and network a container can use. Together, they make containers feel like lightweight VMs while sharing the host kernel.
 
-**Q: What is the container lifecycle?**
+#### Q: What is the container lifecycle?
 A: `Created → Running → Paused → Stopped → Removed`. You manage this with `docker create`, `docker start`, `docker pause`, `docker stop`, `docker rm`.
 
 **Q: What's the difference between `docker stop` and `docker kill`?**
