@@ -24,6 +24,15 @@
 <img width="2940" height="1686" alt="image" src="https://github.com/user-attachments/assets/3430fa37-06fe-41df-affb-4f74c4057785" />
 
 
+### Code changes reflect immediately.
+```
+docker run \
+-p 3000:3000 \
+-v $(pwd):/app \
+-v /app/node_modules \
+my-app
+```
+
 ### Key Projects to Reference
 
 | Project | Docker Usage | Complexity |
