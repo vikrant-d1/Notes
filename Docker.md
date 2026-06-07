@@ -33,6 +33,64 @@ docker run \
 my-app
 ```
 
+### docker-compose file
+```
+docker compose down
+docker compose up
+```
+
+```
+services:
+
+  app:
+    build: .
+    container_name: node-app
+
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:17-alpine
+
+    container_name: postgres-db
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8-alpine
+
+    container_name: redis-cache
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+
+```
+
+
+
 ### Key Projects to Reference
 
 | Project | Docker Usage | Complexity |
