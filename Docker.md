@@ -23,6 +23,127 @@
 
 <img width="2940" height="1686" alt="image" src="https://github.com/user-attachments/assets/3430fa37-06fe-41df-affb-4f74c4057785" />
 
+# Multi-Stage Dockerfile for Production Node.js Applications
+
+## Why Use a Multi-Stage Docker Build?
+
+A multi-stage Dockerfile is the standard production approach because it keeps the final image small, secure, and free of unnecessary build tools.
+
+### Single-Stage Dockerfile Example
+
+```dockerfile
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+CMD ["node", "server.js"]
+```
+
+### Problems with a Single-Stage Build
+
+* Includes development dependencies in the final image.
+* Produces a larger image size.
+* Results in slower deployments.
+* Increases security vulnerabilities by including unnecessary packages and tools.
+
+---
+
+## Production Multi-Stage Dockerfile
+
+The following Dockerfile demonstrates a production-ready multi-stage build for a Node.js/Express application.
+
+```dockerfile
+# Stage 1: Install dependencies
+FROM node:22-alpine AS dependencies
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+# Stage 2: Production image
+FROM node:22-alpine AS production
+
+WORKDIR /app
+
+COPY --from=dependencies /app/node_modules ./node_modules
+
+COPY . .
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+USER node
+
+CMD ["node", "src/server.js"]
+```
+
+---
+
+## Build the Docker Image
+
+Run the following command to build the Docker image:
+
+```bash
+docker build -t node-api .
+```
+
+---
+
+## Run the Container
+
+Start the container and expose port `3000`:
+
+```bash
+docker run -p 3000:3000 node-api
+```
+
+The application will be accessible at:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Benefits of Multi-Stage Builds
+
+### Smaller Image Size
+
+Only the required application files and dependencies are included in the final image.
+
+### Improved Security
+
+Build tools, temporary files, and unnecessary packages are excluded from the runtime image.
+
+### Faster Deployments
+
+Smaller images are quicker to transfer and deploy across environments.
+
+### Better Maintainability
+
+Separates the build process from the runtime environment, making Dockerfiles easier to understand and maintain.
+
+---
+
+## Best Practices
+
+* Use `npm ci` instead of `npm install` for reproducible builds.
+* Use a non-root user (`USER node`) whenever possible.
+* Add a `.dockerignore` file to exclude unnecessary files.
+* Set `NODE_ENV=production` for production workloads.
+* Use health checks to monitor container health.
+* Keep base images updated to receive security patches.
+
+---
+
+
 
 ### Code changes reflect immediately.
 ```
