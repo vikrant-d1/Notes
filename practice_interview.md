@@ -274,25 +274,38 @@ console.log(febo(10));
 ### 0.1. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
 
 ```javascript 
-let stocksArr = [7,6,4,3,1];
- 
- function findMaxmumProfit(stocks){
-     let buyDay = stocks[0];
-     let maximumProfit =0;
-   
-     for(let i=1; i<stocks.length; i++){
-       if(buyDay<stocks[i]){
-          maximumProfit = stocks[i];
-       }
-       
-       if(buyDay>stocks[i]){
-          buyDay = stocks[i];
-       }
-     }
-    
-    maximumProfit=(maximumProfit-buyDay)>0?maximumProfit-buyDay:0;
-    return maximumProfit;
- }
+let stockprice = [4, 1, 9, 8, 12, 2];
+
+function maxProfitfn(arr) {
+  if (!Array.isArray(arr)) return false;
+  if (arr.length === 0) return false;
+
+  let buyPrice = arr[0];
+  let maxProfit = 0;
+
+  for (let i = 1; i < arr.length; i++) {
+    if (typeof arr[i] !== 'number' || !Number.isFinite(arr[i])) {
+      return false;
+    }
+
+    // Calculate profit if sold today
+    let profit = arr[i] - buyPrice;
+
+    // Update max profit
+    if (profit > maxProfit) {
+      maxProfit = profit;
+    }
+
+    // Update minimum buy price
+    if (arr[i] < buyPrice) {
+      buyPrice = arr[i];
+    }
+  }
+
+  return maxProfit;
+}
+
+console.log(maxProfitfn(stockprice)); // 11
 
 console.log(findMaxmumProfit(stocksArr));
 ```
