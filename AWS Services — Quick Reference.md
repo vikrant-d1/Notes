@@ -19,22 +19,24 @@
 <img width="1718" height="954" alt="image" src="https://github.com/user-attachments/assets/b96f6f48-6053-43a6-8b32-37d337e53fb9" />
 
 ### 1. What is CloudFront?
-Definition: Amazon CloudFront is a Content Delivery Network (CDN) service that distributes content globally through a network of edge locations, reducing latency by serving requests from the location closest to the user.
-Why it exists: Without a CDN, every request travels to your origin server (e.g., S3 in us-east-1). A user in Mumbai hitting a server in Virginia adds ~200ms of network latency alone. CloudFront caches content at ~450+ edge locations worldwide.
+Amazon CloudFront is a Content Delivery Network (CDN) service that distributes content globally through a network of edge locations, reducing latency by serving requests from the location closest to the user.
+
+**Why it exists:** 
+Without a CDN, every request travels to your origin server (e.g., S3 in us-east-1). A user in Mumbai hitting a server in Virginia adds ~200ms of network latency alone. CloudFront caches content at ~450+ edge locations worldwide.
 What it serves:
 
-Static assets (HTML, CSS, JS, images, fonts)
-Videos (HLS/DASH streaming)
-APIs (REST, GraphQL)
-Dynamic content (with cache bypass)
-Software downloads
+- Static assets (HTML, CSS, JS, images, fonts)
+- Videos (HLS/DASH streaming)
+- APIs (REST, GraphQL)
+- Dynamic content (with cache bypass)
+- Software downloads
 
-Key benefits:
+**Key benefits:**
 
-Low latency (edge caching)
-High availability (automatic failover)
-DDoS protection (integrated with AWS Shield Standard for free)
-Cost reduction (fewer origin requests = lower compute/bandwidth costs)
+- Low latency (edge caching)
+- High availability (automatic failover)
+- DDoS protection (integrated with AWS Shield Standard for free)
+- Cost reduction (fewer origin requests = lower compute/bandwidth costs)
 
 
 # ☁️ AWS Services — Quick Reference
