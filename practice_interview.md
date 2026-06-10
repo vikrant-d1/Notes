@@ -550,17 +550,13 @@ const transformName = (name:string) => {
 ```javascript 
 let stringData = 'hi i am check the value of uppercase';
 
-function captilization(stringData){
-    let stringArr = stringData.split(' ');
-     let updatedString = ' ';
-     for(let i=1; i<=stringArr.length-1; i++){
-        let capitalLetter = stringArr[i].charAt(0).toUpperCase()+stringArr[i].slice(1,stringArr[i].length);
-         updatedString+= capitalLetter+' ';
-     }
-    return updatedString;
-}
-
-console.log('check data',captilization(stringData));
+const transformName = (name: string): string => {
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 ```
 
 ### 11. check letter repitation in the word
