@@ -1226,4 +1226,17 @@ function encodeString(str){
 const input = "abbcccddddeea";
 const output = encodeString(input);
 console.log(output); // 1a2b3c4d2e1a
+
+or:
+
+function encodeString(str) {
+  return str.replace(/(.)\1*/g, match => {
+    return match.length + match[0];
+  });
+}
+
+console.log(encodeString("abbcccddddeea"));
+// 1a2b3c4d2e1a
 ```
+
+
