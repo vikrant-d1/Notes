@@ -1155,23 +1155,23 @@ console.log(outputArray); // Output: [20, 15, 12]
 ```
 ### 39.Find the 2nd largest element from a given array ? [100,20,112,22]
 ```javascript
-function findSecondLargest(arr){
-        let largestNum = -Infinity;
-        let secondLargestNum = -Infinity;
-        for(let i=0; i<arr.length; i++){
-            if(arr[i]>largestNum){
-                secondLargestNum = largestNum;
-                largestNum = arr[i];
-            }else if (arr[i]>secondLargestNum && arr[i]< largestNum){
-              secondLargestNum = arr[i];
-            }
-        }
+const array = [10, 5, 20, 8, 12];
 
-        return secondLargestNum;
-    }
-    
-    const array = [10, 5, 20, 8, 12];
-console.log(findSecondLargest(array)); // Output: 12
+function finSecondLargest(arr){
+     let largest = -Infinity;
+     let secondLargest = -Infinity;
+     for(let num of arr){
+        if(num>largest){
+            secondLargest=largest;
+            largest=num;
+        }else if(num<largest && num>secondLargest){
+            secondLargest = num;
+        }
+     }
+     return secondLargest;
+}
+
+console.log(finSecondLargest(array)); // Output: 12
 ```
 ### 40.Program challenge: Find the pairs from given input ?
 input1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
