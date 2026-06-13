@@ -1023,26 +1023,29 @@ newFunc("New York");
 ### 33. debouncing function
 Debouncing is a technique that delays the execution of a function until the user stops performing a certain action for a specified amount of time. 
 ```javascript 
-function debounce(func, delay) {
-    let timer;
+function debounce(fn, delay = 300) {
+  let timerId;
 
-    return function (...args) {
+  return function (...args) {
+    const context = this;
 
-        clearTimeout(timer);
+    clearTimeout(timerId);
 
-        timer = setTimeout(() => {
-            func(...args);
-        }, delay);
-    };
+    timerId = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
 }
 
-
 function search(text) {
-    console.log("Searching:", text);
+  console.log("Searching:", text);
 }
 
 const debouncedSearch = debounce(search, 1000);
 
+debouncedSearch("R");
+debouncedSearch("Re");
+debouncedSearch("Rea");
 debouncedSearch("React");
 
 ```
@@ -1051,25 +1054,33 @@ debouncedSearch("React");
 Throttling is a technique that limits the execution of a function to once in every specified time interval. 
 ```javascript 
 function throttle(callback, delay = 1000) {
-      let shouldWait = false;
-      return (...args) => {
-        if (shouldWait) return;
-        callback(...args);
-        shouldWait = true;
-        setTimeout(() => {
-              shouldWait = false;
-        }, delay);
-      };
+  let isThrottled = false;
+
+  return function (...args) {
+    if (isThrottled) return;
+
+    callback.apply(this, args);
+
+    isThrottled = true;
+
+    setTimeout(() => {
+      isThrottled = false;
+    }, delay);
+  };
 }
 
-function logMessage(message) { 
-    console.log(message); 
-} 
+function logMessage(message) {
+  console.log(message);
+}
 
-const throttledLogMessage = throttle(logMessage, 1000); 
-  
-// Logs 'Hello' 
-throttledLogMessage('Hello'); 
+const throttledLogMessage = throttle(logMessage, 1000);
+
+throttledLogMessage("Hello"); // Executes
+throttledLogMessage("World"); // Ignored
+
+setTimeout(() => {
+  throttledLogMessage("Again"); // Executes after 1 second
+}, 1100);
 ```
 
 ### 35.sort accoding to max count of reppetted letter
