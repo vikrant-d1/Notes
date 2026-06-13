@@ -852,20 +852,18 @@ console.log('result', result); //output : [1,2,3,4,5,8]
 ### 25. How do you check if a value is a prime number ?
 ```javascript 
 function checkPrimeNumber(num) {
-   if(num<=1) {
-     return false;
-   }
-   for(let i=2;i < num;i++) {
-      if(num%i == 0) {
-        return false;
-      }
-   }
-   return true;
-}
+    if (num <= 1) return false;
 
-let num=11;
-let result = checkPrimeNumber(num);
-console.log('result', result); //output : tru
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+console.log(checkPrimeNumber(11)); // true
+console.log(checkPrimeNumber(12)); // false
 
 ```
 
