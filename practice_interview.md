@@ -1079,6 +1079,12 @@ function sordOrder(arr){
 }
 
 console.log('check data',sordOrder(arrs))
+output: [
+  { name: [ 'kashyapyy' ], count: 3 },
+  { name: [ 'hellooo' ], count: 3 },
+  { name: [ 'sanjayyyyy' ], count: 5 },
+  { name: [ 'worlddddd' ], count: 5 }
+]
 ```
 
 ### 36. return targeted sum from the array possible number of pair
