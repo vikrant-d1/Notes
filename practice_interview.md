@@ -1,3 +1,37 @@
+### Swap value inplace
+```javascript
+let str = 'a$b#c';
+
+let strArr = str.split('');
+
+let left = 0;
+let right = strArr.length - 1;
+
+while (left < right) {
+
+    // Skip non-alphabet from left
+    if (!/[a-zA-Z]/.test(strArr[left])) {
+        left++;
+    }
+
+    // Skip non-alphabet from right
+    else if (!/[a-zA-Z]/.test(strArr[right])) {
+        right--;
+    }
+
+    // Swap alphabets
+    else {
+        [strArr[left], strArr[right]] = [strArr[right], strArr[left]];
+        left++;
+        right--;
+    }
+}
+
+let newStr = strArr.join('');
+console.log(newStr);
+output: c$b#a
+```
+
 ### Count degits 
 ```javascript
 function countDigit(number){
