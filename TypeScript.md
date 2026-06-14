@@ -4,7 +4,508 @@
 
 ---
 
+
+
 ## 1. TypeScript Basics
+
+### # TypeScript to JavaScript Transpilation — Interview Q&A
+
+---
+
+## Q: How do you transpile TypeScript to JavaScript?
+
+### Answer
+
+TypeScript cannot run directly in Node.js or browsers — it must be compiled down to JavaScript. The primary tool is the **TypeScript Compiler (`tsc`)**, shipped with the `typescript` npm package.
+
+---
+
+## Steps to Transpile
+
+### 1. Install TypeScript
+
+```bash
+npm install -D typescript
+```
+
+### 2. Initialize TypeScript Config
+
+```bash
+npx tsc --init
+```
+
+This generates a `tsconfig.json` file in the root of your project.
+
+### 3. Run the Compiler
+
+```bash
+npx tsc
+```
+
+This reads `tsconfig.json` and outputs compiled `.js` files to the configured `outDir`.
+
+---
+
+## Key `tsconfig.json` Options
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",        // JS version to emit
+    "module": "commonjs",      // Module system (commonjs for Node.js)
+    "outDir": "./dist",        // Output folder for compiled JS
+    "rootDir": "./src",        // Source TypeScript folder
+    "strict": true,            // Enable all strict type checks
+    "esModuleInterop": true,   // Fix default import compatibility
+    "declaration": true,       // Emit .d.ts type definition files
+    "sourceMap": true          // Generate .map files for debugging
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+---
+
+## Common `tsc` Commands
+
+| Command | Purpose |
+|---|---|
+| `npx tsc` | Compile everything per `tsconfig.json` |
+| `npx tsc --watch` | Watch mode — recompile on file change |
+| `npx tsc --noEmit` | Type-check only, no output (used in CI) |
+| `npx tsc --project tsconfig.prod.json` | Use a specific config file |
+
+---
+
+## Production Setup (Recommended)
+
+```json
+// package.json scripts
+{
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  }
+}
+```
+
+- **CI pipeline** → `tsc --noEmit` for type checking only
+- **Production build** → `tsc` or faster alternatives (esbuild/swc)
+- **Development** → `tsx` or `ts-node` (no compile step needed)
+
+---
+
+## Alternatives to `tsc`
+
+| Tool | Speed | Type Checking | Best For |
+|---|---|---|---|
+| **tsc** | Slower | ✅ Full | Standard builds, libraries |
+| **esbuild** | ⚡ ~100x faster | ❌ Strips types only | Bundling, fast CI |
+| **swc** | ⚡ Very fast (Rust) | ❌ Strips types only | Next.js, Vite internals |
+| **ts-node** | Medium | ✅ Yes | Running TS directly in Node |
+| **tsx** | Fast | ❌ No | Dev server, scripts, ESM |
+| **Vite / webpack** | Varies | Optional | Frontend bundling |
+
+> **Best practice**: Use `esbuild` or `swc` for fast transpilation + `tsc --noEmit` for type checking as a separate CI step.
+
+---
+
+## Likely Follow-Up Questions
+
+### Q: What's the difference between `tsc` and `esbuild`?
+
+**Answer:**  
+`tsc` is the official TypeScript compiler — it does **full type checking** and then emits JavaScript. It's slower because it builds a full type graph.  
+`esbuild` just **strips TypeScript syntax** (types, decorators, etc.) without checking them — making it ~100x faster. You lose type safety guarantees at build time, so teams pair it with `tsc --noEmit` in CI.
+
+---
+
+### Q: What does `strict: true` enable?
+
+**Answer:**  
+It enables a set of strict compiler flags in one shot:
+
+| Flag | What it enforces |
+|---|---|
+| `noImplicitAny` | Variables must have explicit types, no implicit `any` |
+| `strictNullChecks` | `null` and `undefined` are not assignable to other types |
+| `strictFunctionTypes` | Stricter checking of function parameter types |
+| `strictBindCallApply` | Correct types for `.bind()`, `.call()`, `.apply()` |
+| `strictPropertyInitialization` | Class properties must be initialized in constructor |
+| `noImplicitThis` | `this` must have a known type |
+
+---
+
+### Q: Can Node.js run TypeScript natively?
+
+**Answer:**  
+Node.js **22+** introduced experimental native TypeScript support via the `--experimental-strip-types` flag, which strips types without transpiling syntax. Node.js **23+** improved this further. However, it's **not production-ready** — it doesn't support all TypeScript features (e.g., decorators, `const enum`). For production, `tsc` or a dedicated transpiler is still the standard.
+
+---
+
+### Q: What is the role of `.d.ts` files?
+
+**Answer:**  
+`.d.ts` files are **TypeScript declaration files** — they contain only type information with no runtime JavaScript. They are generated when `declaration: true` is set in `tsconfig.json`. They allow TypeScript consumers of a library to get type safety and autocomplete without needing the original `.ts` source files.
+
+---
+
+### Q: What's the difference between `target` and `module` in tsconfig?
+
+**Answer:**
+
+| Option | Controls |
+|---|---|
+| `target` | **JavaScript syntax** emitted — e.g., `ES5` uses `var` and no arrow functions; `ES2020` uses `const`, `?.`, etc. |
+| `module` | **Module system** used — `commonjs` emits `require()`/`module.exports`; `ESNext` emits `import`/`export` |
+
+For Node.js backend: `target: ES2020`, `module: commonjs` is the standard combination.
+
+---
+
+---
+
+## Q: What is a `.map` File (Source Map)?
+
+### Answer
+
+When TypeScript is compiled to JavaScript, the resulting `.js` file looks very different from the original `.ts` source. A **source map** (`.js.map`) is a JSON file that creates a **mapping between the compiled JS and the original TS source** — line by line, column by column.
+
+Enable it in `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "sourceMap": true
+  }
+}
+```
+
+This generates a `.js.map` file alongside every `.js` file in `dist/`.
+
+### What it looks like
+
+```
+dist/
+  index.js        ← compiled JavaScript
+  index.js.map    ← source map (links back to src/index.ts)
+src/
+  index.ts        ← original TypeScript
+```
+
+The `.js` file ends with a reference comment:
+
+```js
+// index.js (last line)
+//# sourceMappingURL=index.js.map
+```
+
+### Why it matters
+
+| Benefit | Explanation |
+|---|---|
+| **Debugging** | Breakpoints in DevTools or VS Code point to the original `.ts` file, not compiled `.js` |
+| **Error stack traces** | Tools like Node.js + `source-map-support` show TS line numbers in errors |
+| **Production monitoring** | Sentry / Datadog can map minified errors back to original source |
+
+### Enable source maps in Node.js runtime
+
+```bash
+npm install source-map-support
+```
+
+```ts
+// src/index.ts — add at the very top
+import 'source-map-support/register';
+```
+
+Now runtime errors show TypeScript line numbers instead of compiled JS lines.
+
+### Interview answer (spoken)
+
+> "A `.map` file is a source map — it's a JSON file that maps each line and column of the compiled JavaScript back to the original TypeScript source. It's essential for debugging because without it, breakpoints and error stack traces point to the minified or compiled output, which is hard to read. In production we use it with tools like `source-map-support` in Node.js or Sentry for error monitoring."
+
+---
+
+## Q: What are Generic Functions in TypeScript and Why Use Them?
+
+### Answer
+
+A **generic function** is a function that works with **any type** while still being **type-safe** — the type is determined at call time, not at definition time. Generics use a **type parameter** (conventionally `T`) as a placeholder.
+
+### Without Generics (Problem)
+
+```ts
+// Using 'any' — loses all type safety
+function identity(value: any): any {
+  return value;
+}
+
+const result = identity(42);  // result is 'any' — no autocomplete, no safety
+```
+
+### With Generics (Solution)
+
+```ts
+// T is inferred from the argument at call time
+function identity<T>(value: T): T {
+  return value;
+}
+
+const num = identity(42);        // T = number → num is number
+const str = identity('hello');   // T = string → str is string
+const bool = identity(true);     // T = boolean → bool is boolean
+```
+
+TypeScript **infers** `T` automatically — you rarely need to pass it explicitly.
+
+### Real-World Examples
+
+```ts
+// 1. Generic array utility
+function getFirst<T>(arr: T[]): T | undefined {
+  return arr[0];
+}
+
+const first = getFirst([1, 2, 3]);   // number
+const name  = getFirst(['a', 'b']);  // string
+
+// 2. Generic API response wrapper
+function wrapResponse<T>(data: T): { success: boolean; data: T } {
+  return { success: true, data };
+}
+
+const res = wrapResponse({ id: 1, name: 'Vikrant' });
+// res.data is inferred as { id: number; name: string }
+
+// 3. Generic with constraint — T must have an 'id' property
+function findById<T extends { id: number }>(items: T[], id: number): T | undefined {
+  return items.find(item => item.id === id);
+}
+
+// 4. Multiple type parameters
+function merge<T, U>(obj1: T, obj2: U): T & U {
+  return { ...obj1, ...obj2 };
+}
+
+const merged = merge({ name: 'Vikrant' }, { age: 30 });
+// merged is { name: string; age: number }
+
+// 5. Generic async fetch (very common in production)
+async function fetchData<T>(url: string): Promise<T> {
+  const res = await fetch(url);
+  return res.json() as T;
+}
+
+interface User { id: number; name: string; }
+const user = await fetchData<User>('/api/user/1');  // user is typed as User
+```
+
+### Why Use Generics?
+
+| Reason | Explanation |
+|---|---|
+| **Reusability** | Write one function that works for many types |
+| **Type safety** | Compiler catches type mismatches — no runtime surprises |
+| **Avoid `any`** | `any` disables type checking; generics keep it intact |
+| **Autocomplete** | IDE knows the exact return type — better DX |
+| **Constraints** | `T extends SomeType` limits what types are accepted |
+
+### Interview answer (spoken)
+
+> "Generic functions let you write a single function that works across multiple types while preserving full type safety. Instead of using `any` — which throws away type information — you use a type parameter like `T` that TypeScript infers at the call site. A classic example is a `fetchData<T>` utility that wraps fetch and returns `Promise<T>`, so callers get a fully typed response without any casting. Generics are essential for building reusable utilities, data structures, and API layers."
+
+---
+
+## Q: What are Generic Interfaces in TypeScript and Why Use Them?
+
+### Answer
+
+A **generic interface** defines a contract (shape) that works with **any type**, decided when the interface is used. They're the backbone of reusable, strongly-typed data structures and API contracts.
+
+### Basic Generic Interface
+
+```ts
+interface Box<T> {
+  value: T;
+  label: string;
+}
+
+const numBox: Box<number> = { value: 42, label: 'Age' };
+const strBox: Box<string> = { value: 'hello', label: 'Name' };
+```
+
+### Real-World Examples
+
+```ts
+// 1. API Response wrapper — used in almost every production codebase
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+  timestamp: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// Strongly typed — data is User, not 'any'
+const response: ApiResponse<User> = {
+  data: { id: 1, name: 'Vikrant', email: 'v@example.com' },
+  status: 200,
+  message: 'OK',
+  timestamp: new Date().toISOString(),
+};
+
+// 2. Paginated list response
+interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasNext: boolean;
+}
+
+const users: PaginatedResponse<User> = {
+  items: [{ id: 1, name: 'Vikrant', email: 'v@example.com' }],
+  total: 100,
+  page: 1,
+  pageSize: 10,
+  hasNext: true,
+};
+
+// 3. Generic Repository pattern (very common in Node.js + TypeORM/Prisma)
+interface Repository<T> {
+  findById(id: number): Promise<T | null>;
+  findAll(): Promise<T[]>;
+  create(data: Partial<T>): Promise<T>;
+  update(id: number, data: Partial<T>): Promise<T>;
+  delete(id: number): Promise<void>;
+}
+
+// Implement for a specific entity
+class UserRepository implements Repository<User> {
+  async findById(id: number): Promise<User | null> { /* ... */ return null; }
+  async findAll(): Promise<User[]> { return []; }
+  async create(data: Partial<User>): Promise<User> { /* ... */ return {} as User; }
+  async update(id: number, data: Partial<User>): Promise<User> { /* ... */ return {} as User; }
+  async delete(id: number): Promise<void> { /* ... */ }
+}
+
+// 4. Generic event emitter interface
+interface EventMap {
+  userCreated: User;
+  userDeleted: { id: number };
+}
+
+interface TypedEventEmitter<T extends Record<string, unknown>> {
+  on<K extends keyof T>(event: K, listener: (data: T[K]) => void): void;
+  emit<K extends keyof T>(event: K, data: T[K]): void;
+}
+
+// 5. Generic cache interface
+interface Cache<K, V> {
+  get(key: K): V | undefined;
+  set(key: K, value: V, ttlMs?: number): void;
+  delete(key: K): void;
+  clear(): void;
+}
+```
+
+### Generic Interface vs Generic Function — Key Difference
+
+```ts
+// Generic FUNCTION — T resolved per call
+function parse<T>(json: string): T {
+  return JSON.parse(json) as T;
+}
+
+// Generic INTERFACE — T resolved when type is assigned/implemented
+interface Parser<T> {
+  parse(input: string): T;
+  serialize(value: T): string;
+}
+
+class JsonUserParser implements Parser<User> {
+  parse(input: string): User { return JSON.parse(input); }
+  serialize(value: User): string { return JSON.stringify(value); }
+}
+```
+
+### Why Use Generic Interfaces?
+
+| Reason | Explanation |
+|---|---|
+| **Reusable contracts** | One interface definition, works for any entity type |
+| **Type-safe patterns** | Repository, Service, Cache patterns without repeating types |
+| **Consistent API shapes** | `ApiResponse<T>` enforces the same envelope across all endpoints |
+| **Scalable architecture** | Add new entities — no new interfaces needed, just `Repository<NewEntity>` |
+| **Better tooling** | Full autocomplete and compile-time checks everywhere |
+
+### Interview answer (spoken)
+
+> "Generic interfaces define a reusable contract where the actual type is plugged in at usage time. The most common example I use in production is `ApiResponse<T>` — a single interface that wraps any API response with consistent `data`, `status`, and `message` fields, where `data` is typed to whatever the endpoint returns. Another heavy use is the Repository pattern — I define `Repository<T>` once with `findById`, `findAll`, `create`, `update`, `delete`, and then implement it for each entity. This avoids duplicating method signatures and gives full type safety across the entire data layer."
+
+---
+
+## Quick Reference Cheat Sheet
+
+```bash
+# Install
+npm install -D typescript
+
+# Init config
+npx tsc --init
+
+# Build
+npx tsc
+
+# Type-check only (no output)
+npx tsc --noEmit
+
+# Watch mode
+npx tsc --watch
+
+# Run TS directly (dev only)
+npx tsx src/index.ts
+npx ts-node src/index.ts
+```
+
+```ts
+// Generic function
+function identity<T>(value: T): T { return value; }
+
+// Generic function with constraint
+function findById<T extends { id: number }>(items: T[], id: number) {
+  return items.find(i => i.id === id);
+}
+
+// Generic interface
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+}
+
+// Generic repository interface
+interface Repository<T> {
+  findById(id: number): Promise<T | null>;
+  findAll(): Promise<T[]>;
+  create(data: Partial<T>): Promise<T>;
+}
+
+// Source map — tsconfig.json
+{ "compilerOptions": { "sourceMap": true } }
+
+// Source map support in Node.js
+import 'source-map-support/register';
+```
 
 ### What is TypeScript?
 A **typed superset of JavaScript** by Microsoft. Catches errors at compile time, not runtime.
