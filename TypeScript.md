@@ -1,16 +1,25 @@
-# TypeScript & React – Interview Cheat Sheet
+# TypeScript & React 
 
-> Quick, clear definitions for Team Lead (9+ yrs) interview prep.
+### What is Function Overloading in TypeScript?
 
----
+Function overloading allows a function to accept different types or different numbers of arguments while providing type safety.
 
+In TypeScript, we define multiple function signatures (overloads) and write only one implementation.
 
+```javascript
+function display(value: string): void;
+function display(value: number): void;
 
-## 1. TypeScript Basics
+function display(value: string | number): void {
+  console.log(value);
+}
 
-### # TypeScript to JavaScript Transpilation — Interview Q&A
+display("Hello");
+display(100);
+```
+### Does JavaScript Support Function Overloading?
 
----
+No. JavaScript does not support function overloading. TypeScript provides it at compile time through multiple function signatures, but after compilation there is only one JavaScript function.
 
 ## Q: How do you transpile TypeScript to JavaScript?
 
@@ -98,23 +107,6 @@ This reads `tsconfig.json` and outputs compiled `.js` files to the configured `o
 
 ---
 
-## Alternatives to `tsc`
-
-| Tool | Speed | Type Checking | Best For |
-|---|---|---|---|
-| **tsc** | Slower | ✅ Full | Standard builds, libraries |
-| **esbuild** | ⚡ ~100x faster | ❌ Strips types only | Bundling, fast CI |
-| **swc** | ⚡ Very fast (Rust) | ❌ Strips types only | Next.js, Vite internals |
-| **ts-node** | Medium | ✅ Yes | Running TS directly in Node |
-| **tsx** | Fast | ❌ No | Dev server, scripts, ESM |
-| **Vite / webpack** | Varies | Optional | Frontend bundling |
-
-> **Best practice**: Use `esbuild` or `swc` for fast transpilation + `tsc --noEmit` for type checking as a separate CI step.
-
----
-
-## Likely Follow-Up Questions
-
 ### Q: What's the difference between `tsc` and `esbuild`?
 
 **Answer:**  
@@ -128,17 +120,6 @@ This reads `tsconfig.json` and outputs compiled `.js` files to the configured `o
 **Answer:**  
 It enables a set of strict compiler flags in one shot:
 
-| Flag | What it enforces |
-|---|---|
-| `noImplicitAny` | Variables must have explicit types, no implicit `any` |
-| `strictNullChecks` | `null` and `undefined` are not assignable to other types |
-| `strictFunctionTypes` | Stricter checking of function parameter types |
-| `strictBindCallApply` | Correct types for `.bind()`, `.call()`, `.apply()` |
-| `strictPropertyInitialization` | Class properties must be initialized in constructor |
-| `noImplicitThis` | `this` must have a known type |
-
----
-
 ### Q: Can Node.js run TypeScript natively?
 
 **Answer:**  
@@ -147,30 +128,11 @@ Node.js **22+** introduced experimental native TypeScript support via the `--exp
 ---
 
 ### Q: What is the role of `.d.ts` files?
-
-**Answer:**  
 `.d.ts` files are **TypeScript declaration files** — they contain only type information with no runtime JavaScript. They are generated when `declaration: true` is set in `tsconfig.json`. They allow TypeScript consumers of a library to get type safety and autocomplete without needing the original `.ts` source files.
 
 ---
 
-### Q: What's the difference between `target` and `module` in tsconfig?
-
-**Answer:**
-
-| Option | Controls |
-|---|---|
-| `target` | **JavaScript syntax** emitted — e.g., `ES5` uses `var` and no arrow functions; `ES2020` uses `const`, `?.`, etc. |
-| `module` | **Module system** used — `commonjs` emits `require()`/`module.exports`; `ESNext` emits `import`/`export` |
-
-For Node.js backend: `target: ES2020`, `module: commonjs` is the standard combination.
-
----
-
----
-
 ## Q: What is a `.map` File (Source Map)?
-
-### Answer
 
 When TypeScript is compiled to JavaScript, the resulting `.js` file looks very different from the original `.ts` source. A **source map** (`.js.map`) is a JSON file that creates a **mapping between the compiled JS and the original TS source** — line by line, column by column.
 
@@ -231,8 +193,6 @@ Now runtime errors show TypeScript line numbers instead of compiled JS lines.
 ---
 
 ## Q: What are Generic Functions in TypeScript and Why Use Them?
-
-### Answer
 
 A **generic function** is a function that works with **any type** while still being **type-safe** — the type is determined at call time, not at definition time. Generics use a **type parameter** (conventionally `T`) as a placeholder.
 
@@ -314,15 +274,7 @@ const user = await fetchData<User>('/api/user/1');  // user is typed as User
 | **Autocomplete** | IDE knows the exact return type — better DX |
 | **Constraints** | `T extends SomeType` limits what types are accepted |
 
-### Interview answer (spoken)
-
-> "Generic functions let you write a single function that works across multiple types while preserving full type safety. Instead of using `any` — which throws away type information — you use a type parameter like `T` that TypeScript infers at the call site. A classic example is a `fetchData<T>` utility that wraps fetch and returns `Promise<T>`, so callers get a fully typed response without any casting. Generics are essential for building reusable utilities, data structures, and API layers."
-
----
-
 ## Q: What are Generic Interfaces in TypeScript and Why Use Them?
-
-### Answer
 
 A **generic interface** defines a contract (shape) that works with **any type**, decided when the interface is used. They're the backbone of reusable, strongly-typed data structures and API contracts.
 
@@ -448,64 +400,6 @@ class JsonUserParser implements Parser<User> {
 | **Scalable architecture** | Add new entities — no new interfaces needed, just `Repository<NewEntity>` |
 | **Better tooling** | Full autocomplete and compile-time checks everywhere |
 
-### Interview answer (spoken)
-
-> "Generic interfaces define a reusable contract where the actual type is plugged in at usage time. The most common example I use in production is `ApiResponse<T>` — a single interface that wraps any API response with consistent `data`, `status`, and `message` fields, where `data` is typed to whatever the endpoint returns. Another heavy use is the Repository pattern — I define `Repository<T>` once with `findById`, `findAll`, `create`, `update`, `delete`, and then implement it for each entity. This avoids duplicating method signatures and gives full type safety across the entire data layer."
-
----
-
-## Quick Reference Cheat Sheet
-
-```bash
-# Install
-npm install -D typescript
-
-# Init config
-npx tsc --init
-
-# Build
-npx tsc
-
-# Type-check only (no output)
-npx tsc --noEmit
-
-# Watch mode
-npx tsc --watch
-
-# Run TS directly (dev only)
-npx tsx src/index.ts
-npx ts-node src/index.ts
-```
-
-```ts
-// Generic function
-function identity<T>(value: T): T { return value; }
-
-// Generic function with constraint
-function findById<T extends { id: number }>(items: T[], id: number) {
-  return items.find(i => i.id === id);
-}
-
-// Generic interface
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-  message: string;
-}
-
-// Generic repository interface
-interface Repository<T> {
-  findById(id: number): Promise<T | null>;
-  findAll(): Promise<T[]>;
-  create(data: Partial<T>): Promise<T>;
-}
-
-// Source map — tsconfig.json
-{ "compilerOptions": { "sourceMap": true } }
-
-// Source map support in Node.js
-import 'source-map-support/register';
-```
 
 ### What is TypeScript?
 A **typed superset of JavaScript** by Microsoft. Catches errors at compile time, not runtime.
