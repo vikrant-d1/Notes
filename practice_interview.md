@@ -218,8 +218,6 @@ var removeElement = function(nums, val) {
 ```javascript
 /**
  * Merge Sorted Array
- *
- * Example 1:
  * Input:
  * nums1 = [1,2,3,0,0,0], m = 3
  * nums2 = [2,5,6], n = 3
@@ -230,48 +228,23 @@ var removeElement = function(nums, val) {
  *
  * After merging both sorted arrays:
  * Output: [1,2,2,3,5,6]
- *
- * --------------------------------------------------
- *
- * Example 2:
- * Input:
- * nums1 = [1], m = 1
- * nums2 = [], n = 0
- *
- * Explanation:
- * nums1 contains: [1]
- * nums2 is empty
- *
- * After merging:
- * Output: [1]
- *
- * --------------------------------------------------
- *
- * Example 3:
- * Input:
- * nums1 = [0], m = 0
- * nums2 = [1], n = 1
- *
- * Explanation:
- * nums1 has no valid elements (m = 0)
- * nums2 contains: [1]
- *
- * After merging:
- * Output: [1]
- *
- * --------------------------------------------------
- *
- * Goal:
- * Merge nums2 into nums1 as one sorted array.
- * The final sorted result must be stored inside nums1.
+
  */
 
- var merge = function(nums1, m, nums2, n) {
-    for (let i = m; i < nums1.length; i++) {
-      nums1[i] = nums2[i - m];
+ let nums1 = [1,2,3,0,0,0], m = 3;
+let nums2 = [2,5,6], n = 3;
+
+
+
+function sortMerge(arr1, ln, arr2, lr) {
+    for (let i = 0; i < lr; i++) {
+        arr1[ln + i] = arr2[i];
     }
-    nums1.sort((a, b) => a - b);
-  };
+    return arr1.sort((a, b) => a - b);
+}
+
+const data = sortMerge(nums1,m,nums2,n);
+console.log(data);
 ```
 ### Write a recursive function isPowerOfTwo(n) that returns true if n is a power of 2, otherwise false.
 
