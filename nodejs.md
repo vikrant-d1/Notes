@@ -930,7 +930,7 @@ Most service meshes use a **sidecar proxy** pattern.
 
 ```text
 Service A <-> Proxy A <-> Proxy B <-> Service B
-
+```
 - Popular Service Mesh Tools
 - Istio
 - Linkerd
