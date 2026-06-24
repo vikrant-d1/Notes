@@ -865,6 +865,76 @@ async function checkRateLimit(userId, limitPerMinute = 100) {
 
 > Choose gRPC for internal service-to-service calls where performance and contract enforcement matter. Choose REST for public APIs (broader client support) and simple internal services where developer velocity > performance optimization.
 
+
+# Service Mesh
+
+## Overview
+
+A **Service Mesh** is an infrastructure layer that manages communication between microservices. It provides networking capabilities such as traffic management, security, observability, and reliability without requiring changes to application code.
+
+As applications grow and adopt a microservices architecture, managing communication between services becomes complex. A service mesh simplifies this by handling common networking concerns automatically.
+
+---
+
+## Why Use a Service Mesh?
+
+In a microservices environment, services need to communicate with each other reliably and securely. Instead of implementing networking logic in every service, a service mesh provides these capabilities centrally.
+
+### Benefits
+
+- Service-to-service communication management
+- Traffic routing and load balancing
+- Secure communication using mTLS
+- Monitoring and observability
+- Fault tolerance and resiliency
+- Policy enforcement
+
+---
+
+## Key Features
+
+### Traffic Management
+
+- Intelligent routing
+- Load balancing
+- Traffic splitting
+- Canary deployments
+- Blue-green deployments
+
+### Security
+
+- Mutual TLS (mTLS)
+- Service authentication
+- Authorization policies
+- Encryption of service communication
+
+### Observability
+
+- Metrics collection
+- Distributed tracing
+- Logging
+- Performance monitoring
+
+### Reliability
+
+- Retries
+- Timeouts
+- Circuit breakers
+- Fault injection for testing
+
+---
+
+## Architecture
+
+Most service meshes use a **sidecar proxy** pattern.
+
+```text
+Service A <-> Proxy A <-> Proxy B <-> Service B
+
+- Popular Service Mesh Tools
+- Istio
+- Linkerd
+- Consul
 ---
 
 ### 5.2 CQRS & Event Sourcing
