@@ -395,6 +395,21 @@ The Event Bus distributes events among instances.
 
 ---
 
+## If the interviewer asks: "Why use a separate Moderation Service?"
+
+You can answer:
+
+Separation of concerns: The Posts Service only creates posts.
+Independent scaling: Moderation can handle heavy workloads without affecting post creation.
+Easy maintenance: Business rules can change without modifying the Posts Service.
+Technology flexibility: The moderation logic can later use AI or third-party APIs without impacting other services.
+
+## If the interviewer asks for a real-world example
+
+You can say:
+
+"Social media platforms like Facebook, Instagram, YouTube, and LinkedIn use moderation services. When a user submits a post or comment, it isn't always shown immediately. A moderation service checks for spam, abusive language, hate speech, copyright violations, or other policy violations. Based on the result, the content is approved, rejected, or sent for manual review."
+
 # One-Minute Interview Answer
 
 > A Moderation Service is a dedicated microservice that validates user-generated content before it becomes visible. When a user creates a post, the Posts Service stores it with a `pending` status and publishes a `PostCreated` event. The Moderation Service listens for this event, checks the content using business rules or AI, and determines whether it should be approved or rejected. It then publishes a `PostModerated` event, which the Query Service consumes to update the post status. This design follows event-driven architecture, keeps services loosely coupled, improves scalability, and makes the system easier to maintain.
