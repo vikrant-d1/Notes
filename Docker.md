@@ -156,6 +156,182 @@ my-app
 
 ### docker-compose file
 ```
+version: '3'
+services:
+  ecommerce-ui:
+    image: vikrant011/commerce-ui:1.0.0
+    container_name: ecommerce-ui
+    ports:
+      - "4000:4000"
+    environment:
+      - REACT_APP_PROFILE_API_HOST=http://profile-management
+      - REACT_APP_PRODUCT_API_HOST=http://product-catalog
+      - REACT_APP_INVENTORY_API_HOST=http://product-inventory
+      - REACT_APP_ORDER_API_HOST=http://order-management
+      - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling
+      - REACT_APP_CONTACT_API_HOST=http://contact-support-team
+    depends_on:
+      - profile-management
+      - product-catalog
+      - product-inventory
+      - shipping-and-handling
+      - contact-support-team
+      - order-management
+  shipping-and-handling:
+    image: vikrant011/shipping-and-handling:2.0.0
+    container_name: shipping-and-handling
+    depends_on:
+      - mongodb_shipping
+    environment:
+      - MONGO_URI=mongodb://mongodb_shipping:27017/shipping_db
+    ports:
+      - "8080:8080"
+
+  mongodb_shipping:
+    image: mongo
+    container_name: mongodb_shipping
+    volumes:
+      - mongodb_shipping_data:/data/db
+  contact-support-team:
+    image: vikrant011/contact-support-team:2.0.0
+    container_name: contact-support-team
+    depends_on:
+      - mongodb_contact_support
+    environment:
+      - MONGODB_HOST=mongodb_contact_support
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=contact_support_db
+    ports:
+      - "8000:8000"
+  mongodb_contact_support:
+    image: mongo
+    container_name: mongodb_contact_support
+    volumes:
+      - mongodb_contact_support_data:/data/db
+  product-catalog:
+    image: vikrant011/product-catalog:2.0.0
+    container_name: product-catalog
+    depends_on:
+      - mongodb_product_catalog
+    environment:
+      - MONGODB_HOST=mongodb_product_catalog
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=catalog_db
+    ports:
+      - "3001:3001"
+  mongodb_product_catalog:
+    image: mongo
+    container_name: mongodb_product_catalog
+    volumes:
+      - mongodb_product_catalog_data:/data/db
+
+  order-management:
+    image: vikrant011/order-management:2.0.0
+    container_name: order-management
+    depends_on:
+      - mongodb_order_management
+    ports:
+      - "9090:9090"
+    environment:
+      - PRODUCT_INVENTORY_API_HOST=http://product-inventory
+      - PRODUCT_CATALOG_API_HOST=http://product-catalog
+      - SHIPPING_HANDLING_API_HOST=http://shipping-and-handling
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb_order_management:27017/order_management
+
+  mongodb_order_management: # Port 27017
+    image: mongo 
+    container_name: mongodb_order_management
+    volumes:
+      - mongodb_order_management_data:/data/db
+  product-inventory:
+    image: vikrant011/product-inventory:2.0.0
+    container_name: product-inventory
+    environment:
+      - POSTGRES_HOST=postgres_product_inventtory
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=product_inventory
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_PASSWORD=inventory_password
+    ports:
+      - "3002:3002"
+  postgres_product_inventtory: # posrt 5432
+    image: postgres
+    container_name: postgres_product_inventtory
+    environment:
+      - POSTGRES_PASSWORD=inventory_password
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_DB=product_inventory
+    volumes:
+      - postgres_product_inventtory_data:/var/lib/postgresql
+  profile-management:
+    image: vikrant011/profile-management:2.0.0
+    container_name: profile-management
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mysql_profile_management
+    environment:
+      - MYSQL_HOST=mysql_profile_management
+      - MYSQL_PORT=3306
+      - MYSQL_USER=profile_user
+      - MYSQL_PASSWORD=profile_password
+      - MYSQL_DATABASE=profile_management
+    
+  mysql_profile_management: #Port 3306
+    image: mysql:8.0
+    container_name: mysql_profile_management
+    environment:
+      - MYSQL_DATABASE=profile_management
+      - MYSQL_USER=profile_user
+      - MYSQL_PASSWORD=profile_password
+      - MYSQL_ROOT_PASSWORD=root_password 
+    volumes:
+      - mysql_profile_management_data:/var/lib/mysql
+
+volumes:
+  mongodb_product_catalog_data:
+  mongodb_contact_support_data:
+  mongodb_shipping_data:
+  mongodb_order_management_data:
+  mysql_profile_management_data:
+  postgres_product_inventtory_data:
+
+
+
+
+# docker run --network=my-network -p 4000:4000 \\
+# -e REACT_APP_PROFILE_API_HOST=http://profile-management \\
+# -e REACT_APP_PRODUCT_API_HOST=http://product-catalog \\
+# -e REACT_APP_INVENTORY_API_HOST=http://product-inventory \\
+# -e REACT_APP_ORDER_API_HOST=http://order-management \\
+# -e REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling \\
+# -e REACT_APP_CONTACT_API_HOST=http://contact-support-team \\
+# --name ecommerce-ui rslim087/ecommerce-ui
+
+# docker run -p 8080:8080 -e MONGO_URI=<mongo_uri> shipping-and-handling
+
+# docker run -p 3003:3003 -e MYSQL_HOST=<mysql_host> -e MYSQL_PORT=<mysql_port> -e MYSQL_USER=<mysql_user> -e MYSQL_PASSWORD=<mysql_password> -e MYSQL_DATABASE=<mysql_database> authentication-microservice
+
+# docker run -p 3002:3002 -e POSTGRES_HOST=<postgres_host> -e POSTGRES_PORT=<postgres_port> -e POSTGRES_DB=<postgres_db> -e POSTGRES_USER=<postgres_user> -e POSTGRES_PASSWORD=<postgres_password> product-inventory-microservice
+
+# docker run -p 8000:8000 -e MONGODB_HOST=<mongo_host> -e MONGODB_PORT=<mongo_port> -e MONGODB_DATABASE=<mongo_database> contact-support-microservice
+
+# docker run -p 3001:3001 -e MONGODB_HOST=<mongo_host> -e MONGODB_PORT=<mongo_port> -e MONGODB_DATABASE=<mongo_database> product-catalog-microservice
+
+# docker run --network my-network \
+#   -e PRODUCT_INVENTORY_API_HOST=http://product-inventory \
+#   -e PRODUCT_CATALOG_API_HOST=http://product-catalog \
+#   -e SHIPPING_HANDLING_API_HOST=http://shipping-and-handling \
+#   -e SPRING_DATA_MONGODB_URI=mongodb://host:27017/name \
+#   -e SPRING_DATA_MONGODB_DATABASE=order_management \
+#   -p 9090:9090 --name order-management rslim087/order-management
+
+
+```
+
+
+
+```
 docker compose down
 docker compose up
 ```
