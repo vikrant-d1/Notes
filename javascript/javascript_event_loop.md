@@ -8,6 +8,105 @@ Since JavaScript is single-threaded (it can execute only one task at a time), th
 
 ---
 
+### How It Works — The Execution Model
+
+```
+┌──────────────────────────┐
+│       Call Stack          │  ← Executes synchronous code
+└──────────┬───────────────┘
+           │ (when empty)
+           ▼
+┌──────────────────────────┐
+│   Microtask Queue        │  ← Promise.then, queueMicrotask,
+│   (higher priority)      │     MutationObserver, process.nextTick
+└──────────┬───────────────┘
+           │ (when empty)
+           ▼
+┌──────────────────────────┐
+│   Macrotask Queue        │  ← setTimeout, setInterval, setImmediate,
+│   (lower priority)       │     I/O callbacks, UI rendering
+└──────────────────────────┘
+```
+
+
+
+### Processing Order
+
+1. Execute all synchronous code in the **call stack**
+2. Once the call stack is empty, drain the **entire microtask queue** (all microtasks, including any new ones added during processing)
+3. Execute **one** macrotask from the macrotask queue
+4. After that macrotask, drain the microtask queue again
+5. Optionally, the browser performs **rendering** (repaint/reflow)
+6. Repeat from step 3
+
+### Critical Code Example (Interviewers Love This)
+
+```javascript
+console.log("1: Start");
+
+setTimeout(() => {
+  console.log("2: setTimeout (macrotask)");
+}, 0);
+
+Promise.resolve()
+  .then(() => {
+    console.log("3: Promise.then (microtask)");
+  })
+  .then(() => {
+    console.log("4: Chained Promise (microtask)");
+  });
+
+queueMicrotask(() => {
+  console.log("5: queueMicrotask (microtask)");
+});
+
+console.log("6: End");
+```
+
+**Output:**
+```
+1: Start
+6: End
+3: Promise.then (microtask)
+5: queueMicrotask (microtask)
+4: Chained Promise (microtask)
+2: setTimeout (macrotask)
+```
+
+**Why this order?**
+- `1` and `6` are synchronous — run first in order
+- All microtasks (`3`, `5`, `4`) run before any macrotask because the microtask queue is fully drained first
+- `2` (setTimeout) is a macrotask — runs last, after all microtasks
+
+### Advanced Example — Nested Microtasks & Macrotasks
+
+```javascript
+setTimeout(() => {
+  console.log("A: timeout 1");
+  Promise.resolve().then(() => console.log("B: promise inside timeout"));
+}, 0);
+
+setTimeout(() => {
+  console.log("C: timeout 2");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("D: promise 1");
+  setTimeout(() => console.log("E: timeout inside promise"), 0);
+});
+```
+
+**Output:**
+```
+D: promise 1          ← microtask runs first
+A: timeout 1          ← first macrotask
+B: promise inside timeout  ← microtask created inside macrotask runs before next macrotask
+C: timeout 2          ← second macrotask
+E: timeout inside promise  ← macrotask queued from microtask runs last
+
+---
+
+
 ## Key Definitions
 
 ### Microtasks
