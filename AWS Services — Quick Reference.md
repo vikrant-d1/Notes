@@ -1,23 +1,3 @@
-
-<img width="2914" height="1552" alt="image" src="https://github.com/user-attachments/assets/7b1e7e64-94d6-450e-ae1a-6a2fb5ac90e9" />
-
-<img width="2934" height="1624" alt="image" src="https://github.com/user-attachments/assets/6e40be4a-6b2a-44f2-96f4-da7742baea63" />
-<img width="2936" height="1538" alt="image" src="https://github.com/user-attachments/assets/3afaadcf-9aae-4727-9cd5-64551fbaa264" />
-<img width="2920" height="1628" alt="image" src="https://github.com/user-attachments/assets/73feb2f4-5d17-4857-bd82-30986a08d90c" />
-<img width="2288" height="1272" alt="image" src="https://github.com/user-attachments/assets/cb3212a2-5844-421a-b4ed-a73c69eeae29" />
-<img width="2924" height="1554" alt="image" src="https://github.com/user-attachments/assets/50724a1e-9450-475a-bed7-503fd9de04cb" />
-<img width="2932" height="1574" alt="image" src="https://github.com/user-attachments/assets/1c3502cf-b87d-423c-9078-2e1732fde39a" />
-<img width="2930" height="1626" alt="image" src="https://github.com/user-attachments/assets/3b4bc71e-d182-4ae1-844d-83cbe4384de1" />
-<img width="1822" height="1006" alt="image" src="https://github.com/user-attachments/assets/b46327f0-be97-4210-bf43-1461b89a8232" />
-<img width="1820" height="998" alt="image" src="https://github.com/user-attachments/assets/fe06f6a1-386b-4f7c-a835-23b55274d190" />
-<img width="2350" height="1556" alt="image" src="https://github.com/user-attachments/assets/0fb95e27-b450-4bee-8eb6-84097f595094" />
-<img width="2936" height="1556" alt="image" src="https://github.com/user-attachments/assets/97d8ef9a-9547-408a-aa17-84096e0f9448" />
-<img width="1818" height="1002" alt="image" src="https://github.com/user-attachments/assets/d4a265fa-6513-4b99-9b7a-ef16819e8538" />
-<img width="2924" height="1534" alt="image" src="https://github.com/user-attachments/assets/16ae5f30-4e40-430d-9930-cdefbdf9f514" />
-<img width="2932" height="1552" alt="image" src="https://github.com/user-attachments/assets/3b697b98-9d07-4548-96ab-912dc59817a1" />
-<img width="1828" height="1000" alt="image" src="https://github.com/user-attachments/assets/624734a0-c51a-4b1d-98b7-5092240d1d7a" />
-<img width="1718" height="954" alt="image" src="https://github.com/user-attachments/assets/b96f6f48-6053-43a6-8b32-37d337e53fb9" />
-
 ### 1. What is CloudFront?
 Amazon CloudFront is a Content Delivery Network (CDN) service that distributes content globally through a network of edge locations, reducing latency by serving requests from the location closest to the user.
 
