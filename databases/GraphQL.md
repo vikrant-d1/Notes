@@ -105,6 +105,115 @@ input CreateUserInput {
   email: String!
   role: Role
 }
+
+//dummy data
+const users = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    role: "ADMIN",
+  },
+  {
+    id: "2",
+    name: "Alice",
+    email: "alice@example.com",
+    role: "USER",
+  },
+];
+
+const posts = [
+  {
+    id: "101",
+    title: "GraphQL Basics",
+    authorId: "1",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "102",
+    title: "Node.js Tutorial",
+    authorId: "2",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+module.exports = { users, posts };
+
+
+// resolvers.js
+const { users, posts } = require("./data");
+
+const resolvers = {
+  Query: {
+    user: (_, { id }) => {
+      return users.find(user => user.id === id);
+    },
+
+    users: (_, { limit, offset }) => {
+      let result = users;
+
+      if (offset) {
+        result = result.slice(offset);
+      }
+
+      if (limit) {
+        result = result.slice(0, limit);
+      }
+
+      return result;
+    },
+  },
+
+  Mutation: {
+    createUser: (_, { input }) => {
+      const newUser = {
+        id: String(users.length + 1),
+        ...input,
+        role: input.role || "USER",
+      };
+
+      users.push(newUser);
+
+      return newUser;
+    },
+  },
+
+  User: {
+    posts: (parent) => {
+      return posts.filter(post => post.authorId === parent.id);
+    },
+  },
+
+  Post: {
+    author: (parent) => {
+      return users.find(user => user.id === parent.authorId);
+    },
+  },
+};
+
+module.exports = resolvers;
+
+
+// Server Example
+const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
+
+const fs = require("fs");
+const resolvers = require("./resolvers");
+
+const typeDefs = fs.readFileSync("./schema.graphql", "utf8");
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+startStandaloneServer(server, {
+  listen: { port: 4000 },
+}).then(({ url }) => {
+  console.log(`Server running at ${url}`);
+});
+
 ```
 
 Key SDL features: Object types, Scalar types, Enum types, Input types, Interfaces, Unions, and Directives.
