@@ -20,33 +20,7 @@
 
 # What is a GraphQL Client?
 
-A **GraphQL Client** is a library that enables frontend applications (such as React, Angular, or Vue) to communicate with a GraphQL server.
-
-Instead of manually sending HTTP requests and managing state, a GraphQL client provides built-in tools for:
-
-- Executing Queries
-- Executing Mutations
-- Executing Subscriptions
-- Caching data
-- Managing loading states
-- Handling errors
-- Authentication
-- Pagination
-- Optimistic UI updates
-- Automatic UI synchronization
-
-Popular GraphQL Clients include:
-
-- Apollo Client
-- URQL
-- Relay
-- graphql-request
-
----
-
-## Interview Definition
-
-> **A GraphQL Client is a frontend library that communicates with a GraphQL server. It executes queries, mutations, and subscriptions while providing built-in caching, loading and error state management, authentication, pagination, optimistic UI updates, and automatic cache synchronization.**
+A GraphQL Client is a frontend library that communicates with a GraphQL server. It executes queries, mutations, and subscriptions while providing built-in caching, loading and error state management, authentication, pagination, optimistic UI updates, and automatic cache synchronization.
 
 ---
 
