@@ -1,22 +1,5 @@
 # GraphQL Client Interview Guide (React + Apollo Client)
 
-> A complete interview-ready guide to understanding GraphQL Clients, Apollo Client, caching, hooks, and best practices.
-
----
-
-# Table of Contents
-
-1. What is a GraphQL Client?
-2. Why not use `fetch()`?
-3. Why is caching important?
-4. What is cache normalization?
-5. What is Optimistic UI?
-6. `useQuery()` vs `useLazyQuery()`
-7. Common React GraphQL Hooks
-8. Interview Questions & Answers
-9. Quick Interview Summary
-
----
 
 # What is a GraphQL Client?
 
