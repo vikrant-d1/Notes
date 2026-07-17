@@ -39,3 +39,21 @@
 ### Graceful shutdown
 
 ### Connection pool example
+
+### Advanced Promise and async patterns
+
+### Linked List and Binary Tree problems
+
+### Graph algorithms
+
+### Sliding Window techniques
+
+### Heap/Priority Queue problems
+
+### LRU Cache and Rate Limiter
+
+### Event Loop output questions
+
+### Node.js system-design coding tasks
+
+### EventEmitter and stream implementations
