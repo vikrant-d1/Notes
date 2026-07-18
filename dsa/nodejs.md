@@ -161,6 +161,64 @@ route.post("/api/v1/upload",uploads.single("image"),(req,res)=>{
 
 
 ### Stream a large file
+```javascript
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const { pipeline } = require("stream/promises");
+
+const app = express();
+
+app.get("/download", async (req, res, next) => {
+  try {
+    const filePath = path.join(
+      __dirname,
+      "files",
+      "large-video.mp4"
+    );
+
+    // Check file and get metadata
+    const stat = await fs.promises.stat(filePath);
+
+    if (!stat.isFile()) {
+      return res.status(404).json({
+        success: false,
+        message: "File not found",
+      });
+    }
+
+    res.set({
+      "Content-Type": "video/mp4",
+      "Content-Length": stat.size,
+      "Content-Disposition":
+        'attachment; filename="large-video.mp4"',
+    });
+
+    const fileStream = fs.createReadStream(filePath);
+
+    await pipeline(fileStream, res);
+
+  } catch (error) {
+    // Client may have disconnected
+    if (
+      error.code === "ERR_STREAM_PREMATURE_CLOSE"
+    ) {
+      console.log("Client disconnected");
+      return;
+    }
+
+    // File doesn't exist
+    if (error.code === "ENOENT") {
+      return res.status(404).json({
+        success: false,
+        message: "File not found",
+      });
+    }
+
+    next(error);
+  }
+});
+```
 
 ### Read a 5GB file efficiently
 
