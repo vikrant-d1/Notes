@@ -59,6 +59,42 @@ const loggerMiddleware = (req,res,next)=>{
 ```
 
 ### JWT authentication middleware
+```javascript
+const jwt = require('jsonwebtoken');
+
+const authonticate = (req,res,next) =>{
+    try{
+
+    const authHeader = req.headers.authorization;
+
+    if(!authHeader || !authHeader.startWith(`Bearer`)){
+        return res.status(401).json({
+            success:false,
+            message:"Authentication token is require."
+        })
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decode = jwt.verify(token,process.env.JWT_SECRET);
+
+    req.user = decode;
+    next();
+            
+    }catch(err){
+        return res.status(401).json({
+            success:false,
+            message:"Invalid or expaire token."
+        })
+    }
+}
+
+module.exports = authonticate;
+
+
+// use of authontication
+
+route.get("/profile",authonticate,controller.userProfile);
+```
 
 ### File upload API
 
