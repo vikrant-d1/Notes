@@ -48,6 +48,15 @@ emitter.emit("login", "Rahul");
 ```
 
 ### Build an Express middleware
+```javascript
+
+const loggerMiddleware = (req,res,next)=>{
+       console.log(`method: ${req.method}, url: ${req.url}`);
+       console.log(`time: ${new Date().toISOString()}`);
+       next();
+}
+
+```
 
 ### JWT authentication middleware
 
