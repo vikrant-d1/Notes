@@ -97,6 +97,68 @@ route.get("/profile",authonticate,controller.userProfile);
 ```
 
 ### File upload API
+```javascript
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,"uploads/");
+    },
+    filename: (req,file,cb)=>{
+        const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+        cb(null,uniqueName+path.extname(file.originalname));
+    }
+})
+
+const fileFilter = (req,file,cb)=>{
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if(!allowedTypes.includes(file.mimetype)){
+       return cb(new Error("Only image file are allowed."))
+    }
+
+    cb(null,true);
+}
+
+const uploads = multer({
+    storage,
+    fileFilter,
+    limits:{
+        fileSize:5*1024*1024 // 5 MB
+    }
+})
+
+module.exports = uploads;
+
+
+// Use of the uploads
+
+route.post("/api/v1/upload",uploads.single("image"),(req,res)=>{
+    if(!req.file){
+        return res.status(400).json({
+            success:false,
+            message:"File is require."
+        })
+    }
+
+    res.status(201).json({
+        stutas:true,
+        message:"File uploaded successfully.",
+        data:{
+            filename:req.file.filename,
+            path:req.file.path,
+            size:req.file.size
+        }
+    })
+})
+```
+
 
 ### Stream a large file
 
