@@ -20,8 +20,6 @@
 
 ---
 
-# Multi-Stage Dockerfile for Production Node.js Applications
-
 ## Why Use a Multi-Stage Docker Build?
 
 A multi-stage Dockerfile is the standard production approach because it keeps the final image small, secure, and free of unnecessary build tools.
