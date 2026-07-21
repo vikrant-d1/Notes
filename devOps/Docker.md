@@ -33,9 +33,21 @@ FROM node:22-alpine
 
 WORKDIR /app
 
+# Copy dependency files first for Docker layer caching
+COPY package*.json ./
+
+# Reproducible production-only installation
+RUN npm ci --omit=dev
+
+# Copy application source
 COPY . .
 
-RUN npm install
+ENV NODE_ENV=production
+
+EXPOSE 4000
+
+# Run as non-root user
+USER node
 
 CMD ["node", "server.js"]
 ```
@@ -54,31 +66,32 @@ CMD ["node", "server.js"]
 The following Dockerfile demonstrates a production-ready multi-stage build for a Node.js/Express application.
 
 ```dockerfile
-# Stage 1: Install dependencies
+# Stage 1: Install production dependencies
 FROM node:22-alpine AS dependencies
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci --omit=dev
+
 
 # Stage 2: Production image
 FROM node:22-alpine AS production
 
 WORKDIR /app
 
-COPY --from=dependencies /app/node_modules ./node_modules
-
-COPY . .
-
 ENV NODE_ENV=production
 
-EXPOSE 3000
+COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node . .
 
 USER node
 
-CMD ["node", "src/server.js"]
+EXPOSE 4000
+
+CMD ["node", "index.js"]
+
 ```
 
 ---
