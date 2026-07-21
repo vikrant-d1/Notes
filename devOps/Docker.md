@@ -33,20 +33,20 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy dependency files first for Docker layer caching
-COPY package*.json ./
+# Copy dependency files first for better Docker caching
+COPY --chown=node:node package*.json ./
 
-# Reproducible production-only installation
+# Install production dependencies
 RUN npm ci --omit=dev
 
-# Copy application source
-COPY . .
+# Copy application code with correct ownership
+COPY --chown=node:node . .
 
 ENV NODE_ENV=production
 
 EXPOSE 4000
 
-# Run as non-root user
+# Run as non-root user for security
 USER node
 
 CMD ["node", "server.js"]
