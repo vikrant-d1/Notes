@@ -138,7 +138,7 @@ my-app
 ```
 
 ### docker-compose file
-```
+```dockerfile
 version: '3'
 services:
   ecommerce-ui:
@@ -285,6 +285,7 @@ volumes:
 docker compose down
 docker compose up
 ```
+
 ### Simple Docker compose file
 ```
 services:
@@ -336,30 +337,6 @@ volumes:
 
 ```
 
-### Multi-Stage Build — Your Go-To Example
-
-```dockerfile
-# Stage 1: Build
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
-COPY . .
-RUN npm run build
-
-# Stage 2: Production
-FROM node:20-alpine AS production
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-USER appuser
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
-CMD ["node", "dist/main.js"]
-```
 
 ### Key Dockerfile Instructions
 
@@ -515,7 +492,6 @@ secrets:
     file: ./secrets/db_password.txt
 ```
 
-### Interview Q&A
 
 **Q: What's the difference between `depends_on` and healthcheck-based dependency?**
 A: Basic `depends_on` only waits for the container to start, not for the service inside to be ready. With `condition: service_healthy`, Compose waits until the healthcheck passes — critical for databases that take seconds to initialize.
@@ -539,7 +515,6 @@ A: `no` (default), `always`, `on-failure[:max-retries]`, `unless-stopped`. For p
 ---
 
 ## 5. Networking Deep Dive
-### Key Concepts
 
 ```bash
 # Create custom network
@@ -552,8 +527,6 @@ docker run -d --name db --network my-app-network postgres
 # From api container: ping db  ← works via Docker DNS
 ```
 
-### Interview Q&A
-
 **Q: How does container-to-container communication work?**
 A: Containers on the same user-defined bridge network can communicate using container names as hostnames. Docker has a built-in DNS server (127.0.0.11) that resolves container names to their IPs. The default bridge network doesn't support this — you must use a user-defined network.
 
@@ -564,8 +537,6 @@ A: `--expose` makes a port available to other containers on the same network (in
 A: Create separate networks — put frontend and API on a `frontend-net`, and put API and database on a `backend-net`. Only the API lives on both networks, acting as a gateway.
 
 ---
-
-## 6. Storage & Volumes
 
 **Q: When would you use a named volume vs a bind mount?**
 A: Named volumes for production data (databases, uploads) — Docker manages the storage, it's portable, and works across platforms. Bind mounts for development — mount your source code so you get live reload without rebuilding.
@@ -584,7 +555,6 @@ A: Data in the container's writable layer is lost. Data in volumes persists. Thi
 
 ---
 
-### Registry Workflow
 
 ```bash
 # Tag and push to private registry
@@ -611,8 +581,6 @@ trivy image --severity HIGH,CRITICAL myapp:latest
 ```
 
 ---
-
-## 8. Security Best Practices
 
 ### The Big 8 — Mention These in Interviews
 
@@ -649,8 +617,6 @@ docker run -d \
 ```
 
 ---
-
-## 9. Docker in CI/CD Pipelines
 
 ### GitHub Actions Example
 
