@@ -1107,29 +1107,91 @@ Show awareness of these to demonstrate you stay current:
 
 ## Quick Revision: Top 20 Questions They WILL Ask
 
-1. What is Docker and how is it different from a VM?
-2. Explain Docker architecture (client, daemon, registry)
-3. What are namespaces and cgroups?
-4. Difference between CMD and ENTRYPOINT?
-5. What is a multi-stage build and why use it?
-6. How do you reduce Docker image size?
-7. Explain Docker layer caching
-8. What are Docker volumes? Types?
-9. How does container networking work?
-10. What's the difference between bridge, host, and overlay networks?
-11. How do you manage secrets in Docker?
-12. Explain Docker Compose and its use cases
-13. What restart policies are available?
-14. How do you debug a failing container?
-15. How do you scan images for vulnerabilities?
-16. Docker Swarm vs Kubernetes — when to use which?
-17. How do you integrate Docker in CI/CD?
-18. What is Docker Content Trust?
-19. How do you handle logging in containerized apps?
-20. Describe a production Docker issue you solved
+### What is Docker and how is it different from a VM?
+ Docker packages an application with everything it needs into a container, so it runs consistently on different machines. Docker containers are lightweight because they share the host OS kernel, while Virtual Machines are heavier because each VM has its own complete operating system.
+###  Explain Docker architecture (client, daemon, registry)
+
+###  What are namespaces and cgroups?
+###  Difference between CMD and ENTRYPOINT?
+###  What is a multi-stage build and why use it?
+###  How do you reduce Docker image size?
+###  Explain Docker layer caching
+###  What are Docker volumes? Types?
+###  How does container networking work?
+###  What's the difference between bridge, host, and overlay networks?
+###  How do you manage secrets in Docker?
+###  Explain Docker Compose and its use cases
+###  What restart policies are available?
+###  How do you debug a failing container?
+###  How do you scan images for vulnerabilities?
+###  Docker Swarm vs Kubernetes — when to use which?
+###  How do you integrate Docker in CI/CD?
+We integrate Docker into CI/CD by automatically building a Docker image whenever code is pushed, running tests against the application, pushing the successful image to a container registry, and then deploying that same image to staging or production. This gives us consistent environments, reproducible deployments, easier rollbacks, and avoids the “works on my machine” problem.
+
+**Commit → Build → Test → Docker Image → Registry → Deploy → Container**
+
+```yml
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t my-app:${{ github.sha }} .
+
+      - name: Run Tests
+        run: docker run --rm my-app:${{ github.sha }} npm test
+
+      - name: Push Docker Image
+        run: |
+          docker tag my-app:${{ github.sha }} registry/my-app:${{ github.sha }}
+          docker push registry/my-app:${{ github.sha }}
+
+      - name: Deploy
+        run: |
+          # Deploy the same image to your server/platform
+          echo "Deploy registry/my-app:${{ github.sha }}"
+```
+###  What is Docker Content Trust?
+###  How do you handle logging in containerized apps?
+In containerized applications, I write logs to stdout and stderr instead of storing them inside the container. Docker or the orchestration platform collects these logs, and in production I send them to a centralized logging system such as CloudWatch, ELK, or Datadog. I prefer structured JSON logging with request IDs or correlation IDs so logs can be traced across services.
+
+###  Describe a production Docker issue you solved?
+“In one production project, our Node.js Docker container was restarting frequently under high traffic. I checked the container logs and monitoring metrics and found that the container was exceeding its memory limit and getting killed with an OOM error.
+
+I investigated the application and found that a large amount of data was being loaded into memory at once. We changed the processing to use Node.js streams and batching, optimized the application memory usage, and configured appropriate container memory limits.
+
+We also added health checks and monitoring so we could detect similar issues earlier. After these changes, the container became stable and production restarts stopped.”
+
+**Problem → Investigation → Root cause → Fix → Result**
+```yml
+Problem:
+Container restarting
+        ↓
+Investigation:
+Docker logs + memory metrics
+        ↓
+Root Cause:
+High memory usage → OOM
+        ↓
+Fix:
+Streams + batching
+Memory optimization
+Container limits
+Health checks
+        ↓
+Result:
+Stable containers
+No unexpected restarts
+```
 
 ---
-
-> **Final Tip:** Don't just memorize answers. Practice by actually running these commands, building a small project with Docker Compose, and intentionally breaking things to learn debugging. Interviewers can tell the difference between memorized answers and real experience.
-
-**Good luck with your interview! 🚀**
