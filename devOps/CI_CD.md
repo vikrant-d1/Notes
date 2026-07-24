@@ -1,4 +1,149 @@
-# CI/CD & GitHub Interview Questions & Answers
+### Create Dockerfile:
+
+```Dockerfile
+# ---------- Dependencies ----------
+FROM node:22-alpine AS deps
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+
+# ---------- Build ----------
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build
+
+
+# ---------- Production ----------
+FROM node:22-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+```
+
+### Create CI/CD Application
+```YML
+name: Next.js CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  # ==============================
+  # CI
+  # ==============================
+  test:
+    name: Test and Build
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test -- --runInBand
+
+      - name: Build Next.js
+        run: npm run build
+
+
+  # ==============================
+  # CD
+  # ==============================
+  deploy:
+    name: Deploy to EC2
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/ec2_key
+
+          chmod 600 ~/.ssh/ec2_key
+
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy application
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh -i ~/.ssh/ec2_key \
+          "$EC2_USER@$EC2_HOST" << 'EOF'
+
+            set -e
+
+            cd /home/ubuntu/nextjs-app
+
+            echo "Pulling latest code..."
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "Building Docker image..."
+            docker build -t nextjs-app:${{ github.sha }} .
+
+            echo "Stopping old container..."
+            docker rm -f nextjs-app || true
+
+            echo "Starting new container..."
+            docker run -d \
+              --name nextjs-app \
+              --restart unless-stopped \
+              -p 127.0.0.1:3000:3000 \
+              nextjs-app:${{ github.sha }}
+
+            echo "Cleaning old Docker images..."
+            docker image prune -f
+
+            echo "Deployment completed."
+
+          EOF
+```
 
 ---
 
