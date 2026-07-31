@@ -1,4 +1,4 @@
-### 1. what are your must-haves in production for a Node service?
+### 1. What are your must-haves in production for a Node service?
 For a production-ready Node.js service, I focus on reliability, observability, security, scalability, and maintainability.
 
 **First, logging and monitoring.** I use structured logging with libraries like Pino or Winston and integrate an APM tool such as New Relic or Datadog. I also expose health endpoints like /health and /ready for Kubernetes or the load balancer.
@@ -105,4 +105,225 @@ I would use Redis as a centralized, atomic counter because all Node.js instances
 
 ### 5. Your Node app is on Kubernetes behind a load balancer. Traffic doubles after a campaign. CPU looks fine, but latency spikes from 200 milliseconds to 2 seconds. Database is healthy. Walk me through how you'd investigate and what metrics you'd check first.
 Healthy CPU doesn't necessarily mean the application isn't overloaded. In Node.js, a single blocked event loop, waiting on I/O, connection pool contention, or a slow downstream dependency can all increase response time dramatically while CPU usage remains relatively low. That's why I'd rely on traces and runtime metrics rather than CPU alone.
+
+## 1. Production Incident
+
+### Question
+
+Describe a production incident you handled end-to-end.
+
+### Strong Answer
+
+-   An alert was triggered because an e-commerce API started failing in
+    production.
+-   I opened **New Relic APM** and checked the failed transaction
+    traces.
+-   I identified the exact error and isolated the failing code path.
+-   The root cause was an incorrect variable/configuration causing the
+    API failure.
+-   I fixed the bug, added unit tests, and verified the fix in a
+    development environment.
+-   I deployed the fix using **canary deployment**.
+-   I monitored error rate, latency, logs, and New Relic metrics.
+-   After confirming stability, I shifted 100% of traffic to the new
+    version.
+
+------------------------------------------------------------------------
+
+## 2. N+1 Query in Prisma
+
+### Question
+
+How would you identify and fix an N+1 query?
+
+### Strong Answer
+
+1.  Detect slow transactions in New Relic.
+2.  Find the SQL query causing excessive database calls.
+3.  Confirm using Prisma query logs.
+4.  Fix using:
+    -   `include`
+    -   `select`
+    -   batching
+    -   DataLoader (especially for GraphQL)
+5.  Verify with tests.
+6.  Deploy to Dev.
+7.  Canary deployment.
+8.  Confirm latency improvement in New Relic.
+
+------------------------------------------------------------------------
+
+## 3. Zero Downtime Index Creation
+
+### Question
+
+How do you add an index to a large production table without downtime?
+
+### Strong Answer (Memorize)
+
+1.  Run **EXPLAIN ANALYZE**.
+2.  Confirm an index will improve performance.
+3.  Create the index without blocking writes.
+
+PostgreSQL:
+
+``` sql
+CREATE INDEX CONCURRENTLY idx_orders_user_id
+ON orders(user_id);
+```
+
+4.  Wait until index creation completes.
+5.  Deploy the application normally.
+6.  Canary deployment for the application.
+7.  Monitor New Relic and database metrics.
+8.  Confirm the query planner uses the index with `EXPLAIN ANALYZE`.
+
+If adding a new column: - Add nullable column. - Deploy
+backward-compatible code. - Backfill in batches. - Enable with feature
+flag. - Remove old code later (expand → migrate → contract).
+
+------------------------------------------------------------------------
+
+## 4. High CPU Usage
+
+### Question
+
+How do you prove Node.js is CPU-bound?
+
+### Strong Answer
+
+First, prove the problem.
+
+Check: - New Relic CPU usage - Event loop delay - Request latency -
+Database latency - External API latency
+
+If DB and network are healthy but CPU is high and event loop delay is
+high, it is likely CPU-bound.
+
+Then profile:
+
+-   Node.js Inspector (built-in)
+-   Clinic.js (external npm package)
+
+Remember:
+
+-   **New Relic = Monitoring**
+-   **Node Inspector / Clinic.js = Profiling**
+
+Fixes: - Optimize expensive algorithms. - Avoid unnecessary loops. -
+Move CPU-intensive work to Worker Threads. - Use PM2 cluster or
+Kubernetes replicas for horizontal scaling.
+
+------------------------------------------------------------------------
+
+## 5. Memory Leak
+
+### Question
+
+Memory keeps increasing until Kubernetes OOMKills the pod.
+
+### Strong Answer
+
+1.  Observe memory growth in New Relic.
+2.  Verify heap usage never drops after GC.
+3.  Capture heap snapshots using:
+    -   Node.js Inspector
+    -   heapdump
+4.  Compare snapshots.
+5.  Find retained objects.
+
+Common causes: - Global cache - Uncleared timers - Event listeners -
+Closures - Large Maps/Sets
+
+Fix the leak.
+
+Deploy with rolling/canary deployment.
+
+Monitor memory after deployment.
+
+Remember:
+
+-   **New Relic detects the leak.**
+-   **Heap Snapshot identifies the leaked object.**
+
+------------------------------------------------------------------------
+
+## 6. Latency Increased After Deployment
+
+### Question
+
+API latency increased from 200 ms to 3 seconds immediately after
+deployment.
+
+### Strong Answer
+
+1.  Confirm customer impact.
+2.  Check New Relic deployment markers.
+3.  Compare previous vs current deployment.
+4.  If customers are impacted significantly:
+    -   Roll back immediately.
+5.  Verify service recovery.
+6.  Debug root cause:
+    -   Slow query
+    -   Missing index
+    -   N+1 query
+    -   Infinite loop
+    -   External API
+7.  Fix.
+8.  Test.
+9.  Canary deployment.
+10. Monitor.
+
+Priority:
+
+Restore service first.
+
+Investigate later.
+
+------------------------------------------------------------------------
+
+## 7. Redis Failure
+
+### Question
+
+Redis goes down. Login becomes slow.
+
+### Strong Answer
+
+1.  Check Redis health.
+2.  Check connection errors.
+3.  Determine impact:
+    -   Cache only?
+    -   Session store?
+4.  If cache:
+    -   Bypass cache carefully.
+    -   Protect DB with rate limiting.
+5.  If session store:
+    -   Fail gracefully.
+6.  Restart or failover Redis.
+7.  Verify application recovery.
+8.  Perform RCA.
+
+------------------------------------------------------------------------
+
+# Interview Tips
+
+## Monitoring vs Profiling
+
+Monitoring: - New Relic - Prometheus - Grafana
+
+Profiling: - Node.js Inspector - Clinic.js - heapdump
+
+## Golden Incident Flow
+
+1.  Detect
+2.  Measure
+3.  Isolate
+4.  Mitigate
+5.  Restore
+6.  Root Cause Analysis
+7.  Permanent Fix
+8.  Canary Deployment
+9.  Monitor
+
 
