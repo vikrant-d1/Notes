@@ -668,11 +668,107 @@ Investigate later.
 8.  Perform RCA.
 
 
-### Monitoring vs Profiling
+#### Monitoring vs Profiling
 
 Monitoring: - New Relic - Prometheus - Grafana
 
 Profiling: - Node.js Inspector - Clinic.js - heapdump
+
+
+#### How do services communicate?
+
+Using:
+
+REST
+gRPC
+Kafka/Event-driven messaging
+RabbitMQ
+Amazon SQS (depending on the use case)
+
+#### Is Microservices always better?
+No.
+
+Microservices solve organizational and scaling problems but introduce significant operational complexity. A well-designed monolith is often the better choice for small teams and simpler applications.
+
+### Why API Gateway?
+It provides a single entry point for clients and centralizes concerns such as authentication, routing, rate limiting, logging, SSL termination, and request aggregation.
+
+#### You're building an e-commerce platform with User, Order, Payment, and Inventory services. How would they communicate?
+I'd use different communication mechanisms based on the business requirement. For synchronous operations that require an immediate response, such as fetching a user profile or validating an order, I'd use REST or gRPC. For internal, latency-sensitive communication, I'd prefer gRPC because of its performance and strongly typed contracts. For asynchronous workflows such as order creation, payment processing, inventory updates, notifications, and email sending, I'd use an event-driven architecture with Kafka. An API Gateway would serve as the single entry point for external clients, handling authentication, routing, rate limiting, and request aggregation.
+
+#### Difference between Retry and Circuit Breaker?
+
+**Retry**
+
+Tries again because failures may be temporary.
+
+**Circuit Breaker**
+
+Stops calling a consistently failing service until it has a chance to recover.
+
+### Why Timeout?
+To prevent blocked connections and threads when downstream services are slow or unavailable.
+
+### Why Service Discovery?
+Because service instances scale dynamically and their IP addresses change. Service discovery allows applications to locate healthy instances without hardcoding addresses.
+
+#### Your Payment Service is down, but your website must remain operational. How would you design the system?
+I'd configure a reasonable timeout for calls to the Payment Service so requests don't hang indefinitely. For transient failures, I'd retry a limited number of times using exponential backoff with jitter. If failures continue beyond the configured threshold, a circuit breaker would open to stop sending traffic to the unhealthy service and fail fast. The Order Service could return a user-friendly message or mark the order as "Payment Pending," depending on the business requirements. I'd isolate Payment Service resources using the Bulkhead pattern so failures don't affect other services, and I'd rely on service discovery to always connect to healthy service instances if multiple replicas are available.
+
+#### What is a Distributed Transaction?
+A transaction that spans multiple independent services or databases and requires coordination to keep data consistent.
+
+#### What is Two-Phase Commit?
+A distributed transaction protocol with two phases:
+
+Prepare
+Commit (or Rollback)
+
+The coordinator ensures all participants either commit or roll back together.
+
+#### Why isn't SQL BEGIN/COMMIT enough?
+Because SQL transactions work within a single database. In microservices, each service owns its own database, so a local transaction cannot guarantee consistency across services.
+
+#### Why is 2PC slow?
+Because it requires multiple network round trips, locks resources during the prepare phase, and waits for every participant before committing.
+
+#### Why isn't 2PC popular in Microservices?
+Because it reduces availability and scalability, introduces blocking, and creates a coordinator dependency. Modern distributed systems usually prefer eventual consistency with patterns like Saga.
+
+#### An order service updates its database, then the payment service fails. How do you keep the system consistent?
+If I were using a traditional distributed transaction, Two-Phase Commit could guarantee atomicity across the databases, but I generally wouldn't choose it for cloud-native microservices because of its blocking behavior, coordinator dependency, and scalability limitations. Instead, I'd use the Saga Pattern. The Order Service would create the order in a pending state and publish an event. The Payment Service would attempt the payment. If payment succeeds, the workflow continues to Inventory and Shipping. If payment fails, a compensating transaction would cancel the order, returning the system to a consistent business state through eventual consistency.
+
+#### Would you use 2PC in a modern e-commerce microservices system?
+Generally, no. While 2PC provides strong consistency, it doesn't scale well for high-throughput distributed systems because it blocks participants, depends on a coordinator, and increases latency. For most microservice architectures, I'd use the Saga Pattern with compensating transactions and accept eventual consistency, reserving 2PC for cases where strong atomicity across multiple resources is absolutely required.
+
+#### What is Saga Pattern?
+Saga is a distributed transaction pattern where a business transaction is split into multiple local transactions. If one step fails, compensating transactions undo previously completed steps to achieve eventual consistency.
+
+#### What is a Compensating Transaction?
+An action that reverses the business effect of a previous successful step. Examples include refunding a payment or cancelling an order.
+
+#### What is the Outbox Pattern?
+The Outbox Pattern stores business data and an integration event in the same database transaction. A background process later publishes the event to the message broker, ensuring events are not lost.
+
+#### Why not publish directly to Kafka?
+Because the database write and Kafka publish are separate operations. If one succeeds and the other fails, the system becomes inconsistent. The Outbox Pattern solves this by making the database update and event creation atomic.
+
+#### A customer places an order. The order is saved successfully, but the Kafka event isn't published because Kafka is temporarily unavailable. How would you solve this?
+I would implement the Outbox Pattern. Instead of writing to the Orders table and publishing to Kafka as two independent operations, I'd write both the order and an outbox event in the same database transaction. After the transaction commits, a background worker reads pending events from the Outbox table and publishes them to Kafka. If Kafka is unavailable, the worker retries later without losing the event. This guarantees that every committed business transaction eventually produces the corresponding integration event.
+
+#### Your application uses PostgreSQL with read replicas. A user updates their email address and immediately refreshes the page, but still sees the old email. Why?
+This is likely due to replication lag. The write was committed to the primary database, but the subsequent read was served from a replica that hadn't yet received the update. To provide a better user experience, I'd implement read-after-write consistency by routing the user's immediate follow-up reads to the primary for a short period or using session-aware routing. Other users can continue reading from replicas because temporary staleness is acceptable for that use case.
+
+#### Would you use strong consistency for every application?
+No. I choose the consistency model based on business requirements. For financial transactions and inventory reservations, I require strong consistency. For user preferences, I typically implement read-after-write consistency so users immediately see their own changes. For use cases like social feeds, analytics, notifications, or product catalogs, eventual consistency is usually sufficient because it offers better scalability and availability with acceptable temporary staleness.
+
+
+
+
+
+
+
+
 
 
 
