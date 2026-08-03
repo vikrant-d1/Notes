@@ -762,6 +762,29 @@ This is likely due to replication lag. The write was committed to the primary da
 #### Would you use strong consistency for every application?
 No. I choose the consistency model based on business requirements. For financial transactions and inventory reservations, I require strong consistency. For user preferences, I typically implement read-after-write consistency so users immediately see their own changes. For use cases like social feeds, analytics, notifications, or product catalogs, eventual consistency is usually sufficient because it offers better scalability and availability with acceptable temporary staleness.
 
+#### Why Elasticsearch instead of PostgreSQL?
+PostgreSQL is optimized for transactional workloads and relational data, while Elasticsearch is optimized for full-text search, relevance ranking, fuzzy matching, and large-scale search. I use PostgreSQL as the source of truth and Elasticsearch as a search index.
+
+#### Can PostgreSQL perform full-text search?
+Yes. PostgreSQL has built-in full-text search using tsvector and tsquery, and for many applications it's sufficient. However, Elasticsearch provides much richer capabilities such as advanced relevance scoring, fuzzy search, autocomplete, language analyzers, and distributed search at scale.
+
+#### Why not store all data in Elasticsearch?
+Because Elasticsearch is not designed to replace a transactional database. It lacks the strong transactional guarantees, relational constraints, and data integrity features that PostgreSQL provides.
+
+#### How is Elasticsearch kept in sync?
+Typically, PostgreSQL remains the source of truth. After a successful database transaction, an event is published (often using the Outbox Pattern with Kafka or another message broker), and an indexing service updates Elasticsearch asynchronously.
+
+#### Your product catalog has 100 million products. Users complain that search takes 8 seconds using PostgreSQL. What would you do?
+First, I'd verify whether the issue is caused by missing indexes or inefficient queries. If the requirement is advanced product search with relevance ranking, typo tolerance, autocomplete, and filters across a very large catalog, I'd introduce Elasticsearch rather than trying to force PostgreSQL to behave like a search engine. PostgreSQL would remain the source of truth, while Elasticsearch would maintain a searchable index that's updated asynchronously through events using the Outbox Pattern. This architecture gives fast search performance while preserving transactional integrity in PostgreSQL.
+
+#### Elasticsearch is faster than PostgreSQL.
+Elasticsearch is faster for search workloads because it uses an inverted index and is optimized for text search. PostgreSQL is optimized for transactional workloads. They solve different problems, and in production I use PostgreSQL as the source of truth and Elasticsearch as the search engine.
+
+#### A user updates a product name. How does Elasticsearch get updated?
+I wouldn't update PostgreSQL and Elasticsearch independently because that can lead to inconsistencies. Instead, I'd save the product update and an Outbox event in the same database transaction. A background worker reads pending Outbox events, updates the Elasticsearch index, and marks the event as processed. If Elasticsearch is temporarily unavailable, the worker retries later. This ensures reliable indexing while PostgreSQL remains the source of truth.
+
+#### What is Apache Solr?
+Apache Solr is an open-source enterprise search platform built on Apache Lucene. It provides fast full-text search, filtering, faceting, autocomplete, highlighting, and distributed search capabilities.
 
 
 
