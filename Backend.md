@@ -786,6 +786,11 @@ I wouldn't update PostgreSQL and Elasticsearch independently because that can le
 #### What is Apache Solr?
 Apache Solr is an open-source enterprise search platform built on Apache Lucene. It provides fast full-text search, filtering, faceting, autocomplete, highlighting, and distributed search capabilities.
 
+#### If you are not using RDS or ElastiCache, how do you monitor PostgreSQL and Redis?
+Since PostgreSQL and Redis are self-hosted, CloudWatch doesn't automatically collect their internal metrics or logs. We either configure the CloudWatch Agent to forward PostgreSQL logs and Redis logs, or, more commonly in Kubernetes or Docker environments, we expose metrics using PostgreSQL Exporter and Redis Exporter, scrape them with Prometheus, visualize them in Grafana, and send application logs to Loki. This gives us visibility into database connections, slow queries, cache hit ratios, memory usage, and application errors.
+
+
+
 
 
 
