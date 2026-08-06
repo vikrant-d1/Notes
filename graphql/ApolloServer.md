@@ -1,29 +1,82 @@
 # GraphQL 
+Top 15 packages every senior GraphQL developer should know
 
-## Table of Contents
+| Package                  | Importance |
+| ------------------------ | ---------- |
+| `graphql`                | ⭐⭐⭐⭐⭐      |
+| `@apollo/server`         | ⭐⭐⭐⭐⭐      |
+| `@graphql-tools/*`       | ⭐⭐⭐⭐⭐      |
+| `dataloader`             | ⭐⭐⭐⭐⭐      |
+| `graphql-scalars`        | ⭐⭐⭐⭐⭐      |
+| `graphql-shield`         | ⭐⭐⭐⭐⭐      |
+| `graphql-armor`          | ⭐⭐⭐⭐⭐      |
+| `graphql-depth-limit`    | ⭐⭐⭐⭐⭐      |
+| `graphql-cost-analysis`  | ⭐⭐⭐⭐⭐      |
+| `graphql-ws`             | ⭐⭐⭐⭐⭐      |
+| `@graphql-codegen/cli`   | ⭐⭐⭐⭐⭐      |
+| `@graphql-inspector/cli` | ⭐⭐⭐⭐⭐      |
+| `@apollo/subgraph`       | ⭐⭐⭐⭐⭐      |
+| `ioredis`                | ⭐⭐⭐⭐⭐      |
+| `zod`                    | ⭐⭐⭐⭐⭐      |
 
-1. [Fundamentals & Core Concepts](#1-fundamentals--core-concepts)
-2. [Schema Design & Type System](#2-schema-design--type-system)
-3. [Queries, Mutations & Subscriptions](#3-queries-mutations--subscriptions)
-4. [Resolvers — Deep Dive](#4-resolvers--deep-dive)
-5. [Data Fetching & the N+1 Problem](#5-data-fetching--the-n1-problem)
-6. [Authentication & Authorization](#6-authentication--authorization)
-7. [Error Handling](#7-error-handling)
-8. [Performance & Caching](#8-performance--caching)
-9. [Security](#9-security)
-10. [Subscriptions & Real-time](#10-subscriptions--real-time)
-11. [Testing](#11-testing)
-12. [Tooling & Ecosystem](#12-tooling--ecosystem)
-13. [GraphQL vs REST — Comparison & Drawbacks](#13-graphql-vs-rest--comparison--drawbacks)
-14. [Microservices & Federation](#14-microservices--federation)
-15. [Architecture & System Design (Tech Lead)](#15-architecture--system-design-tech-lead)
-16. [Team Leadership & Best Practices (Tech Lead)](#16-team-leadership--best-practices-tech-lead)
-17. [Node.js + GraphQL Integration](#17-nodejs--graphql-integration)
-18. [Advanced & Tricky Questions](#18-advanced--tricky-questions)
-19. [Scenario-Based Questions](#19-scenario-based-questions)
-20. [Coding Challenges](#20-coding-challenges)
 
----
+##Recommended Production Stack (Most Important)
+
+```
+graphql
+@apollo/server
+@graphql-tools/schema
+@graphql-tools/merge
+@graphql-tools/load
+
+@prisma/client
+prisma
+
+zod
+
+jsonwebtoken
+bcrypt
+graphql-shield
+
+dataloader
+ioredis
+
+graphql-scalars
+graphql-ws
+
+graphql-armor
+graphql-depth-limit
+graphql-cost-analysis
+
+@graphql-codegen/cli
+@graphql-inspector/cli
+
+pino
+@opentelemetry/api
+prom-client
+
+helmet
+cors
+compression
+
+dotenv
+
+```
+
+### GraphQL Armor
+
+GraphQL Armor protects against DoS attacks.
+
+```
+npm install graphql-armor
+```
+Provides
+- Depth Limit
+- Alias Limit
+- Tokens Limit
+- Directives Limit
+- Cost Limit
+
 
 ## 1. Fundamentals & Core Concepts
 
