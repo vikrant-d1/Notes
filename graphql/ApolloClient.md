@@ -1,36 +1,36 @@
-# GraphQL Client Interview Guide (React + Apollo Client)
+## GraphQL Client Interview Guide (React + Apollo Client)
 
 
-# What is a GraphQL Client?
+## What is a GraphQL Client?
 
 A GraphQL Client is a frontend library that communicates with a GraphQL server. It executes queries, mutations, and subscriptions while providing built-in caching, loading and error state management, authentication, pagination, optimistic UI updates, and automatic cache synchronization.
 
 ---
 
-## Using Apollo Client vs Fetch
+#### Using Apollo Client vs Fetch
 
 Using `fetch()` requires manually handling authentication, loading states, errors, caching, retries, pagination, and UI updates. A GraphQL client like Apollo Client provides these features out of the box, reducing boilerplate code and improving performance and developer productivity.
 
 ---
 
-# Why is Caching Important?
+## Why is Caching Important?
 
 Caching stores previously fetched data locally, reducing unnecessary network requests, improving application performance, and delivering a faster user experience.
 
 ---
 
-# What is Cache Normalization?
+## What is Cache Normalization?
 Cache normalization stores every object only once using a unique identifier, typically `id` and `__typename`. Multiple queries reference the same cached object, ensuring consistency and efficient updates throughout the application.
 
 ---
 
-# What is Optimistic UI?
+## What is Optimistic UI?
 Optimistic UI immediately updates the interface after a user action by assuming the server request will succeed. If the request later fails, the client rolls back the optimistic changes to maintain consistency.
 
 ---
 
 
-## Example: useQuery()
+#### Example: useQuery()
 
 ```tsx
 const { loading, data, error } = useQuery(GET_USERS);
@@ -40,7 +40,7 @@ Runs immediately when the component mounts.
 
 ---
 
-## Example: useLazyQuery()
+#### Example: useLazyQuery()
 
 ```tsx
 const [getUsers, { loading, data }] = useLazyQuery(GET_USERS);
@@ -58,7 +58,7 @@ Runs only when the function is called.
 
 ---
 
-# Common React GraphQL Hooks
+## Common React GraphQL Hooks
 
 | Hook | Purpose |
 |------|---------|
@@ -72,9 +72,9 @@ Runs only when the function is called.
 
 ---
 
-# Hook Usage Examples
+## Hook Usage Examples
 
-## useQuery
+#### useQuery
 
 ```tsx
 const { loading, error, data } = useQuery(GET_USERS);
@@ -82,7 +82,7 @@ const { loading, error, data } = useQuery(GET_USERS);
 
 ---
 
-## useLazyQuery
+#### useLazyQuery
 
 ```tsx
 const [loadUsers, { data }] = useLazyQuery(GET_USERS);
@@ -90,7 +90,7 @@ const [loadUsers, { data }] = useLazyQuery(GET_USERS);
 
 ---
 
-## useMutation
+#### useMutation
 
 ```tsx
 const [createUser] = useMutation(CREATE_USER);
@@ -104,7 +104,7 @@ createUser({
 
 ---
 
-## useSubscription
+#### useSubscription
 
 ```tsx
 const { data } = useSubscription(USER_ADDED);
@@ -112,7 +112,7 @@ const { data } = useSubscription(USER_ADDED);
 
 ---
 
-## useApolloClient
+#### useApolloClient
 
 ```tsx
 const client = useApolloClient();
@@ -124,7 +124,7 @@ client.refetchQueries({
 
 ---
 
-## useFragment
+#### useFragment
 
 ```tsx
 const user = useFragment({
@@ -135,7 +135,7 @@ const user = useFragment({
 
 ---
 
-## useReactiveVar
+#### useReactiveVar
 
 ```tsx
 const isLoggedIn = useReactiveVar(authVar);
@@ -143,47 +143,47 @@ const isLoggedIn = useReactiveVar(authVar);
 
 ---
 
-## What is a GraphQL Client?
+#### What is a GraphQL Client?
  A GraphQL Client is a library that communicates with a GraphQL server and provides features such as executing queries, mutations, subscriptions, caching, authentication, loading and error state management, pagination, and automatic UI synchronization.
 
 ---
 
-## Why not use `fetch()`?
+#### Why not use `fetch()`?
 
 Because `fetch()` requires manually implementing authentication, loading states, error handling, caching, retries, pagination, and state management. GraphQL clients handle these concerns automatically.
 
 ---
 
-## Why is caching important?
+#### Why is caching important?
 
 Caching stores previously fetched data locally, reducing unnecessary network requests, improving application performance, and providing a faster user experience.
 
 ---
 
-## What is cache normalization?
+#### What is cache normalization?
 
 Cache normalization stores each object only once using a unique identifier (typically `id` and `__typename`), allowing all queries to reference the same object and keeping data consistent across the application.
 
 ---
 
-## What is Optimistic UI?
+#### What is Optimistic UI?
 
 Optimistic UI immediately updates the interface before receiving the server response, providing a smoother user experience. If the request fails, the client automatically rolls back the optimistic update.
 
 ---
 
-## Difference between `useQuery()` and `useLazyQuery()`?
+#### Difference between `useQuery()` and `useLazyQuery()`?
 
 `useQuery()` executes automatically when the component renders, making it suitable for initial page data. `useLazyQuery()` executes only when explicitly triggered, making it ideal for search forms, filters, or button clicks.
 
 ---
 
 
-# Apollo Client Hooks 
+## Apollo Client Hooks 
 
-# 1. useQuery()
+## 1. useQuery()
 
-## What is useQuery()?
+#### What is useQuery()?
 
 `useQuery()` is a React hook provided by Apollo Client that automatically executes a GraphQL query when the component renders.
 
@@ -191,7 +191,7 @@ It is the most commonly used hook for fetching data.
 
 ---
 
-## Syntax
+#### Syntax
 
 ```tsx
 const { loading, error, data } = useQuery(QUERY);
@@ -199,7 +199,7 @@ const { loading, error, data } = useQuery(QUERY);
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { gql, useQuery } from "@apollo/client";
@@ -232,7 +232,7 @@ function Users() {
 
 ---
 
-## Common Options
+#### Common Options
 
 ```tsx
 useQuery(GET_USERS, {
@@ -243,7 +243,7 @@ useQuery(GET_USERS, {
 });
 ```
 
-### Common Options
+###### Common Options
 
 | Option | Purpose |
 |---------|---------|
@@ -256,7 +256,7 @@ useQuery(GET_USERS, {
 
 ---
 
-## Returns
+#### Returns
 
 ```tsx
 const {
@@ -271,15 +271,15 @@ const {
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useQuery() automatically executes a GraphQL query when a component mounts and returns loading, error, and data states while integrating with Apollo Client's cache.*
 
 ---
 
-# 2. useLazyQuery()
+## 2. useLazyQuery()
 
-## What is useLazyQuery()?
+#### What is useLazyQuery()?
 
 `useLazyQuery()` works like `useQuery()`, but it does **not** execute automatically.
 
@@ -287,7 +287,7 @@ Instead, it returns a function that you call manually.
 
 ---
 
-## Syntax
+#### Syntax
 
 ```tsx
 const [getUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
@@ -295,7 +295,7 @@ const [getUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 const [getUsers, { loading, data }] = useLazyQuery(GET_USERS);
@@ -307,7 +307,7 @@ const [getUsers, { loading, data }] = useLazyQuery(GET_USERS);
 
 ---
 
-## With Variables
+#### With Variables
 
 ```tsx
 getUsers({
@@ -319,15 +319,15 @@ getUsers({
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useLazyQuery() provides manual control over query execution. Unlike useQuery(), it runs only when the returned function is called.
 
 ---
 
-# 3. useMutation()
+## 3. useMutation()
 
-## What is useMutation()?
+#### What is useMutation()?
 
 `useMutation()` executes GraphQL mutations such as:
 
@@ -339,7 +339,7 @@ Unlike queries, mutations execute only when explicitly called.
 
 ---
 
-## Syntax
+#### Syntax
 
 ```tsx
 const [createUser, { loading, error, data }] =
@@ -348,7 +348,7 @@ useMutation(CREATE_USER);
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 const CREATE_USER = gql`
@@ -371,7 +371,7 @@ createUser({
 
 ---
 
-## Common Options
+#### Common Options
 
 ```tsx
 useMutation(CREATE_USER, {
@@ -384,21 +384,21 @@ useMutation(CREATE_USER, {
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 > useMutation() executes GraphQL mutations for creating, updating, or deleting data and provides loading, error, and response states.
 
 ---
 
-# 4. useSubscription()
+## 4. useSubscription()
 
-## What is useSubscription()?
+#### What is useSubscription()?
 
 `useSubscription()` receives real-time updates from the GraphQL server using WebSockets.
 
 ---
 
-## Syntax
+#### Syntax
 
 ```tsx
 const { data } = useSubscription(MESSAGE_ADDED);
@@ -406,7 +406,7 @@ const { data } = useSubscription(MESSAGE_ADDED);
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 const MESSAGE_ADDED = gql`
@@ -423,15 +423,15 @@ const { data } = useSubscription(MESSAGE_ADDED);
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useSubscription() listens for real-time GraphQL events over a WebSocket connection and updates the UI automatically when new data is received.
 
 ---
 
-# 5. useFragment()
+## 5. useFragment()
 
-## What is useFragment()?
+#### What is useFragment()?
 
 `useFragment()` reads normalized cached data using GraphQL fragments without executing a network request.
 
@@ -439,7 +439,7 @@ Available in Apollo Client v3.8+.
 
 ---
 
-## Fragment
+#### Fragment
 
 ```graphql
 fragment UserFragment on User {
@@ -451,7 +451,7 @@ fragment UserFragment on User {
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 const user = useFragment({
@@ -465,7 +465,7 @@ const user = useFragment({
 
 ---
 
-## Benefits
+#### Benefits
 
 - Reads from cache only
 - No API call
@@ -474,7 +474,7 @@ const user = useFragment({
 
 ---
 
-## When to Use
+#### When to Use
 
 - Large applications
 - Shared UI components
@@ -482,15 +482,15 @@ const user = useFragment({
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useFragment() reads normalized data directly from Apollo Client's cache using GraphQL fragments, avoiding unnecessary network requests.
 
 ---
 
-# 6. useReactiveVar()
+## 6. useReactiveVar()
 
-## What is useReactiveVar()?
+#### What is useReactiveVar()?
 
 `useReactiveVar()` is used to read local state managed by Apollo Reactive Variables.
 
@@ -498,7 +498,7 @@ Reactive variables update subscribed components automatically without React Cont
 
 ---
 
-## Create Variable
+#### Create Variable
 
 ```tsx
 import { makeVar } from "@apollo/client";
@@ -508,7 +508,7 @@ export const isLoggedInVar = makeVar(false);
 
 ---
 
-## Read Variable
+#### Read Variable
 
 ```tsx
 const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -516,7 +516,7 @@ const isLoggedIn = useReactiveVar(isLoggedInVar);
 
 ---
 
-## Update Variable
+#### Update Variable
 
 ```tsx
 isLoggedInVar(true);
@@ -524,7 +524,7 @@ isLoggedInVar(true);
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - Authentication
 - Theme
@@ -534,15 +534,15 @@ isLoggedInVar(true);
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useReactiveVar() subscribes a component to Apollo Reactive Variables, allowing local state updates without external state management libraries.
 
 ---
 
-# 7. useApolloClient()
+## 7. useApolloClient()
 
-## What is useApolloClient()?
+#### What is useApolloClient()?
 
 `useApolloClient()` provides direct access to the Apollo Client instance.
 
@@ -550,7 +550,7 @@ Useful for performing cache operations or executing queries programmatically.
 
 ---
 
-## Syntax
+#### Syntax
 
 ```tsx
 const client = useApolloClient();
@@ -558,7 +558,7 @@ const client = useApolloClient();
 
 ---
 
-## Execute Query
+#### Execute Query
 
 ```tsx
 const result = await client.query({
@@ -568,7 +568,7 @@ const result = await client.query({
 
 ---
 
-## Clear Cache
+#### Clear Cache
 
 ```tsx
 client.clearStore();
@@ -576,7 +576,7 @@ client.clearStore();
 
 ---
 
-## Reset Cache
+#### Reset Cache
 
 ```tsx
 client.resetStore();
@@ -584,7 +584,7 @@ client.resetStore();
 
 ---
 
-## Refetch Queries
+#### Refetch Queries
 
 ```tsx
 client.refetchQueries({
@@ -594,7 +594,7 @@ client.refetchQueries({
 
 ---
 
-## When to Use
+#### When to Use
 
 - Manual query execution
 - Cache management
@@ -603,15 +603,15 @@ client.refetchQueries({
 
 ---
 
-## Interview Definition
+#### Interview Definition
 
 useApolloClient() returns the Apollo Client instance, allowing manual execution of queries, mutations, cache updates, and store management.
 
 ---
 
-# Frequently Asked Interview Questions
+## Frequently Asked Interview Questions
 
-## What is the difference between useQuery() and useLazyQuery()?
+#### What is the difference between useQuery() and useLazyQuery()?
 
 | useQuery() | useLazyQuery() |
 |------------|----------------|
@@ -620,37 +620,37 @@ useApolloClient() returns the Apollo Client instance, allowing manual execution 
 
 ---
 
-## When should you use useMutation()?
+#### When should you use useMutation()?
 
 Use `useMutation()` for operations that modify server-side data, such as creating, updating, deleting records, user login, or submitting forms.
 
 ---
 
-## When should you use useSubscription()?
+#### When should you use useSubscription()?
 
 Use `useSubscription()` when your application requires real-time updates, such as chat messages, notifications, live dashboards, stock prices, or sports scores.
 
 ---
 
-## What is useFragment()?
+#### What is useFragment()?
 
 `useFragment()` reads normalized data directly from Apollo Client's cache using GraphQL fragments. It avoids unnecessary network requests and promotes reusable components.
 
 ---
 
-## What is useReactiveVar()?
+#### What is useReactiveVar()?
 
 `useReactiveVar()` subscribes a component to Apollo Reactive Variables, making it ideal for lightweight local state management such as authentication status, themes, or UI preferences.
 
 ---
 
-## What is useApolloClient()?
+#### What is useApolloClient()?
 
 `useApolloClient()` gives direct access to the Apollo Client instance, allowing manual queries, cache reads and writes, cache clearing, refetching queries, and store management.
 
 ---
 
-# Quick Interview Summary
+## Quick Interview Summary
 
 | Hook | Purpose |
 |------|---------|
@@ -671,12 +671,12 @@ Use `useSubscription()` when your application requires real-time updates, such a
 > - **Local state:** `useReactiveVar()`
 > - **Advanced client control:** `useApolloClient()`
 
-# Apollo Client Cache Internals & Normalization – Complete Interview Guide
+## Apollo Client Cache Internals & Normalization – Complete Interview Guide
 Learn how Apollo Client's cache works internally, how cache normalization improves performance, and how to answer interview questions confidently.
 
 ---
 
-# What is Apollo Cache?
+## What is Apollo Cache?
 
 Apollo Client uses an **InMemoryCache** to store GraphQL query results in the browser.
 
@@ -697,7 +697,7 @@ GraphQL Server
 
 ---
 
-# Why Do We Need Cache?
+## Why Do We Need Cache?
 
 Without cache:
 
@@ -764,7 +764,7 @@ No Network Request
 
 ---
 
-## Benefits
+#### Benefits
 
 - Faster UI
 - Less network traffic
@@ -775,7 +775,7 @@ No Network Request
 
 ---
 
-# How Apollo Cache Works
+## How Apollo Cache Works
 
 Suppose the server returns:
 
@@ -813,7 +813,7 @@ Each object is stored only once.
 
 ---
 
-# What is Cache Normalization?
+## What is Cache Normalization?
 
 Normalization means:
 
@@ -868,7 +868,7 @@ Both queries reference the same cached object.
 
 ---
 
-# Why is Normalization Important?
+## Why is Normalization Important?
 
 Imagine three screens:
 
@@ -929,7 +929,7 @@ Updating it updates every component that references it.
 
 ---
 
-# Internal Cache Structure
+## Internal Cache Structure
 
 Apollo's cache looks similar to this:
 
@@ -973,7 +973,7 @@ User:2
 
 ---
 
-# Cache IDs
+## Cache IDs
 
 Apollo identifies objects using:
 
@@ -1013,7 +1013,7 @@ Post:12
 
 ---
 
-# Why __typename?
+## Why __typename?
 
 Suppose:
 
@@ -1045,7 +1045,7 @@ No conflicts occur.
 
 ---
 
-# Reading from Cache
+## Reading from Cache
 
 Apollo checks the cache before making a network request.
 
@@ -1079,7 +1079,7 @@ Call GraphQL Server
 
 ---
 
-# Writing to Cache
+## Writing to Cache
 
 After a successful query:
 
@@ -1105,7 +1105,7 @@ Update Components
 
 ---
 
-# Cache Updates After Mutation
+## Cache Updates After Mutation
 
 Suppose we update a user.
 
@@ -1145,7 +1145,7 @@ No manual state management is required.
 
 ---
 
-# Cache Policies (Type Policies)
+## Cache Policies (Type Policies)
 
 Apollo allows custom cache behavior.
 
@@ -1189,7 +1189,7 @@ User: {
 
 ---
 
-# Fetch Policies
+## Fetch Policies
 
 Fetch policies control where Apollo retrieves data.
 
@@ -1212,9 +1212,9 @@ useQuery(GET_USERS,{
 
 ---
 
-# Cache API
+## Cache API
 
-## Read Query
+#### Read Query
 
 ```tsx
 const data = client.readQuery({
@@ -1224,7 +1224,7 @@ const data = client.readQuery({
 
 ---
 
-## Write Query
+#### Write Query
 
 ```tsx
 client.writeQuery({
@@ -1237,7 +1237,7 @@ client.writeQuery({
 
 ---
 
-## Read Fragment
+#### Read Fragment
 
 ```tsx
 client.readFragment({
@@ -1248,7 +1248,7 @@ client.readFragment({
 
 ---
 
-## Write Fragment
+#### Write Fragment
 
 ```tsx
 client.writeFragment({
@@ -1262,7 +1262,7 @@ client.writeFragment({
 
 ---
 
-## Modify Cache
+#### Modify Cache
 
 ```tsx
 client.cache.modify({
@@ -1277,7 +1277,7 @@ client.cache.modify({
 
 ---
 
-## Evict Object
+#### Evict Object
 
 ```tsx
 client.cache.evict({
@@ -1287,7 +1287,7 @@ client.cache.evict({
 
 ---
 
-## Garbage Collection
+#### Garbage Collection
 
 ```tsx
 client.cache.gc();
@@ -1297,7 +1297,7 @@ Garbage collection removes orphaned objects that are no longer referenced in the
 
 ---
 
-# Cache Lifecycle
+## Cache Lifecycle
 
 ```text
 Component
@@ -1354,43 +1354,43 @@ Automatic UI Re-render
 ---
 
 
-## What is Apollo Cache?
+#### What is Apollo Cache?
 
 Apollo Cache is an in-memory normalized data store that caches GraphQL query results, reducing unnecessary network requests and improving application performance.
 
 ---
 
-## What is Cache Normalization?
+#### What is Cache Normalization?
 
 Cache normalization stores each object only once using a unique identifier (typically `id` and `__typename`). Multiple queries reference the same object, ensuring consistency and efficient updates.
 
 ---
 
-## Why is `__typename` important?
+#### Why is `__typename` important?
 
 `__typename` identifies the GraphQL type of an object. Combined with `id`, it creates unique cache keys such as `User:1` or `Post:1`, preventing collisions between different object types.
 
 ---
 
-## Why is normalization better than storing raw JSON?
+#### Why is normalization better than storing raw JSON?
 
 Normalization eliminates duplicate objects, reduces memory usage, keeps data synchronized across the application, and allows Apollo Client to update all dependent components automatically after a mutation.
 
 ---
 
-## What happens after a mutation?
+#### What happens after a mutation?
 
 Apollo writes the returned object into the normalized cache. Any component referencing that object is automatically re-rendered with the updated data.
 
 ---
 
-## What is the default fetch policy?
+#### What is the default fetch policy?
 
 The default fetch policy is **`cache-first`**, which returns cached data when available and falls back to the network if the cache doesn't contain the requested data.
 
 ---
 
-## What is the difference between `cache-first` and `network-only`?
+#### What is the difference between `cache-first` and `network-only`?
 
 | cache-first | network-only |
 |--------------|--------------|
@@ -1399,25 +1399,25 @@ The default fetch policy is **`cache-first`**, which returns cached data when av
 
 ---
 
-## What does `cache.modify()` do?
+#### What does `cache.modify()` do?
 
 `cache.modify()` updates specific fields of a cached object without replacing the entire object. It is commonly used to append items to lists or update individual fields after mutations.
 
 ---
 
-## What is garbage collection?
+#### What is garbage collection?
 
 Garbage collection removes cached objects that are no longer referenced by any active query, helping reduce memory usage.
 
 ---
 
-# Apollo Client Fetch Policies (Interview Guide)
+## Apollo Client Fetch Policies (Interview Guide)
 
 > **Fetch Policies** determine where Apollo Client retrieves data from when executing a GraphQL query: **Cache**, **Network**, or **Both**.
 
 ---
 
-# What is a Fetch Policy?
+## What is a Fetch Policy?
 
 A **Fetch Policy** tells Apollo Client how to fetch data for a query.
 
@@ -1429,7 +1429,7 @@ It controls whether Apollo should:
 
 ---
 
-# Available Fetch Policies
+## Available Fetch Policies
 
 | Fetch Policy | Description | Best Use Case |
 |--------------|-------------|---------------|
@@ -1442,16 +1442,16 @@ It controls whether Apollo should:
 
 ---
 
-# 1. cache-first (Default)
+## 1. cache-first (Default)
 
-## Definition
+#### Definition
 
 Apollo checks the cache first.
 
 - If data exists → Return cached data.
 - If data doesn't exist → Fetch from the server and store it in the cache.
 
-### Flow
+###### Flow
 
 ```text
 Cache
@@ -1461,7 +1461,7 @@ Cache
    └── Data Missing → Fetch from Server → Save to Cache
 ```
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1469,28 +1469,28 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Dashboard
 - User Profile
 - Product List
 - Blog Posts
 
-### Interview Answer
+###### Interview Answer
 
 > **`cache-first` is the default Apollo fetch policy. It checks the cache first and only makes a network request if the requested data is not available.**
 
 ---
 
-# 2. cache-only
+## 2. cache-only
 
-## Definition
+#### Definition
 
 Apollo only reads data from the cache.
 
 No network request is ever made.
 
-### Flow
+###### Flow
 
 ```text
 Cache
@@ -1500,7 +1500,7 @@ Cache
    └── Data Missing → No Request
 ```
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1508,27 +1508,27 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Offline applications
 - Local state
 - Previously fetched data
 
-### Interview Answer
+###### Interview Answer
 
 > **`cache-only` reads data exclusively from the cache and never contacts the server.**
 
 ---
 
-# 3. network-only
+## 3. network-only
 
-## Definition
+#### Definition
 
 Apollo ignores the cache and always requests fresh data from the server.
 
 The response is then stored in the cache.
 
-### Flow
+###### Flow
 
 ```text
 Server
@@ -1543,7 +1543,7 @@ Save to Cache
 Render UI
 ```
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1551,25 +1551,25 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Reports
 - Admin Dashboard
 - Frequently changing data
 
-### Interview Answer
+###### Interview Answer
 
 > **`network-only` always fetches fresh data from the server and updates the Apollo cache with the response.**
 
 ---
 
-# 4. no-cache
+## 4. no-cache
 
-## Definition
+#### Definition
 
 Apollo always fetches fresh data from the server but never stores the response in the cache.
 
-### Flow
+###### Flow
 
 ```text
 Server
@@ -1583,7 +1583,7 @@ Render UI
 (No Cache)
 ```
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1591,28 +1591,28 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Login
 - OTP Verification
 - Payment Processing
 - Sensitive Data
 
-### Interview Answer
+###### Interview Answer
 
 > **`no-cache` always fetches fresh data and skips writing the response to the Apollo cache.**
 
 ---
 
-# 5. cache-and-network
+## 5. cache-and-network
 
-## Definition
+#### Definition
 
 Apollo immediately returns cached data and simultaneously requests fresh data from the server.
 
 When the server responds, Apollo updates the cache and automatically re-renders the UI.     
 
-### Flow
+###### Flow
 
 ```text
 Cache
@@ -1630,7 +1630,7 @@ Update Cache
 Update UI
 ```
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1638,26 +1638,26 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Social Media Feed
 - News Feed
 - Dashboard
 - Product Catalog
 
-### Interview Answer
+###### Interview Answer
 
 > **`cache-and-network` returns cached data immediately while also fetching fresh data from the server. Once the network response arrives, the cache and UI are updated automatically.**
 
 ---
 
-# 6. standby
+## 6. standby
 
-## Definition
+#### Definition
 
 The query remains inactive until it is manually triggered or reactivated.
 
-### Example
+###### Example
 
 ```tsx
 const { data } = useQuery(GET_USERS, {
@@ -1665,19 +1665,19 @@ const { data } = useQuery(GET_USERS, {
 });
 ```
 
-### Best For
+###### Best For
 
 - Hidden Tabs
 - Background Screens
 - Optional Components
 
-### Interview Answer
+###### Interview Answer
 
 > **`standby` keeps the query inactive until it is explicitly used or refetched.**
 
 ---
 
-# Fetch Policy Comparison
+## Fetch Policy Comparison
 
 | Policy | Cache | Network | Saves Cache | Best Use Case |
 |----------|:----:|:-------:|:-----------:|---------------|
@@ -1690,15 +1690,15 @@ const { data } = useQuery(GET_USERS, {
 
 ---
 
-# Frequently Asked Interview Questions
+## Frequently Asked Interview Questions
 
-## What is the default fetch policy?
+#### What is the default fetch policy?
 
 **Answer:** `cache-first`
 
 ---
 
-## Difference between `cache-first` and `network-only`
+#### Difference between `cache-first` and `network-only`
 
 | cache-first | network-only |
 |--------------|--------------|
@@ -1708,7 +1708,7 @@ const { data } = useQuery(GET_USERS, {
 
 ---
 
-## Difference between `network-only` and `no-cache`
+#### Difference between `network-only` and `no-cache`
 
 | network-only | no-cache |
 |--------------|-----------|
@@ -1717,7 +1717,7 @@ const { data } = useQuery(GET_USERS, {
 
 ---
 
-## Difference between `cache-first` and `cache-and-network`
+#### Difference between `cache-first` and `cache-and-network`
 
 | cache-first | cache-and-network |
 |--------------|-------------------|
@@ -1726,7 +1726,7 @@ const { data } = useQuery(GET_USERS, {
 
 ---
 
-## Which fetch policy is best for login?
+#### Which fetch policy is best for login?
 
 **Answer:** `no-cache`
 
@@ -1734,7 +1734,7 @@ Reason: Login responses are sensitive and usually shouldn't be cached.
 
 ---
 
-## Which fetch policy is best for dashboards?
+#### Which fetch policy is best for dashboards?
 
 **Answer:**
 
@@ -1743,7 +1743,7 @@ Reason: Login responses are sensitive and usually shouldn't be cached.
 
 ---
 
-# Quick Interview Summary
+## Quick Interview Summary
 
 | Fetch Policy | One-Line Explanation |
 |---------------|----------------------|
@@ -1756,25 +1756,25 @@ Reason: Login responses are sensitive and usually shouldn't be cached.
 
 ---
 
-# Apollo Client Fetch Policies – 20+ Real Production Scenarios (Interview Guide)
+## Apollo Client Fetch Policies – 20+ Real Production Scenarios (Interview Guide)
 
 > These are real-world scenarios commonly discussed in GraphQL and Apollo Client interviews. Learn **which fetch policy to use and why**.
 
 ---
 
-# Scenario 1: Dashboard
+## Scenario 1: Dashboard
 
-### Situation
+###### Situation
 
 A user opens the dashboard multiple times.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-first"
 ```
 
-### Why?
+###### Why?
 
 - Dashboard data doesn't change every second.
 - Cache provides instant loading.
@@ -1782,337 +1782,337 @@ fetchPolicy: "cache-first"
 
 ---
 
-# Scenario 2: User Profile
+## Scenario 2: User Profile
 
-### Situation
+###### Situation
 
 The user visits their profile repeatedly.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-first"
 ```
 
-### Why?
+###### Why?
 
 Profile information changes infrequently, so cached data improves performance.
 
 ---
 
-# Scenario 3: Product Listing (E-commerce)
+## Scenario 3: Product Listing (E-commerce)
 
-### Situation
+###### Situation
 
 Products are updated occasionally, but users expect fast loading.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-and-network"
 ```
 
-### Why?
+###### Why?
 
 Show cached products immediately and refresh them in the background.
 
 ---
 
-# Scenario 4: News Feed
+## Scenario 4: News Feed
 
-### Situation
+###### Situation
 
 News articles are continuously published.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-and-network"
 ```
 
-### Why?
+###### Why?
 
 Users see cached news instantly while receiving the latest articles automatically.
 
 ---
 
-# Scenario 5: Social Media Feed
+## Scenario 5: Social Media Feed
 
-### Situation
+###### Situation
 
 Posts are added every minute.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-and-network"
 ```
 
-### Why?
+###### Why?
 
 Fast initial rendering with background updates.
 
 ---
 
-# Scenario 6: Stock Market Dashboard
+## Scenario 6: Stock Market Dashboard
 
-### Situation
+###### Situation
 
 Stock prices change every second.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "network-only"
 ```
 
-### Why?
+###### Why?
 
 Always display the latest prices.
 
 ---
 
-# Scenario 7: Admin Dashboard
+## Scenario 7: Admin Dashboard
 
-### Situation
+###### Situation
 
 Administrators monitor frequently changing business data.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "network-only"
 ```
 
-### Why?
+###### Why?
 
 Fresh data is more important than loading speed.
 
 ---
 
-# Scenario 8: Analytics Reports
+## Scenario 8: Analytics Reports
 
-### Situation
+###### Situation
 
 Sales reports change frequently.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "network-only"
 ```
 
-### Why?
+###### Why?
 
 Reports must always display current information.
 
 ---
 
-# Scenario 9: Login
+## Scenario 9: Login
 
-### Situation
+###### Situation
 
 User authentication.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "no-cache"
 ```
 
-### Why?
+###### Why?
 
 Authentication responses should not be stored in cache.
 
 ---
 
-# Scenario 10: OTP Verification
+## Scenario 10: OTP Verification
 
-### Situation
+###### Situation
 
 Verify a one-time password.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "no-cache"
 ```
 
-### Why?
+###### Why?
 
 Every verification request must go to the server.
 
 ---
 
-# Scenario 11: Payment Confirmation
+## Scenario 11: Payment Confirmation
 
-### Situation
+###### Situation
 
 Processing an online payment.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "no-cache"
 ```
 
-### Why?
+###### Why?
 
 Payment responses should never be cached.
 
 ---
 
-# Scenario 12: Search Results
+## Scenario 12: Search Results
 
-### Situation
+###### Situation
 
 Users search for products or users.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "network-only"
 ```
 
-### Why?
+###### Why?
 
 Each search query is different and should return fresh results.
 
 ---
 
-# Scenario 13: Auto Complete Search
+## Scenario 13: Auto Complete Search
 
-### Situation
+###### Situation
 
 Suggestions while typing.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "network-only"
 ```
 
-### Why?
+###### Why?
 
 Suggestions change with every keystroke.
 
 ---
 
-# Scenario 14: Shopping Cart
+## Scenario 14: Shopping Cart
 
-### Situation
+###### Situation
 
 User adds or removes items.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-first"
 ```
 
-### Why?
+###### Why?
 
 The cart is frequently accessed, and updates are handled through cache after mutations.
 
 ---
 
-# Scenario 15: Notifications
+## Scenario 15: Notifications
 
-### Situation
+###### Situation
 
 Unread notification count.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-and-network"
 ```
 
-### Why?
+###### Why?
 
 Display cached notifications immediately while checking for new ones.
 
 ---
 
-# Scenario 16: Chat Messages
+## Scenario 16: Chat Messages
 
-### Situation
+###### Situation
 
 Real-time messaging.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-and-network"
 ```
 
-### Better Option
+###### Better Option
 
 Use **GraphQL Subscriptions** for live updates.
 
 ---
 
-# Scenario 17: Settings Page
+## Scenario 17: Settings Page
 
-### Situation
+###### Situation
 
 Application settings rarely change.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-first"
 ```
 
-### Why?
+###### Why?
 
 Provides instant loading with minimal server requests.
 
 ---
 
-# Scenario 18: Offline Mode
+## Scenario 18: Offline Mode
 
-### Situation
+###### Situation
 
 The application works without internet access.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "cache-only"
 ```
 
-### Why?
+###### Why?
 
 Only cached data is available.
 
 ---
 
-# Scenario 19: Hidden Tab
+## Scenario 19: Hidden Tab
 
-### Situation
+###### Situation
 
 A background or inactive tab.
 
-### Fetch Policy
+###### Fetch Policy
 
 ```tsx
 fetchPolicy: "standby"
 ```
 
-### Why?
+###### Why?
 
 Avoid unnecessary updates until the tab becomes active.
 
 ---
 
-# Scenario 20: User Logout
+## Scenario 20: User Logout
 
-### Situation
+###### Situation
 
 User signs out.
 
-### Action
+###### Action
 
 ```tsx
 client.clearStore();
@@ -2124,19 +2124,19 @@ or
 client.resetStore();
 ```
 
-### Why?
+###### Why?
 
 Remove all cached user data to prevent data leakage.
 
 ---
 
-# Scenario 21: User Updates Their Profile
+## Scenario 21: User Updates Their Profile
 
-### Situation
+###### Situation
 
 User changes their name.
 
-### Best Practice
+###### Best Practice
 
 Use:
 
@@ -2150,55 +2150,55 @@ or
 writeFragment()
 ```
 
-### Why?
+###### Why?
 
 Immediately update the cache without refetching the profile.
 
 ---
 
-# Scenario 22: Create a New Post
+## Scenario 22: Create a New Post
 
-### Situation
+###### Situation
 
 User creates a new social media post.
 
-### Best Practice
+###### Best Practice
 
 ```tsx
 cache.modify()
 ```
 
-### Why?
+###### Why?
 
 Insert the new post into the cached list instead of refetching the entire feed.
 
 ---
 
-# Scenario 23: Delete a Product
+## Scenario 23: Delete a Product
 
-### Situation
+###### Situation
 
 Admin deletes a product.
 
-### Best Practice
+###### Best Practice
 
 ```tsx
 cache.modify()
 ```
 
-### Why?
+###### Why?
 
 Remove the deleted product from the cached list.
 
 ---
 
-# Scenario 24: Update Product Price
+## Scenario 24: Update Product Price
 
-### Situation
+###### Situation
 
 Admin edits a product.
 
-### Best Practice
+###### Best Practice
 
 Apollo automatically updates the normalized cache if the mutation returns:
 
@@ -2209,29 +2209,29 @@ Apollo automatically updates the normalized cache if the mutation returns:
 }
 ```
 
-### Why?
+###### Why?
 
 The cache entry (`Product:id`) is updated, and all components using it re-render automatically.
 
 ---
 
-# Scenario 25: Multiple Components Showing the Same User
+## Scenario 25: Multiple Components Showing the Same User
 
-### Situation
+###### Situation
 
 The Dashboard, Profile, and Sidebar all display the logged-in user's information.
 
-### Best Practice
+###### Best Practice
 
 Use Apollo's normalized cache.
 
-### Why?
+###### Why?
 
 Updating the user in one place updates every component referencing that user.
 
 ---
 
-# Interview Tips
+## Interview Tips
 
 - Use **`cache-first`** for data that doesn't change often.
 - Use **`cache-and-network`** when users should see cached data immediately but still receive fresh updates.
@@ -2243,14 +2243,14 @@ Updating the user in one place updates every component referencing that user.
 
 ---
 
-# 30-Second Interview Answer
+## 30-Second Interview Answer
 
 In production, the fetch policy depends on the use case. I use `cache-first` for dashboards and profiles, `cache-and-network` for feeds and product lists, `network-only` for reports and live data, `no-cache` for login and payment flows, `cache-only` for offline features, and `standby` for inactive screens. After mutations, I prefer updating Apollo's normalized cache with `cache.modify()` or `writeFragment()` rather than refetching entire queries whenever possible.
 >
-> # Apollo Links (Auth, Error, Retry, Upload, Batch) – Complete Interview Guide
+> ## Apollo Links (Auth, Error, Retry, Upload, Batch) – Complete Interview Guide
 
 
-# What is Apollo Link?
+## What is Apollo Link?
 
 Apollo Link is a middleware layer in Apollo Client that allows you to intercept, modify, or handle GraphQL operations before they reach the server and after the response is received.
 
@@ -2258,7 +2258,7 @@ It is similar to Express middleware for GraphQL requests.
 
 ---
 
-## Apollo Link Flow
+#### Apollo Link Flow
 
 ```text
 React Component
@@ -2283,7 +2283,7 @@ Auth  Retry  Error  Upload
 
 ---
 
-# Why Do We Need Apollo Links?
+## Why Do We Need Apollo Links?
 
 Apollo Links allow you to:
 
@@ -2299,15 +2299,15 @@ Without Apollo Links, these features must be implemented manually in every reque
 
 ---
 
-# 1. Auth Link
+## 1. Auth Link
 
-## What is Auth Link?
+#### What is Auth Link?
 
 Auth Link adds authentication information (such as JWT tokens) to every GraphQL request.
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { setContext } from "@apollo/client/link/context";
@@ -2326,7 +2326,7 @@ const authLink = setContext((_, { headers }) => {
 
 ---
 
-## Request
+#### Request
 
 ```http
 Authorization: Bearer eyJhbGciOiJIUzI1...
@@ -2334,7 +2334,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1...
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - JWT Authentication
 - OAuth Tokens
@@ -2343,15 +2343,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1...
 
 ---
 
-## Interview Answer
+#### Interview Answer
 
 > **Auth Link automatically attaches authentication headers, such as JWT tokens, to every GraphQL request before it is sent to the server.**
 
 ---
 
-# 2. Error Link
+## 2. Error Link
 
-## What is Error Link?
+#### What is Error Link?
 
 Error Link intercepts GraphQL and network errors globally.
 
@@ -2359,7 +2359,7 @@ Instead of handling errors in every component, you can manage them in one place.
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { onError } from "@apollo/client/link/error";
@@ -2381,7 +2381,7 @@ const errorLink = onError(
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - Unauthorized (401)
 - Forbidden (403)
@@ -2391,21 +2391,21 @@ const errorLink = onError(
 
 ---
 
-## Interview Answer
+#### Interview Answer
 
 Error Link centrally handles GraphQL and network errors, allowing consistent logging, user notifications, or authentication handling across the application.
 
 ---
 
-# 3. Retry Link
+## 3. Retry Link
 
-## What is Retry Link?
+#### What is Retry Link?
 
 Retry Link automatically retries failed requests due to temporary issues.
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { RetryLink } from "@apollo/client/link/retry";
@@ -2419,7 +2419,7 @@ const retryLink = new RetryLink({
 
 ---
 
-## Retry Flow
+#### Retry Flow
 
 ```text
 Request
@@ -2443,7 +2443,7 @@ Success
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - Temporary network failures
 - Slow internet connections
@@ -2452,15 +2452,15 @@ Success
 
 ---
 
-## Interview Answer
+#### Interview Answer
 
 Retry Link automatically retries failed GraphQL requests caused by temporary network issues, improving application reliability.
 
 ---
 
-# 4. Upload Link
+## 4. Upload Link
 
-## What is Upload Link?
+#### What is Upload Link?
 
 Upload Link enables file uploads through GraphQL using multipart requests.
 
@@ -2468,7 +2468,7 @@ The default HTTP Link does not support file uploads.
 
 ---
 
-## Installation
+#### Installation
 
 ```bash
 npm install apollo-upload-client
@@ -2476,7 +2476,7 @@ npm install apollo-upload-client
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { createUploadLink } from "apollo-upload-client";
@@ -2488,7 +2488,7 @@ const uploadLink = createUploadLink({
 
 ---
 
-## Mutation Example
+#### Mutation Example
 
 ```graphql
 mutation UploadFile($file: Upload!) {
@@ -2500,7 +2500,7 @@ mutation UploadFile($file: Upload!) {
 
 ---
 
-## React Example
+#### React Example
 
 ```tsx
 uploadFile({
@@ -2512,7 +2512,7 @@ uploadFile({
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - Profile Picture
 - Documents
@@ -2522,21 +2522,21 @@ uploadFile({
 
 ---
 
-## Interview Answer
+#### Interview Answer
 
 > **Upload Link enables GraphQL file uploads by sending multipart form-data requests, which are not supported by the standard HTTP Link.**
 
 ---
 
-# 5. Batch Link
+## 5. Batch Link
 
-## What is Batch Link?
+#### What is Batch Link?
 
 Batch Link combines multiple GraphQL operations into a single HTTP request.
 
 ---
 
-## Without Batch Link
+#### Without Batch Link
 
 ```text
 Query A
@@ -2562,7 +2562,7 @@ Three network requests.
 
 ---
 
-## With Batch Link
+#### With Batch Link
 
 ```text
 Query A
@@ -2582,7 +2582,7 @@ Server
 
 ---
 
-## Example
+#### Example
 
 ```tsx
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
@@ -2594,7 +2594,7 @@ const batchLink = new BatchHttpLink({
 
 ---
 
-## Benefits
+#### Benefits
 
 - Fewer HTTP requests
 - Reduced latency
@@ -2602,7 +2602,7 @@ const batchLink = new BatchHttpLink({
 
 ---
 
-## Use Cases
+#### Use Cases
 
 - Dashboard
 - Multiple widgets
@@ -2611,13 +2611,13 @@ const batchLink = new BatchHttpLink({
 
 ---
 
-## Interview Answer
+#### Interview Answer
 
 Batch Link groups multiple GraphQL operations into a single HTTP request, reducing network overhead and improving performance.
 
 ---
 
-# Combining Multiple Links
+## Combining Multiple Links
 
 Apollo allows multiple links to be chained together.
 
@@ -2634,7 +2634,7 @@ const link = ApolloLink.from([
 
 ---
 
-## Complete Flow
+#### Complete Flow
 
 ```text
 React
@@ -2666,7 +2666,7 @@ GraphQL Server
 
 ---
 
-# Real Production Scenarios
+## Real Production Scenarios
 
 | Scenario | Apollo Link |
 |----------|-------------|
@@ -2686,7 +2686,7 @@ GraphQL Server
 
 ---
 
-# Comparison
+## Comparison
 
 | Link | Purpose | Common Use Case |
 |------|---------|----------------|
@@ -2698,43 +2698,43 @@ GraphQL Server
 
 ---
 
-## What is Apollo Link?
+#### What is Apollo Link?
 
 Apollo Link is middleware that intercepts GraphQL operations before they are sent to the server and after responses are received, enabling features such as authentication, error handling, retries, uploads, and batching.
 
 ---
 
-## Why do we use Auth Link?
+#### Why do we use Auth Link?
 
 Auth Link automatically attaches authentication headers, such as JWT tokens or API keys, to every GraphQL request.
 
 ---
 
-## Why use Error Link?
+#### Why use Error Link?
 
 Error Link provides centralized handling of GraphQL and network errors, making it easier to log errors, show notifications, or redirect users after authentication failures.
 
 ---
 
-## What is Retry Link?
+#### What is Retry Link?
 
 Retry Link automatically retries failed requests caused by temporary issues like network interruptions or server timeouts.
 
 ---
 
-## Why is Upload Link needed?
+#### Why is Upload Link needed?
 
 The default HTTP Link cannot upload files. Upload Link supports multipart form-data requests for GraphQL file uploads.
 
 ---
 
-## What is Batch Link?
+#### What is Batch Link?
 
 Batch Link combines multiple GraphQL operations into a single HTTP request, reducing the number of network calls and improving performance.
 
 ---
 
-## Can multiple Apollo Links be used together?
+#### Can multiple Apollo Links be used together?
 
 Yes. Apollo Links are composable and can be chained using `ApolloLink.from()`.
 
@@ -2751,7 +2751,7 @@ ApolloLink.from([
 
 ---
 
-# Best Practices
+## Best Practices
 
 - Use **Auth Link** for authentication headers.
 - Handle authentication failures globally with **Error Link**.
@@ -2762,7 +2762,7 @@ ApolloLink.from([
 
 ---
 
-# Quick Interview Summary
+## Quick Interview Summary
 
 | Apollo Link | One-Line Explanation |
 |-------------|----------------------|
@@ -2774,13 +2774,13 @@ ApolloLink.from([
 
 ---
 
-# Real-Time Subscriptions in Apollo Client – Complete Interview Guide
+## Real-Time Subscriptions in Apollo Client – Complete Interview Guide
 
 > Learn how GraphQL Subscriptions work, how Apollo Client implements real-time communication, and common production use cases.
 
 ---
 
-# Table of Contents
+## Table of Contents
 
 1. What are GraphQL Subscriptions?
 2. Why Do We Need Subscriptions?
@@ -2797,7 +2797,7 @@ ApolloLink.from([
 
 ---
 
-# What are GraphQL Subscriptions?
+## What are GraphQL Subscriptions?
 
 A **GraphQL Subscription** is an operation that allows the server to **push real-time updates** to the client whenever data changes.
 
@@ -2809,7 +2809,7 @@ Unlike Queries and Mutations:
 
 ---
 
-## GraphQL Operations
+#### GraphQL Operations
 
 | Operation | Purpose | Communication |
 |-----------|----------|---------------|
@@ -2819,7 +2819,7 @@ Unlike Queries and Mutations:
 
 ---
 
-# Why Do We Need Subscriptions?
+## Why Do We Need Subscriptions?
 
 Without subscriptions, the client must repeatedly request data.
 
@@ -2882,11 +2882,11 @@ No repeated requests are needed.
 
 ---
 
-# How Subscriptions Work
+## How Subscriptions Work
 
 Subscriptions use **WebSockets**, which provide a persistent connection between the client and server.
 
-### Flow
+###### Flow
 
 ```text
 Client
@@ -2918,7 +2918,7 @@ UI Re-renders
 
 ---
 
-# HTTP vs WebSocket
+## HTTP vs WebSocket
 
 | HTTP | WebSocket |
 |------|-----------|
@@ -2929,7 +2929,7 @@ UI Re-renders
 
 ---
 
-# Apollo Client Subscription Architecture
+## Apollo Client Subscription Architecture
 
 ```text
 React Component
@@ -2955,9 +2955,9 @@ UI Updates
 
 ---
 
-# Setting Up Subscriptions
+## Setting Up Subscriptions
 
-## Install Required Package
+#### Install Required Package
 
 ```bash
 npm install graphql-ws
@@ -2965,7 +2965,7 @@ npm install graphql-ws
 
 ---
 
-## Create WebSocket Link
+#### Create WebSocket Link
 
 ```tsx
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
@@ -2980,7 +2980,7 @@ const wsLink = new GraphQLWsLink(
 
 ---
 
-## Split HTTP and WebSocket Links
+#### Split HTTP and WebSocket Links
 
 ```tsx
 import { split } from "@apollo/client";
@@ -3002,9 +3002,9 @@ const splitLink = split(
 
 ---
 
-# useSubscription Hook
+## useSubscription Hook
 
-## Syntax
+#### Syntax
 
 ```tsx
 const { data, loading, error } =
@@ -3013,7 +3013,7 @@ useSubscription(SUBSCRIPTION);
 
 ---
 
-## Example
+#### Example
 
 ```graphql
 subscription MessageAdded {
@@ -3053,7 +3053,7 @@ function Chat() {
 
 ---
 
-# Passing Variables
+## Passing Variables
 
 Subscriptions can receive variables.
 
@@ -3078,7 +3078,7 @@ const { data } = useSubscription(CHAT_SUBSCRIPTION, {
 
 ---
 
-# Handling Subscription Events
+## Handling Subscription Events
 
 ```tsx
 const { data } = useSubscription(MESSAGE_ADDED, {
@@ -3090,7 +3090,7 @@ const { data } = useSubscription(MESSAGE_ADDED, {
 
 ---
 
-# Combining Query + Subscription
+## Combining Query + Subscription
 
 A common production pattern:
 
@@ -3123,9 +3123,9 @@ Update UI
 
 ---
 
-# Real Production Scenarios
+## Real Production Scenarios
 
-## 1. Chat Application
+#### 1. Chat Application
 
 Receive new messages instantly.
 
@@ -3140,31 +3140,31 @@ subscription {
 
 ---
 
-## 2. Live Notifications
+#### 2. Live Notifications
 
 Push new notifications immediately.
 
 ---
 
-## 3. Stock Market
+#### 3. Stock Market
 
 Receive live stock price updates.
 
 ---
 
-## 4. Sports Score
+#### 4. Sports Score
 
 Update match scores in real time.
 
 ---
 
-## 5. Live Auction
+#### 5. Live Auction
 
 Show the latest bid instantly.
 
 ---
 
-## 6. Food Delivery
+#### 6. Food Delivery
 
 Track order status changes.
 
@@ -3177,49 +3177,49 @@ Examples:
 
 ---
 
-## 7. Ride Sharing
+#### 7. Ride Sharing
 
 Driver location updates.
 
 ---
 
-## 8. Cryptocurrency Dashboard
+#### 8. Cryptocurrency Dashboard
 
 Real-time coin prices.
 
 ---
 
-## 9. IoT Dashboard
+#### 9. IoT Dashboard
 
 Display live sensor data.
 
 ---
 
-## 10. Online Multiplayer Games
+#### 10. Online Multiplayer Games
 
 Synchronize player actions.
 
 ---
 
-## 11. Collaborative Document Editing
+#### 11. Collaborative Document Editing
 
 Receive live edits from other users.
 
 ---
 
-## 12. Customer Support Chat
+#### 12. Customer Support Chat
 
 Receive agent replies instantly.
 
 ---
 
-## 13. Live Dashboard
+#### 13. Live Dashboard
 
 Update KPIs without refreshing the page.
 
 ---
 
-## 14. Social Media
+#### 14. Social Media
 
 Receive:
 
@@ -3230,13 +3230,13 @@ Receive:
 
 ---
 
-## 15. Hospital Monitoring
+#### 15. Hospital Monitoring
 
 Live patient monitoring systems.
 
 ---
 
-# Subscription vs Polling
+## Subscription vs Polling
 
 | Subscription | Polling |
 |--------------|----------|
@@ -3248,7 +3248,7 @@ Live patient monitoring systems.
 
 ---
 
-# Best Practices
+## Best Practices
 
 - Use subscriptions only for real-time features.
 - Use queries for initial data loading.
@@ -3260,19 +3260,19 @@ Live patient monitoring systems.
 
 ---
 
-## What is a GraphQL Subscription?
+#### What is a GraphQL Subscription?
 
 A GraphQL Subscription allows the server to push real-time updates to connected clients whenever subscribed data changes.
 
 ---
 
-## What protocol do GraphQL Subscriptions use?
+#### What protocol do GraphQL Subscriptions use?
 
 GraphQL Subscriptions typically use **WebSockets**, which maintain a persistent, bidirectional connection between the client and server.
 
 ---
 
-## What is the difference between Query and Subscription?
+#### What is the difference between Query and Subscription?
 
 | Query | Subscription |
 |--------|--------------|
@@ -3282,19 +3282,19 @@ GraphQL Subscriptions typically use **WebSockets**, which maintain a persistent,
 
 ---
 
-## Why use WebSockets instead of HTTP?
+#### Why use WebSockets instead of HTTP?
 
 HTTP requires a new request for every update. WebSockets keep a persistent connection open, allowing the server to push updates instantly without repeated requests.
 
 ---
 
-## What is the difference between Polling and Subscriptions?
+#### What is the difference between Polling and Subscriptions?
 
 Polling repeatedly requests data at fixed intervals, while subscriptions receive updates instantly from the server through a persistent WebSocket connection.
 
 ---
 
-## Can Queries and Subscriptions be used together?
+#### Can Queries and Subscriptions be used together?
 
 Yes. A common production pattern is to use a query to load initial data and a subscription to receive future updates in real time.
 
@@ -3302,19 +3302,19 @@ Yes. A common production pattern is to use a query to load initial data and a su
 
 
 
-# 30-Second Interview Answer
+## 30-Second Interview Answer
 
 GraphQL Subscriptions enable real-time communication between the client and server using WebSockets. Unlike queries, which fetch data once, subscriptions keep a persistent connection open and allow the server to push updates whenever data changes. In Apollo Client, we use the `useSubscription()` hook for features such as chat applications, live notifications, stock prices, order tracking, and collaborative editing. A common production approach is to load initial data with `useQuery()` and then keep it updated using `useSubscription()`.
 
 
-# GraphQL Refresh Token Flow Guide
+## GraphQL Refresh Token Flow Guide
 
 A straightforward, practical guide to understanding, architecting, and implementing a robust **Access & Refresh Token Authentication Flow** in GraphQL APIs.
 
 ---
 
 
-## Overview
+#### Overview
 
 In JWT-based authentication, keeping tokens short-lived enhances security. However, requiring users to log in repeatedly creates a poor user experience. 
 
@@ -3325,7 +3325,7 @@ The **Refresh Token Flow** balances security and UX using two distinct tokens:
 
 ---
 
-## How the Flow Works
+#### How the Flow Works
 
 ```
   +--------+                                           +----------------+
@@ -3353,15 +3353,15 @@ The **Refresh Token Flow** balances security and UX using two distinct tokens:
 
 ---
 
-## Architecture & Storage Options
+#### Architecture & Storage Options
 
-### Option 1: GraphQL Mutation (Mobile & Cross-Platform)
+###### Option 1: GraphQL Mutation (Mobile & Cross-Platform)
 
 * **Access Token:** Saved in memory or encrypted mobile storage (e.g., Keychain / Keystore).
 * **Refresh Token:** Saved in secure storage and sent manually via a `refreshToken` GraphQL mutation argument.
 * **Best for:** Mobile apps (React Native, iOS, Android) and desktop clients.
 
-### Option 2: HTTP-Only Cookies (Web Security Best Practice)
+###### Option 2: HTTP-Only Cookies (Web Security Best Practice)
 
 * **Access Token:** Kept in-memory within JavaScript (e.g., a React state or Apollo cache variable).
 * **Refresh Token:** Set by the server in an `HttpOnly`, `SameSite=Strict`, `Secure` cookie.
@@ -3369,7 +3369,7 @@ The **Refresh Token Flow** balances security and UX using two distinct tokens:
 
 ---
 
-## GraphQL Schema Design
+#### GraphQL Schema Design
 
 ```graphql
 type User {
@@ -3402,7 +3402,7 @@ type Mutation {
 
 ---
 
-## Client Implementation (Apollo Client Example)
+#### Client Implementation (Apollo Client Example)
 
 Below is an automated token-refresh setup using Apollo Client's `onError` link to catch `UNAUTHENTICATED` errors, refresh the access token silently, and retry failed operations.
 
@@ -3495,7 +3495,7 @@ export const client = new ApolloClient({
 
 ---
 
-## Server-Side Implementation (Node.js Example)
+#### Server-Side Implementation (Node.js Example)
 
 Here is how you handle the token verification and refresh mutation on an Express / GraphQL server context:
 
@@ -3543,7 +3543,7 @@ export const resolvers = {
 
 ---
 
-## Security Best Practices
+#### Security Best Practices
 
 1. **Token Rotation:** Issue a new Refresh Token alongside every new Access Token. Invalidate the old Refresh Token immediately.
 2. **Reuse Detection:** If a revoked or previously used Refresh Token is presented, immediately revoke all active Refresh Tokens for that user account (signals potential theft).
@@ -3555,14 +3555,14 @@ export const resolvers = {
    * `SameSite: Strict` or `Lax` (protects against CSRF)
 
 
-# GraphQL Pagination with Apollo Client (`fetchMore` + `merge`)
+## GraphQL Pagination with Apollo Client (`fetchMore` + `merge`)
 
 A comprehensive guide to implementing seamless, cache-aware pagination in GraphQL applications using Apollo Client's `fetchMore` function and `InMemoryCache` `typePolicies` (`merge` functions).
 
 ---
 
 
-## Overview
+#### Overview
 
 Handling paginated data efficiently in GraphQL requires coordinating two main responsibilities:
 1. **Executing the Next Page Request (`fetchMore`):** Triggering network requests with updated pagination parameters (e.g., `offset`, `after` cursor).
@@ -3572,7 +3572,7 @@ In **Apollo Client v3+**, field merging is decoupled from UI components and conf
 
 ---
 
-## Core Architecture
+#### Core Architecture
 
 ```
   +------------------+         1. Trigger fetchMore(variables)        +-------------------+
@@ -3589,9 +3589,9 @@ In **Apollo Client v3+**, field merging is decoupled from UI components and conf
 
 ---
 
-## GraphQL Schema & Query Design
+#### GraphQL Schema & Query Design
 
-### Offset-Based Query Example
+###### Offset-Based Query Example
 
 ```graphql
 query GetPosts($offset: Int!, $limit: Int!) {
@@ -3609,11 +3609,11 @@ query GetPosts($offset: Int!, $limit: Int!) {
 
 ---
 
-## Cache Configuration (`typePolicies` & `merge`)
+#### Cache Configuration (`typePolicies` & `merge`)
 
 By default, Apollo Client replaces field values when new data arrives. To append paginated data seamlessly, configure a field policy.
 
-### Option A: Custom Offset-Based Merge Function
+###### Option A: Custom Offset-Based Merge Function
 
 ```javascript
 import { ApolloClient, InMemoryCache } from '@apollo/client';
@@ -3645,7 +3645,7 @@ const cache = new InMemoryCache({
 });
 ```
 
-### Option B: Using Apollo's Built-in Helpers
+###### Option B: Using Apollo's Built-in Helpers
 
 Apollo Client provides utility functions for standard pagination patterns:
 
@@ -3670,7 +3670,7 @@ const cache = new InMemoryCache({
 
 ---
 
-## Client UI Integration (React Example)
+#### Client UI Integration (React Example)
 
 Use the `fetchMore` function returned by `useQuery` to load subsequent data pages.
 
@@ -3721,11 +3721,11 @@ export function PostList() {
 
 ---
 
-## Cursor-Based Pagination (Relay Connection Specification)
+#### Cursor-Based Pagination (Relay Connection Specification)
 
 For production systems handling frequent writes, cursor-based pagination prevents items from being skipped or duplicated.
 
-### Field Policy Setup:
+###### Field Policy Setup:
 
 ```javascript
 import { InMemoryCache } from '@apollo/client';
@@ -3742,7 +3742,7 @@ const cache = new InMemoryCache({
 });
 ```
 
-### React Component Implementation:
+###### React Component Implementation:
 
 ```jsx
 import React from 'react';
@@ -3804,14 +3804,14 @@ export function CursorPostList() {
 
 ---
 
-## Best Practices & Common Pitfalls
+#### Best Practices & Common Pitfalls
 
 1. **Configure `keyArgs` Carefully:** If your paginated query accepts filter/search arguments (e.g., `category`, `searchTerm`), pass them into `keyArgs` (e.g., `keyArgs: ['category']`). Otherwise, results from different filters will merge into a single list.
 2. **Avoid `updateQuery` in Apollo Client v3:** Do not pass `updateQuery` inside `fetchMore()`. Centralizing merge logic in `typePolicies` maintains a single source of truth for cache operations.
 3. **Prevent Duplicate Keys:** Ensure unique identifiers (`id`) are returned for each entity in the list so React and Apollo Client can track items accurately.
 4. **Handle Refetching Cleanly:** When re-running a search query or resetting filters, use `refetch()` or clear the cache variable to reset the pagination state to page 1.
 
-# Apollo Client Type Policies Guide
+## Apollo Client Type Policies Guide
 
 In Apollo Client v3+, **Type Policies** are the primary mechanism for customizing how the `InMemoryCache` stores, reads, and merges data for specific GraphQL types and fields.
 
@@ -3820,7 +3820,7 @@ Setting up type policies moves client-side state and caching logic out of UI com
 ----
 
 
-## Overview
+#### Overview
 
 By default, Apollo Client's `InMemoryCache` normalizes incoming GraphQL objects using their `__typename` and `id` (or `_id`) properties. 
 
@@ -3832,7 +3832,7 @@ By default, Apollo Client's `InMemoryCache` normalizes incoming GraphQL objects 
 
 ---
 
-## Basic Type Policy Structure
+#### Basic Type Policy Structure
 
 Type policies are declared inside the `typePolicies` map when initializing `InMemoryCache`.
 
@@ -3858,9 +3858,9 @@ const cache = new InMemoryCache({
 
 ---
 
-## Key Features
+#### Key Features
 
-### 1. Customizing Record Identification (`keyFields`)
+###### 1. Customizing Record Identification (`keyFields`)
 
 If an entity does not use `id` as its unique identifier or uses a composite key, configure `keyFields`.
 
@@ -3885,7 +3885,7 @@ const cache = new InMemoryCache({
 
 ---
 
-### 2. Managing Field Behaviors (`fields`)
+###### 2. Managing Field Behaviors (`fields`)
 
 The `fields` mapping specifies field-level policy configurations for a given type:
 
@@ -3901,7 +3901,7 @@ typePolicies: {
 
 ---
 
-### 3. Reading Cached Values (`read` functions)
+###### 3. Reading Cached Values (`read` functions)
 
 A field's `read` function derives or formats values on the fly whenever the cache is queried.
 
@@ -3926,7 +3926,7 @@ const cache = new InMemoryCache({
 
 ---
 
-### 4. Customizing Cache Merges (`merge` functions)
+###### 4. Customizing Cache Merges (`merge` functions)
 
 When new query data arrives, Apollo Client replaces old field values by default. A `merge` function defines how to combine new data with existing data in the cache (essential for paginated arrays).
 
@@ -3957,7 +3957,7 @@ const cache = new InMemoryCache({
 
 ---
 
-### 5. Filtering Arguments (`keyArgs`)
+###### 5. Filtering Arguments (`keyArgs`)
 
 `keyArgs` determines which field arguments cause Apollo Client to create separate cache instances.
 
@@ -3981,7 +3981,7 @@ const cache = new InMemoryCache({
 
 ---
 
-## Complete Real-World Example
+#### Complete Real-World Example
 
 A complete `InMemoryCache` setup using custom entity keys, reactive variables, computed local fields, and built-in pagination helpers:
 
@@ -4027,20 +4027,20 @@ export const cache = new InMemoryCache({
 
 ---
 
-## Best Practices
+#### Best Practices
 
 1. **Centralize Cache Logic:** Define `merge` and `read` functions inside `typePolicies` instead of passing inline `updateQuery` functions to `fetchMore`.
 2. **Safely Access Fields with `readField`:** Always use the `readField('fieldName')` helper function inside `read` and `merge` policies to ensure safe entity references.
 3. **Set `keyArgs` Explicitly for Filtered Lists:** Specify `keyArgs` on list queries to prevent search or category filters from corrupting or merging into a single list.
 4. **Leverage Built-in Utilities:** Prefer using standard Apollo helpers (`offsetLimitPagination()`, `relayStylePagination()`) before writing custom `merge` functions.
 
-# 🚀 Apollo Client Testing Guide
+## 🚀 Apollo Client Testing Guide
 
 A practical guide and reference for testing GraphQL operations, cache interactions, reactive variables, and custom field policies in React applications using Apollo Client.
 
 ---
 
-## Overview
+#### Overview
 
 Testing Apollo Client code usually falls into two main categories:
 
@@ -4049,11 +4049,11 @@ Testing Apollo Client code usually falls into two main categories:
 
 ---
 
-## 1. Testing Components with Static Mocks
+#### 1. Testing Components with Static Mocks
 
 Apollo Client provides `<MockedProvider />` from `@apollo/client/testing` to simulate network responses without running a GraphQL server.
 
-### Queries
+###### Queries
 
 ```jsx
 import { render, screen } from '@testing-library/react';
@@ -4089,7 +4089,7 @@ it('renders user data after loading', async () => {
 });
 ```
 
-### Mutations
+###### Mutations
 
 ```jsx
 import { render, screen } from '@testing-library/react';
@@ -4125,7 +4125,7 @@ it('submits updated user name', async () => {
 });
 ```
 
-### Handling GraphQL & Network Errors
+###### Handling GraphQL & Network Errors
 
 ```js
 // GraphQL Error (Server returns errors array)
@@ -4145,9 +4145,9 @@ const networkErrorMock = {
 
 ---
 
-## 2. Testing Cache Updates
+#### 2. Testing Cache Updates
 
-### Integration Tests (`update` functions)
+###### Integration Tests (`update` functions)
 
 Pass a custom `InMemoryCache` seeded with initial state into `<MockedProvider>` to verify that a mutation updates the local cache and re-renders dependent components.
 
@@ -4197,7 +4197,7 @@ it('updates the cache and appends new item to list', async () => {
 });
 ```
 
-### Direct Cache Unit Tests (`readQuery` / `writeQuery`)
+###### Direct Cache Unit Tests (`readQuery` / `writeQuery`)
 
 Unit test cache helper logic in pure JavaScript without rendering React components:
 
@@ -4225,11 +4225,11 @@ it('appends todo item directly to cache', () => {
 
 ---
 
-## 3. Testing Custom `typePolicies` & Field Policies
+#### 3. Testing Custom `typePolicies` & Field Policies
 
 Field policies dictate how `InMemoryCache` reads, normalizes, and merges fields. Test them by instantiating `InMemoryCache` directly with your custom configuration.
 
-### Pagination `merge` Functions
+###### Pagination `merge` Functions
 
 ```js
 import { InMemoryCache, gql } from '@apollo/client';
@@ -4280,7 +4280,7 @@ it('merges paginated pages in cache', () => {
 });
 ```
 
-### Local Computed `read` Fields
+###### Local Computed `read` Fields
 
 ```js
 import { InMemoryCache, gql } from '@apollo/client';
@@ -4327,9 +4327,9 @@ it('computes local field using read policy', () => {
 
 ---
 
-## 4. Testing Reactive Variables (`makeVar`)
+#### 4. Testing Reactive Variables (`makeVar`)
 
-### Pure Unit Tests
+###### Pure Unit Tests
 
 ```js
 import { makeVar } from '@apollo/client';
@@ -4358,7 +4358,7 @@ describe('cartItemsVar', () => {
 });
 ```
 
-### Testing Reactive Variables with Component Integration
+###### Testing Reactive Variables with Component Integration
 
 Pass the custom `InMemoryCache` to `<MockedProvider>` when components rely on `@client` fields backed by `makeVar`:
 
@@ -4418,7 +4418,7 @@ it('updates UI when reactive variable toggles', async () => {
 
 ---
 
-## 5. Flexible Testing with `mock-apollo-client`
+#### 5. Flexible Testing with `mock-apollo-client`
 
 For dynamic resolver logic or wildcard responses without static mock objects, use [`mock-apollo-client`](https://github.com/mike-plaid/mock-apollo-client).
 
@@ -4455,7 +4455,7 @@ it('handles dynamic queries using resolver functions', async () => {
 
 ---
 
-## Best Practices & Caveats
+#### Best Practices & Caveats
 
 1. **Always Include `__typename`:** Apollo Client relies on `__typename` for normalization. Omitting it in mock responses can break cache operations.
 2. **Match Variables Exactly:** In `<MockedProvider>`, query variables must match the request object **1:1**, including types and key ordering.
