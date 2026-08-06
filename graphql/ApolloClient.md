@@ -1,7 +1,7 @@
-## GraphQL Client Interview Guide (React + Apollo Client)
+## GraphQL React + Apollo Client
 
 
-## What is a GraphQL Client?
+### What is a GraphQL Client?
 
 A GraphQL Client is a frontend library that communicates with a GraphQL server. It executes queries, mutations, and subscriptions while providing built-in caching, loading and error state management, authentication, pagination, optimistic UI updates, and automatic cache synchronization.
 
