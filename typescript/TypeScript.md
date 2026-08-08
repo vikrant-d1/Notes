@@ -1,5 +1,16 @@
 # TypeScript & React 
 
+### Q3. What is the difference between `any`, `unknown`, and `never`?
+
+#### 📖 Definitions
+
+- **`any`** — Opts out of type checking entirely. A value of type `any` can be assigned to any other type and any operation on it is allowed. It's an escape hatch that effectively turns off TypeScript for that value.
+
+- **`unknown`** — The type-safe counterpart to `any`. Like `any`, it can hold any value — but unlike `any`, you cannot perform operations on an `unknown` value without first narrowing its type with a type guard.
+
+- **`never`** — Represents a value that **never occurs**. It is the bottom type — a subtype of every type. Used for functions that always throw, infinite loops, or exhaustive type checks.
+
+
 ### What is Function Overloading in TypeScript?
 
 Function overloading allows a function to accept different types or different numbers of arguments while providing type safety.
