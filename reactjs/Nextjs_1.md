@@ -1,28 +1,5 @@
 # Next.js Interview Preparation
 
-
-## Table of Contents
-
-1. [What is Next.js?](#1-what-is-nextjs)
-2. [Rendering Strategies — Definitions, Benefits & Drawbacks](#2-rendering-strategies)
-3. [Scenario-Based Rendering — Which One to Pick and Why](#3-scenario-based-rendering)
-4. [Server Components vs Client Components](#4-server-components-vs-client-components)
-5. [App Router vs Pages Router](#5-app-router-vs-pages-router)
-6. [Next.js 14 vs 15 vs 16 — What Changed](#6-nextjs-14-vs-15-vs-16)
-7. [Caching in Next.js — How It Changed Across Versions](#7-caching-in-nextjs)
-8. [Data Fetching Patterns](#8-data-fetching-patterns)
-9. [Routing & Navigation](#9-routing-and-navigation)
-10. [Middleware](#10-middleware)
-11. [Server Actions](#11-server-actions)
-12. [Image & Font Optimization](#12-image-and-font-optimization)
-13. [Authentication Patterns](#13-authentication-patterns)
-14. [SEO in Next.js](#14-seo-in-nextjs)
-15. [Performance Optimization](#15-performance-optimization)
-16. [Deployment & Self-Hosting](#16-deployment-and-self-hosting)
-17. [Most Asked Interview Questions with Answers](#17-most-asked-interview-questions-with-answers)
-
----
-
 ## 1. What is Next.js?
 
 Next.js is a React framework built by Vercel that gives you everything you need to build fast, production-ready web applications. While React itself is a library for building UI components, Next.js adds the missing pieces on top of React: routing, server-side rendering, static site generation, API routes, image optimization, and much more — all configured and ready to use out of the box.

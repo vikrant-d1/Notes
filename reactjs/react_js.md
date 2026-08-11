@@ -1927,25 +1927,3 @@ A strong senior answer is:
 > colocation, memoization when justified, virtualization, transitions,
 > Suspense, and profiling.
 
-------------------------------------------------------------------------
-
-# Key Takeaways
-
--   Rendering is not the same as DOM mutation.
--   Parent rendering can cause child evaluation.
--   `React.memo` can provide render bailouts but is not a universal
-    solution.
--   Stable keys preserve component identity.
--   Changing a key can remount a component and reset its state.
--   State behaves like a snapshot for a particular render.
--   Functional updates solve many stale-state problems.
--   Objects, arrays, and functions use reference identity.
--   Context can create broad update propagation.
--   Fiber enables modern scheduling and concurrent rendering.
--   Automatic batching reduces unnecessary renders.
--   Transitions help keep urgent interactions responsive.
--   Suspense coordinates asynchronous/loading UI.
--   Hydration requires compatible server/client output.
--   Server Components and SSR solve different problems.
--   Virtualization is essential for very large lists.
--   Always profile before applying performance optimizations.
