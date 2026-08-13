@@ -1261,4 +1261,46 @@ console.log(encodeString("abbcccddddeea"));
 // 1a2b3c4d2e1a
 ```
 
+### Deep clone with recurive function
+```javascript 
+function deepClone(value){
+    if(value === null || typeof value !== "object"){
+        return value;
+    }
+
+    const result = Array.isArray(value) ? [] :{};
+
+    for (const key in value){
+        result[key] = deepClone(value[key]);
+    }
+
+    return result;
+}
+
+// test deep clone function
+const user = {
+  name: "Vikrant",
+  age: 30,
+  address: {
+    city: "Gurugram",
+    country: "India"
+  },
+  skills: ["JavaScript", "Node.js"],
+  projects: [
+    {
+      name: "E-commerce",
+      tech: ["React", "Node"]
+    }
+  ]
+};
+
+const clonedUser = deepClone(user);
+
+clonedUser.address.city = "Delhi";
+clonedUser.skills.push("TypeScript");
+clonedUser.projects[0].tech.push("MongoDB");
+
+console.log(clonedUser)
+
+```
 
