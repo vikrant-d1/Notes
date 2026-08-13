@@ -1,4 +1,6 @@
 ### Swap value inplace
+input str = 'a$b#c';
+output: c$b#a
 ```javascript
 let str = 'a$b#c';
 
