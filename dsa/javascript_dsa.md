@@ -1,37 +1,29 @@
 ### Swap value inplace
-input str = 'a$b#c';
 output: c$b#a
 ```javascript
-let str = 'a$b#c';
+let str = "a$b#c";
 
-let strArr = str.split('');
+let arr = str.split("");
 
 let left = 0;
-let right = strArr.length - 1;
+let right = arr.length - 1;
+
+const isAlphabet = (char) => /[a-zA-Z]/.test(char);
 
 while (left < right) {
-
-    // Skip non-alphabet from left
-    if (!/[a-zA-Z]/.test(strArr[left])) {
+    if (!isAlphabet(arr[left])) {
         left++;
-    }
-
-    // Skip non-alphabet from right
-    else if (!/[a-zA-Z]/.test(strArr[right])) {
+    } else if (!isAlphabet(arr[right])) {
         right--;
-    }
-
-    // Swap alphabets
-    else {
-        [strArr[left], strArr[right]] = [strArr[right], strArr[left]];
+    } else {
+        [arr[left], arr[right]] = [arr[right], arr[left]];
         left++;
         right--;
     }
 }
 
-let newStr = strArr.join('');
-console.log(newStr);
-output: c$b#a
+console.log(arr.join(""));
+
 ```
 
 ### Count degits 
