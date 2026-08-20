@@ -1,3 +1,42 @@
+### Convert a deeply nested object into a flat object using dot notation.
+
+```javascript 
+const input = {
+  user: {
+    name: "Shikhar",
+    address: {
+      city: "Delhi",
+      pin: 110001
+    }
+  }
+};
+
+function bindObjectName(obj,parentKey=''){
+      let result = {};
+      for(let key in obj){
+         const isObject = (typeof obj[key] == "object");
+         let currentKey = parentKey ? `${parentKey}.${key}` : key;
+          if(isObject && obj[key] !== null){
+           const nextedResult = bindObjectName(obj[key],currentKey);
+           Object.assign(result, nextedResult);
+          }else{
+          result[currentKey]=obj[key]; 
+          }
+      }
+    return result;
+}
+
+console.log(bindObjectName(input));
+
+// Output:
+// {
+//   "user.name": "Shikhar",
+//   "user.address.city": "Delhi",
+//   "user.address.pin": 110001
+// }
+
+```
+
 ### Swap value inplace
 output: c$b#a
 ```javascript
