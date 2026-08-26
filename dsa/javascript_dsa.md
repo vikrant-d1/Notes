@@ -1,3 +1,78 @@
+### Convert a flat array of objects into a hierarchical tree structure based on id and parentId.
+```javascript
+const data = [
+  { id: 1, parentId: null },
+  { id: 2, parentId: 1 },
+  { id: 3, parentId: 1 },
+  { id: 4, parentId: 2 },
+  { id: 5, parentId: 3 }
+];
+
+function buildTree(objArr) {
+  let map = new Map();
+  let tree = [];
+
+  // Step 1: Create all nodes
+  for (let i = 0; i < objArr.length; i++) {
+    map.set(objArr[i].id, {
+      ...objArr[i],
+      children: []
+    });
+  }
+
+  // Step 2: Build parent-child relationship
+  for (let j = 0; j < objArr.length; j++) {
+    let item = map.get(objArr[j].id);
+
+    if (item.parentId === null) {
+      tree.push(item);
+    } else {
+      const parent = map.get(item.parentId);
+
+      if (parent) {
+        parent.children.push(item);
+      }
+    }
+  }
+
+  return tree;
+}
+
+console.log(buildTree(data));
+
+//output
+[
+  {
+    id: 1,
+    parentId: null,
+    children: [
+      {
+        id: 2,
+        parentId: 1,
+        children: [
+          {
+            id: 4,
+            parentId: 2,
+            children: []
+          }
+        ]
+      },
+      {
+        id: 3,
+        parentId: 1,
+        children: [
+          {
+            id: 5,
+            parentId: 3,
+            children: []
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
 ### Convert a deeply nested object into a flat object using dot notation.
 
 ```javascript 
