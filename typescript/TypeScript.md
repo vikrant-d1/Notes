@@ -2,11 +2,9 @@
 
 ### Q3. What is the difference between `any`, `unknown`, and `never`?
 
-- **`any`** — Opts out of type checking entirely. A value of type `any` can be assigned to any other type and any operation on it is allowed. It's an escape hatch that effectively turns off TypeScript for that value.
-
-- **`unknown`** — The type-safe counterpart to `any`. Like `any`, it can hold any value — but unlike `any`, you cannot perform operations on an `unknown` value without first narrowing its type with a type guard.
-
-- **`never`** — Represents a value that **never occurs**. It is the bottom type — a subtype of every type. Used for functions that always throw, infinite loops, or exhaustive type checks.
+- **any** — Disables type checking, allowing the value to be used and assigned almost anywhere.
+- **unknown** — Represents an unknown value that must be type-checked or narrowed before use.
+- **never** — Represents a value that can never occur, commonly used for functions that never return and exhaustive checks.
 
 
 ### What is Function Overloading in TypeScript?
@@ -30,120 +28,18 @@ display(100);
 
 No. JavaScript does not support function overloading. TypeScript provides it at compile time through multiple function signatures, but after compilation there is only one JavaScript function.
 
-## Q: How do you transpile TypeScript to JavaScript?
 
-### Answer
-
-TypeScript cannot run directly in Node.js or browsers — it must be compiled down to JavaScript. The primary tool is the **TypeScript Compiler (`tsc`)**, shipped with the `typescript` npm package.
-
----
-
-## Steps to Transpile
-
-### 1. Install TypeScript
-
-```bash
-npm install -D typescript
-```
-
-### 2. Initialize TypeScript Config
-
-```bash
-npx tsc --init
-```
-
-This generates a `tsconfig.json` file in the root of your project.
-
-### 3. Run the Compiler
-
-```bash
-npx tsc
-```
-
-This reads `tsconfig.json` and outputs compiled `.js` files to the configured `outDir`.
-
----
-
-## Key `tsconfig.json` Options
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2020",        // JS version to emit
-    "module": "commonjs",      // Module system (commonjs for Node.js)
-    "outDir": "./dist",        // Output folder for compiled JS
-    "rootDir": "./src",        // Source TypeScript folder
-    "strict": true,            // Enable all strict type checks
-    "esModuleInterop": true,   // Fix default import compatibility
-    "declaration": true,       // Emit .d.ts type definition files
-    "sourceMap": true          // Generate .map files for debugging
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
-}
-```
-
----
-
-## Common `tsc` Commands
-
-| Command | Purpose |
-|---|---|
-| `npx tsc` | Compile everything per `tsconfig.json` |
-| `npx tsc --watch` | Watch mode — recompile on file change |
-| `npx tsc --noEmit` | Type-check only, no output (used in CI) |
-| `npx tsc --project tsconfig.prod.json` | Use a specific config file |
-
----
-
-## Production Setup (Recommended)
-
-```json
-// package.json scripts
-{
-  "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
-    "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts"
-  }
-}
-```
-
-- **CI pipeline** → `tsc --noEmit` for type checking only
-- **Production build** → `tsc` or faster alternatives (esbuild/swc)
-- **Development** → `tsx` or `ts-node` (no compile step needed)
-
----
-
-### Q: What's the difference between `tsc` and `esbuild`?
-
-**Answer:**  
-`tsc` is the official TypeScript compiler — it does **full type checking** and then emits JavaScript. It's slower because it builds a full type graph.  
-`esbuild` just **strips TypeScript syntax** (types, decorators, etc.) without checking them — making it ~100x faster. You lose type safety guarantees at build time, so teams pair it with `tsc --noEmit` in CI.
-
----
-
-### Q: What does `strict: true` enable?
-
-**Answer:**  
-It enables a set of strict compiler flags in one shot:
-
-### Q: Can Node.js run TypeScript natively?
-
-**Answer:**  
-Node.js **22+** introduced experimental native TypeScript support via the `--experimental-strip-types` flag, which strips types without transpiling syntax. Node.js **23+** improved this further. However, it's **not production-ready** — it doesn't support all TypeScript features (e.g., decorators, `const enum`). For production, `tsc` or a dedicated transpiler is still the standard.
-
----
 
 ### Q: What is the role of `.d.ts` files?
-`.d.ts` files are **TypeScript declaration files** — they contain only type information with no runtime JavaScript. They are generated when `declaration: true` is set in `tsconfig.json`. They allow TypeScript consumers of a library to get type safety and autocomplete without needing the original `.ts` source files.
+`.d.ts` files are TypeScript declaration files that contain type information but no runtime JavaScript code.
+They provide type safety and autocomplete for libraries or JavaScript code without exposing the original TypeScript source.
 
 ---
 
 ## Q: What is a `.map` File (Source Map)?
 
-When TypeScript is compiled to JavaScript, the resulting `.js` file looks very different from the original `.ts` source. A **source map** (`.js.map`) is a JSON file that creates a **mapping between the compiled JS and the original TS source** — line by line, column by column.
+A **source map** (`.js.map`) is a JSON file that creates a **mapping between the compiled JS and the original TS source** — line by line, column by column.
+It helps with debugging by showing the original .ts code instead of the compiled JavaScript.
 
 Enable it in `tsconfig.json`:
 
@@ -157,79 +53,12 @@ Enable it in `tsconfig.json`:
 
 This generates a `.js.map` file alongside every `.js` file in `dist/`.
 
-### What it looks like
 
-```
-dist/
-  index.js        ← compiled JavaScript
-  index.js.map    ← source map (links back to src/index.ts)
-src/
-  index.ts        ← original TypeScript
-```
-
-The `.js` file ends with a reference comment:
-
-```js
-// index.js (last line)
-//# sourceMappingURL=index.js.map
-```
-
-### Why it matters
-
-| Benefit | Explanation |
-|---|---|
-| **Debugging** | Breakpoints in DevTools or VS Code point to the original `.ts` file, not compiled `.js` |
-| **Error stack traces** | Tools like Node.js + `source-map-support` show TS line numbers in errors |
-| **Production monitoring** | Sentry / Datadog can map minified errors back to original source |
-
-### Enable source maps in Node.js runtime
-
-```bash
-npm install source-map-support
-```
-
-```ts
-// src/index.ts — add at the very top
-import 'source-map-support/register';
-```
-
-Now runtime errors show TypeScript line numbers instead of compiled JS lines.
-
-### Interview answer (spoken)
-
-> "A `.map` file is a source map — it's a JSON file that maps each line and column of the compiled JavaScript back to the original TypeScript source. It's essential for debugging because without it, breakpoints and error stack traces point to the minified or compiled output, which is hard to read. In production we use it with tools like `source-map-support` in Node.js or Sentry for error monitoring."
-
----
 
 ## Q: What are Generic Functions in TypeScript and Why Use Them?
 
 A **generic function** is a function that works with **any type** while still being **type-safe** — the type is determined at call time, not at definition time. Generics use a **type parameter** (conventionally `T`) as a placeholder.
 
-### Without Generics (Problem)
-
-```ts
-// Using 'any' — loses all type safety
-function identity(value: any): any {
-  return value;
-}
-
-const result = identity(42);  // result is 'any' — no autocomplete, no safety
-```
-
-### With Generics (Solution)
-
-```ts
-// T is inferred from the argument at call time
-function identity<T>(value: T): T {
-  return value;
-}
-
-const num = identity(42);        // T = number → num is number
-const str = identity('hello');   // T = string → str is string
-const bool = identity(true);     // T = boolean → bool is boolean
-```
-
-TypeScript **infers** `T` automatically — you rarely need to pass it explicitly.
 
 ### Real-World Examples
 
@@ -273,31 +102,10 @@ interface User { id: number; name: string; }
 const user = await fetchData<User>('/api/user/1');  // user is typed as User
 ```
 
-### Why Use Generics?
-
-| Reason | Explanation |
-|---|---|
-| **Reusability** | Write one function that works for many types |
-| **Type safety** | Compiler catches type mismatches — no runtime surprises |
-| **Avoid `any`** | `any` disables type checking; generics keep it intact |
-| **Autocomplete** | IDE knows the exact return type — better DX |
-| **Constraints** | `T extends SomeType` limits what types are accepted |
-
 ## Q: What are Generic Interfaces in TypeScript and Why Use Them?
 
 A **generic interface** defines a contract (shape) that works with **any type**, decided when the interface is used. They're the backbone of reusable, strongly-typed data structures and API contracts.
 
-### Basic Generic Interface
-
-```ts
-interface Box<T> {
-  value: T;
-  label: string;
-}
-
-const numBox: Box<number> = { value: 42, label: 'Age' };
-const strBox: Box<string> = { value: 'hello', label: 'Name' };
-```
 
 ### Real-World Examples
 
@@ -379,78 +187,6 @@ interface Cache<K, V> {
 }
 ```
 
-### Generic Interface vs Generic Function — Key Difference
-
-```ts
-// Generic FUNCTION — T resolved per call
-function parse<T>(json: string): T {
-  return JSON.parse(json) as T;
-}
-
-// Generic INTERFACE — T resolved when type is assigned/implemented
-interface Parser<T> {
-  parse(input: string): T;
-  serialize(value: T): string;
-}
-
-class JsonUserParser implements Parser<User> {
-  parse(input: string): User { return JSON.parse(input); }
-  serialize(value: User): string { return JSON.stringify(value); }
-}
-```
-
-### Why Use Generic Interfaces?
-
-| Reason | Explanation |
-|---|---|
-| **Reusable contracts** | One interface definition, works for any entity type |
-| **Type-safe patterns** | Repository, Service, Cache patterns without repeating types |
-| **Consistent API shapes** | `ApiResponse<T>` enforces the same envelope across all endpoints |
-| **Scalable architecture** | Add new entities — no new interfaces needed, just `Repository<NewEntity>` |
-| **Better tooling** | Full autocomplete and compile-time checks everywhere |
-
-
-### What is TypeScript?
-A **typed superset of JavaScript** by Microsoft. Catches errors at compile time, not runtime.
-
-### Basic Types
-| Type | Example |
-|------|---------|
-| `boolean` | `let done: boolean = false` |
-| `number` | `let age: number = 30` |
-| `string` | `let name: string = "John"` |
-| `array` | `let list: number[] = [1,2,3]` |
-| `tuple` | `let x: [string, number] = ["hi", 10]` |
-| `enum` | `enum Color { Red, Green }` |
-| `any` | Disables type checking — **avoid** |
-| `unknown` | Safe `any` — must narrow before use |
-| `never` | Function that never returns (throws/infinite loop) |
-| `void` | Function returns nothing useful |
-
-### `any` vs `unknown` vs `never`
-- **`any`** → No checking. Escape hatch. Avoid it.
-- **`unknown`** → Must check type before using. Safe alternative to `any`.
-- **`never`** → Impossible value. Used for exhaustive checks.
-
-### `type` vs `interface`
-| Feature | `interface` | `type` |
-|---------|------------|--------|
-| Object shapes | ✅ | ✅ |
-| Declaration merging | ✅ | ❌ |
-| Unions / Intersections | ❌ | ✅ |
-| Mapped / Computed types | ❌ | ✅ |
-
-**Rule:** `interface` for objects & classes. `type` for everything else.
-
-### `const` Assertions
-Locks values to their **literal types** and makes them `readonly`.
-```ts
-const roles = ["admin", "user"] as const;
-type Role = (typeof roles)[number]; // "admin" | "user"
-```
-
----
-
 ## 2. Advanced Types
 
 ### Union & Intersection
@@ -489,16 +225,7 @@ Build string types from other string types.
 ```ts
 type Event = `on${Capitalize<"click" | "focus">}`; // "onClick" | "onFocus"
 ```
-
 ---
-
-## 3. Generics
-
-### What Are Generics?
-**Type parameters** that let you write reusable, type-safe code.
-```ts
-function identity<T>(arg: T): T { return arg; }
-```
 
 ### Generic Constraints
 Limit what `T` can be using `extends`.
@@ -559,14 +286,6 @@ palette.green.toUpperCase(); // ✅ still knows it's string
 - **Interface** → Pure contract. Multiple implementation.
 
 ---
-
-## 6. Advanced Patterns
-
-### Declaration Files (`.d.ts`)
-Type-only files that describe JS libraries without implementations.
-
-### Declaration Merging
-Adding fields to an existing interface (e.g., extending Express `Request`).
 
 ### Decorators
 Functions that modify classes/methods at design time. `@Logger`, `@Log`.
@@ -1290,61 +1009,5 @@ if (!result.success) {
 
 ---
 
-## PART 6 — Common Mistakes (Senior Level)
 
-| ❌ Don't | ✅ Do |
-|----------|------|
-| Use `any` for API responses | Use `unknown` + Zod validation |
-| Use `as` to silence errors | Use proper type guards / narrowing |
-| Skip `strict: true` | Always enable strict mode |
-| Return raw DB types to clients | Map through typed transformers |
-| Trust API responses blindly | Validate at runtime with Zod/io-ts |
-| Put all types in one giant file | Colocate types with their domain |
-| Use `React.FC` everywhere | Prefer typed function props directly |
-| Ignore `null` / `undefined` | Use `?.` and `??` — enable `strictNullChecks` |
-| Share mutable state objects | Use `Readonly<T>`, `as const`, `DeepReadonly` |
-| Define types manually for APIs | Derive from Zod schemas or Prisma/Drizzle |
-| Over-abstract type utilities | Keep types readable; extract only when reused 3+ times |
 
----
-
-## PART 7 — Leadership & Architecture Questions
-
----
-
-### L1: How do you migrate 200k lines of JS to TS?
-1. Enable `allowJs: true` — mix JS/TS.
-2. Start `strict: false`, enable flags one by one.
-3. Prioritize **shared modules → API layer → UI components**.
-4. CI gate: block new `.js` files.
-5. Track progress: `any` count dashboard.
-6. Target: 6-12 months for full migration with a team.
-
-### L2: How do you enforce TS quality in a 50-person team?
-- `strict: true` + `noUncheckedIndexedAccess` in shared tsconfig.
-- ESLint with `@typescript-eslint/recommended-type-checked`.
-- Pre-commit hooks (Husky + lint-staged).
-- CI blocks on type errors — zero tolerance.
-- Shared utility types package in monorepo.
-- Weekly TS knowledge-sharing sessions.
-- Code review checklist: no `any`, no `as`, proper error typing.
-
-### L3: How do you decide between tRPC, GraphQL, and REST?
-| Factor | REST | GraphQL | tRPC |
-|--------|------|---------|------|
-| Type safety | Manual (Zod/OpenAPI) | Codegen | Automatic |
-| Client diversity | Any | Any | TS only |
-| Learning curve | Low | Medium | Low |
-| Overhead | Low | Medium | Lowest |
-| Best for | Public APIs, microservices | Complex data graphs, mobile | TS monorepos, internal APIs |
-
-### L4: How do you handle breaking type changes in a shared package?
-1. **Semantic versioning** — major bump for breaking changes.
-2. **Deprecation first** — mark old types with `@deprecated` JSDoc.
-3. **Codemods** — automated migration scripts (ts-morph / jscodeshift).
-4. **CI validation** — consumers run against canary versions before release.
-5. **Changeset-based releases** — document what changed and why.
-
----
-
-*Practice these scenarios out loud — senior interviews test **how you think and communicate**, not just syntax. Good luck! 🚀*
