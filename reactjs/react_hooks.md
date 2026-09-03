@@ -47,56 +47,41 @@ This README adds both in full and expands **every hook/API into a practical proj
 ```typescript
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseApiOptions {
-  debounceMs?: number;
-}
-
-interface UseApiReturn<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-  execute: (url: string, options?: RequestInit) => void;
-  cancel: () => void;
-}
-
-export function useApi<T>({
-  debounceMs = 500,
-}: UseApiOptions = {}): UseApiReturn<T> {
-  const [data, setData] = useState<T | null>(null);
+export function useApi(debounceMs = 500) {
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const abortController = useRef<AbortController | null>(null);
+  const timerRef = useRef(null);
+  const controllerRef = useRef(null);
 
   const cancel = useCallback(() => {
     // Cancel debounce timer
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-      debounceTimer.current = null;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
 
-    // Abort running request
-    if (abortController.current) {
-      abortController.current.abort();
-      abortController.current = null;
+    // Abort previous API request
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+      controllerRef.current = null;
     }
-
-    setLoading(false);
   }, []);
 
   const execute = useCallback(
-    (url: string, options?: RequestInit) => {
-      // Cancel previous debounce/request
+    (url, options = {}) => {
+      // Cancel previous timer/request
       cancel();
 
-      setError(null);
       setLoading(true);
+      setError(null);
 
-      debounceTimer.current = setTimeout(async () => {
+      // Debounce
+      timerRef.current = setTimeout(async () => {
         const controller = new AbortController();
 
-        abortController.current = controller;
+        controllerRef.current = controller;
 
         try {
           const response = await fetch(url, {
@@ -108,18 +93,16 @@ export function useApi<T>({
             throw new Error(`HTTP Error: ${response.status}`);
           }
 
-          const result: T = await response.json();
+          const result = await response.json();
 
           setData(result);
         } catch (err) {
-          // Abort is expected when a new request starts
-          if (err instanceof DOMException && err.name === "AbortError") {
+          // Ignore AbortController error
+          if (err.name === "AbortError") {
             return;
           }
 
-          setError(
-            err instanceof Error ? err.message : "Something went wrong"
-          );
+          setError(err.message || "Something went wrong");
         } finally {
           if (!controller.signal.aborted) {
             setLoading(false);
@@ -130,6 +113,7 @@ export function useApi<T>({
     [cancel, debounceMs]
   );
 
+  // Cleanup when component unmounts
   useEffect(() => {
     return () => {
       cancel();
@@ -147,59 +131,55 @@ export function useApi<T>({
 
 // use
 
+
 import { useState } from "react";
 import { useApi } from "./useApi";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-export default function UserSearch() {
-  const [query, setQuery] = useState("");
+function UserSearch() {
+  const [search, setSearch] = useState("");
 
   const {
     data,
     loading,
     error,
-    execute,
-  } = useApi<User[]>({
-    debounceMs: 500,
-  });
+  } = useApi(500);
 
-  const handleSearch = (value: string) => {
-    setQuery(value);
+  const handleSearch = (e) => {
+    const value = e.target.value;
+
+    setSearch(value);
 
     if (!value.trim()) {
       return;
     }
 
     execute(
-      `https://api.example.com/users?search=${encodeURIComponent(value)}`
+      `https://api.example.com/users?search=${value}`
     );
   };
 
   return (
     <div>
       <input
-        value={query}
-        onChange={(e) => handleSearch(e.target.value)}
+        value={search}
+        onChange={handleSearch}
         placeholder="Search users..."
       />
 
       {loading && <p>Loading...</p>}
 
-      {error && <p>Error: {error}</p>}
+      {error && <p>{error}</p>}
 
       {data?.map((user) => (
         <div key={user.id}>
-          {user.name} - {user.email}
+          {user.name}
         </div>
       ))}
     </div>
   );
 }
+
+export default UserSearch;
 ```
 
 # 1. useState
