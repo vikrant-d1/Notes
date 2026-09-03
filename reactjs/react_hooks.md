@@ -43,6 +43,165 @@ This README adds both in full and expands **every hook/API into a practical proj
 
 ---
 
+### Custom UseApi hook with debouncing and abort controller.
+```typescript
+import { useCallback, useEffect, useRef, useState } from "react";
+
+interface UseApiOptions {
+  debounceMs?: number;
+}
+
+interface UseApiReturn<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  execute: (url: string, options?: RequestInit) => void;
+  cancel: () => void;
+}
+
+export function useApi<T>({
+  debounceMs = 500,
+}: UseApiOptions = {}): UseApiReturn<T> {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortController = useRef<AbortController | null>(null);
+
+  const cancel = useCallback(() => {
+    // Cancel debounce timer
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+      debounceTimer.current = null;
+    }
+
+    // Abort running request
+    if (abortController.current) {
+      abortController.current.abort();
+      abortController.current = null;
+    }
+
+    setLoading(false);
+  }, []);
+
+  const execute = useCallback(
+    (url: string, options?: RequestInit) => {
+      // Cancel previous debounce/request
+      cancel();
+
+      setError(null);
+      setLoading(true);
+
+      debounceTimer.current = setTimeout(async () => {
+        const controller = new AbortController();
+
+        abortController.current = controller;
+
+        try {
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+
+          const result: T = await response.json();
+
+          setData(result);
+        } catch (err) {
+          // Abort is expected when a new request starts
+          if (err instanceof DOMException && err.name === "AbortError") {
+            return;
+          }
+
+          setError(
+            err instanceof Error ? err.message : "Something went wrong"
+          );
+        } finally {
+          if (!controller.signal.aborted) {
+            setLoading(false);
+          }
+        }
+      }, debounceMs);
+    },
+    [cancel, debounceMs]
+  );
+
+  useEffect(() => {
+    return () => {
+      cancel();
+    };
+  }, [cancel]);
+
+  return {
+    data,
+    loading,
+    error,
+    execute,
+    cancel,
+  };
+}
+
+// use
+
+import { useState } from "react";
+import { useApi } from "./useApi";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export default function UserSearch() {
+  const [query, setQuery] = useState("");
+
+  const {
+    data,
+    loading,
+    error,
+    execute,
+  } = useApi<User[]>({
+    debounceMs: 500,
+  });
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+
+    if (!value.trim()) {
+      return;
+    }
+
+    execute(
+      `https://api.example.com/users?search=${encodeURIComponent(value)}`
+    );
+  };
+
+  return (
+    <div>
+      <input
+        value={query}
+        onChange={(e) => handleSearch(e.target.value)}
+        placeholder="Search users..."
+      />
+
+      {loading && <p>Loading...</p>}
+
+      {error && <p>Error: {error}</p>}
+
+      {data?.map((user) => (
+        <div key={user.id}>
+          {user.name} - {user.email}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 # 1. useState
 
 ## Definition
