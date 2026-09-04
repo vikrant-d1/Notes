@@ -1,4 +1,111 @@
 
+
+##  Move Zeroes
+**Pattern:** Two Pointer
+
+**Complexity:** O(n) time, O(1) space
+
+```javascript
+function moveZeroes(nums) {
+  let write = 0;
+
+  for (const num of nums) {
+    if (num !== 0) {
+      nums[write++] = num;
+    }
+  }
+
+  while (write < nums.length) {
+    nums[write++] = 0;
+  }
+
+  return nums;
+}
+```
+
+
+
+### Example Input
+
+```javascript
+const nums = [0, 1, 0, 3, 12];
+console.log(moveZeroes(nums));
+```
+
+### Example Output
+
+```text
+[1, 3, 12, 0, 0]
+```
+## 8. Rotate Array
+**Pattern:** Array / In-place
+
+**Complexity:** O(n) time, O(1) space
+
+```javascript
+function rotate(nums, k) {
+  k %= nums.length;
+
+  const reverse = (left, right) => {
+    while (left < right) {
+      [nums[left], nums[right]] = [nums[right], nums[left]];
+      left++;
+      right--;
+    }
+  };
+
+  reverse(0, nums.length - 1);
+  reverse(0, k - 1);
+  reverse(k, nums.length - 1);
+
+  return nums;
+}
+```
+
+
+
+### Example Input
+
+```javascript
+const nums = [1, 2, 3, 4, 5, 6, 7];
+const k = 3;
+console.log(rotate(nums, k));
+```
+
+### Example Output
+
+```text
+[5, 6, 7, 1, 2, 3, 4]
+```
+
+```javascript
+function missingNumber(nums) {
+  let result = nums.length;
+
+  for (let i = 0; i < nums.length; i++) {
+    result ^= i ^ nums[i];
+  }
+
+  return result;
+}
+```
+
+
+
+### Example Input
+
+```javascript
+const nums = [3, 0, 1];
+console.log(missingNumber(nums));
+```
+
+### Example Output
+
+```text
+2
+```
+
+
 ### Convert a flat array of objects into a hierarchical tree structure based on id and parentId.
 ```javascript
 const data = [
