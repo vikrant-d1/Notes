@@ -1,51 +1,5 @@
-# Senior Node.js / Full-Stack — 100 DSA Problems With JavaScript Programs
+# DSA Problems With JavaScript Programs
 
-This README contains the **100 selected DSA problems with JavaScript implementations** for Senior Node.js / Full-Stack interview preparation.
-
-The focus is on learning the **pattern + implementation + complexity**, rather than memorizing random LeetCode solutions.
-
-> **Important:** Some problems have a deliberately simple implementation first. In a senior interview, be prepared to discuss and implement the optimized version using the appropriate data structure (for example, a real Min Heap for Kth Largest / Merge K Sorted Lists, and two heaps for Median From Data Stream).
-
----
-
-## How to Use This README
-
-For every problem:
-
-1. Understand the problem.
-2. Try a brute-force solution first.
-3. Identify the optimal pattern.
-4. Implement it yourself without looking.
-5. Explain time and space complexity.
-6. Test edge cases.
-7. Explain why the chosen data structure works.
-
-## Priority
-
-- ⭐⭐⭐ = Must know
-- ⭐⭐ = Important
-- No star = Complete after the high-priority problems
-
----
-
-## 100-Problem Map
-
-| # | Topic | Problems |
-|---|---|---|
-| 1-15 | Arrays | HashMap, Prefix Sum, Kadane, Sorting, Two Pointers |
-| 16-25 | Strings | HashMap, String processing, Sliding Window |
-| 26-33 | Sliding Window | Fixed/Variable windows |
-| 34-39 | Two Pointers | Array/string pointer techniques |
-| 40-46 | Binary Search | Normal, rotated, answer-space search |
-| 47-54 | Stack | Stack + Monotonic Stack |
-| 55-64 | Linked List | Fast/slow pointers, LRU |
-| 65-74 | Trees/BST | DFS, BFS, BST |
-| 75-79 | Heap | Top K, Priority Queue, Median |
-| 80-87 | Graph | BFS, DFS, Topological Sort, Dijkstra, DSU |
-| 88-95 | DP | 1D, 2D, Grid, String DP |
-| 96-100 | Greedy/Backtracking/Trie | Greedy, recursion, prefix tree |
-
----
 
 
 ## 4. Product of Array Except Self
