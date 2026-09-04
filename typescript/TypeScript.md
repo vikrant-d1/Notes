@@ -1,547 +1,1388 @@
-# TypeScript & React 
+# TypeScript — Missing Advanced Interview Questions & Answers
 
-### Q3. What is the difference between `any`, `unknown`, and `never`?
+This README contains the **advanced TypeScript topics that were missing or not covered deeply enough** in the existing interview guide.
 
-- **any** — Disables type checking, allowing the value to be used and assigned almost anywhere.
-- **unknown** — Represents an unknown value that must be type-checked or narrowed before use.
-- **never** — Represents a value that can never occur, commonly used for functions that never return and exhaustive checks.
-
-
-### What is Function Overloading in TypeScript?
-
-Function overloading allows a function to accept different types or different numbers of arguments while providing type safety.
-
-In TypeScript, we define multiple function signatures (overloads) and write only one implementation.
-
-```javascript
-function display(value: string): void;
-function display(value: number): void;
-
-function display(value: string | number): void {
-  console.log(value);
-}
-
-display("Hello");
-display(100);
-```
-### Does JavaScript Support Function Overloading?
-
-No. JavaScript does not support function overloading. TypeScript provides it at compile time through multiple function signatures, but after compilation there is only one JavaScript function.
-
-
-
-### Q: What is the role of `.d.ts` files?
-`.d.ts` files are TypeScript declaration files that contain type information but no runtime JavaScript code.
-They provide type safety and autocomplete for libraries or JavaScript code without exposing the original TypeScript source.
+Focus: **Senior / Staff / Principal TypeScript interviews**, especially for Node.js, React, Next.js, API, and large-scale applications.
 
 ---
 
-## Q: What is a `.map` File (Source Map)?
+## 1. Structural Typing & Assignability
 
-A **source map** (`.js.map`) is a JSON file that creates a **mapping between the compiled JS and the original TS source** — line by line, column by column.
-It helps with debugging by showing the original .ts code instead of the compiled JavaScript.
+### Q1. What is structural typing in TypeScript?
 
-Enable it in `tsconfig.json`:
+**Answer:**
 
-```json
-{
-  "compilerOptions": {
-    "sourceMap": true
-  }
-}
-```
-
-This generates a `.js.map` file alongside every `.js` file in `dist/`.
-
-
-
-## Q: What are Generic Functions in TypeScript and Why Use Them?
-
-A **generic function** is a function that works with **any type** while still being **type-safe** — the type is determined at call time, not at definition time. Generics use a **type parameter** (conventionally `T`) as a placeholder.
-
-
-### Real-World Examples
+TypeScript is structurally typed, which means compatibility is based on the **shape of a type**, not its explicit name.
 
 ```ts
-// 1. Generic array utility
-function getFirst<T>(arr: T[]): T | undefined {
-  return arr[0];
+interface User {
+  id: number;
+  name: string;
 }
 
-const first = getFirst([1, 2, 3]);   // number
-const name  = getFirst(['a', 'b']);  // string
+const user = {
+  id: 1,
+  name: "Vikrant",
+  email: "test@example.com"
+};
 
-// 2. Generic API response wrapper
-function wrapResponse<T>(data: T): { success: boolean; data: T } {
-  return { success: true, data };
-}
-
-const res = wrapResponse({ id: 1, name: 'Vikrant' });
-// res.data is inferred as { id: number; name: string }
-
-// 3. Generic with constraint — T must have an 'id' property
-function findById<T extends { id: number }>(items: T[], id: number): T | undefined {
-  return items.find(item => item.id === id);
-}
-
-// 4. Multiple type parameters
-function merge<T, U>(obj1: T, obj2: U): T & U {
-  return { ...obj1, ...obj2 };
-}
-
-const merged = merge({ name: 'Vikrant' }, { age: 30 });
-// merged is { name: string; age: number }
-
-// 5. Generic async fetch (very common in production)
-async function fetchData<T>(url: string): Promise<T> {
-  const res = await fetch(url);
-  return res.json() as T;
-}
-
-interface User { id: number; name: string; }
-const user = await fetchData<User>('/api/user/1');  // user is typed as User
+const u: User = user; // OK
 ```
 
-## Q: What are Generic Interfaces in TypeScript and Why Use Them?
+`user` has all properties required by `User`, so it is assignable.
 
-A **generic interface** defines a contract (shape) that works with **any type**, decided when the interface is used. They're the backbone of reusable, strongly-typed data structures and API contracts.
+---
 
+### Q2. What is excess property checking?
 
-### Real-World Examples
+**Answer:**
+
+TypeScript performs additional checking when assigning a **fresh object literal** to a target type.
 
 ```ts
-// 1. API Response wrapper — used in almost every production codebase
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-  message: string;
-  timestamp: string;
+interface User {
+  name: string;
 }
 
+const user: User = {
+  name: "Vikrant",
+  age: 30
+};
+// Error: Object literal may only specify known properties
+```
+
+But:
+
+```ts
+const data = {
+  name: "Vikrant",
+  age: 30
+};
+
+const user: User = data; // OK
+```
+
+This difference is called **excess property checking**.
+
+---
+
+## 2. Type Inference
+
+### Q3. What is type inference?
+
+**Answer:**
+
+TypeScript automatically determines a value's type without requiring an explicit annotation.
+
+```ts
+const name = "Vikrant";
+// string
+
+const age = 30;
+// number
+```
+
+Inference also works with function returns:
+
+```ts
+function getUser() {
+  return {
+    id: 1,
+    name: "Vikrant"
+  };
+}
+
+// inferred return type:
+// { id: number; name: string }
+```
+
+---
+
+### Q4. What is contextual typing?
+
+**Answer:**
+
+Contextual typing means TypeScript determines the type of an expression from the context where it is used.
+
+```ts
+const numbers = [1, 2, 3];
+
+numbers.map((value) => {
+  return value * 2;
+});
+```
+
+TypeScript knows `value` is a `number` because `map()` expects a callback receiving an array element.
+
+---
+
+### Q5. What is literal widening?
+
+**Answer:**
+
+TypeScript may widen literal types to broader types.
+
+```ts
+let status = "active";
+// string
+
+const status2 = "active";
+// "active"
+```
+
+`const` preserves the literal more often because the value cannot be reassigned.
+
+Use `as const` when you want deep literal preservation:
+
+```ts
+const config = {
+  environment: "production",
+  retries: 3
+} as const;
+```
+
+---
+
+## 3. keyof, typeof & Indexed Access Types
+
+### Q6. What does `keyof` do?
+
+**Answer:**
+
+`keyof` creates a union of the property names of a type.
+
+```ts
 interface User {
   id: number;
   name: string;
   email: string;
 }
 
-// Strongly typed — data is User, not 'any'
-const response: ApiResponse<User> = {
-  data: { id: 1, name: 'Vikrant', email: 'v@example.com' },
-  status: 200,
-  message: 'OK',
-  timestamp: new Date().toISOString(),
+type UserKey = keyof User;
+// "id" | "name" | "email"
+```
+
+---
+
+### Q7. What is an indexed access type?
+
+**Answer:**
+
+It retrieves the type of a property from another type.
+
+```ts
+type UserName = User["name"];
+// string
+
+type UserValue = User[keyof User];
+// string | number
+```
+
+This is extremely useful when building generic utilities.
+
+---
+
+### Q8. How do you create a type-safe property getter?
+
+**Answer:**
+
+Use `keyof` with an indexed access type.
+
+```ts
+function getValue<T, K extends keyof T>(
+  obj: T,
+  key: K
+): T[K] {
+  return obj[key];
+}
+
+const user = {
+  id: 1,
+  name: "Vikrant"
 };
 
-// 2. Paginated list response
-interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  hasNext: boolean;
+const name = getValue(user, "name");
+// string
+
+const id = getValue(user, "id");
+// number
+```
+
+---
+
+## 4. Conditional Types
+
+### Q9. What is a distributive conditional type?
+
+**Answer:**
+
+A conditional type distributes over a union when the checked type is a naked type parameter.
+
+```ts
+type ToArray<T> =
+  T extends unknown ? T[] : never;
+
+type Result = ToArray<string | number>;
+// string[] | number[]
+```
+
+TypeScript effectively evaluates:
+
+```ts
+string extends unknown ? string[] : never
+|
+number extends unknown ? number[] : never
+```
+
+---
+
+### Q10. How do you prevent distributive behavior?
+
+**Answer:**
+
+Wrap the type parameter in a tuple.
+
+```ts
+type ToArray<T> =
+  [T] extends [unknown] ? T[] : never;
+
+type Result = ToArray<string | number>;
+// (string | number)[]
+```
+
+This is a common advanced conditional-type interview question.
+
+---
+
+### Q11. What is the `infer` keyword?
+
+**Answer:**
+
+`infer` allows TypeScript to extract a type from another type.
+
+```ts
+type Element<T> =
+  T extends (infer U)[]
+    ? U
+    : never;
+
+type Result = Element<string[]>;
+// string
+```
+
+Another example:
+
+```ts
+type PromiseValue<T> =
+  T extends Promise<infer U>
+    ? U
+    : T;
+```
+
+---
+
+## 5. Mapped Types & Key Remapping
+
+### Q12. What are mapped types?
+
+**Answer:**
+
+Mapped types transform every property of an existing type.
+
+```ts
+type Optional<T> = {
+  [K in keyof T]?: T[K];
+};
+```
+
+Example:
+
+```ts
+interface User {
+  id: number;
+  name: string;
 }
 
-const users: PaginatedResponse<User> = {
-  items: [{ id: 1, name: 'Vikrant', email: 'v@example.com' }],
-  total: 100,
-  page: 1,
-  pageSize: 10,
-  hasNext: true,
+type PartialUser = Optional<User>;
+```
+
+---
+
+### Q13. What is key remapping in mapped types?
+
+**Answer:**
+
+Key remapping allows you to create new property names using `as`.
+
+```ts
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]:
+    () => T[K];
 };
 
-// 3. Generic Repository pattern (very common in Node.js + TypeORM/Prisma)
-interface Repository<T> {
-  findById(id: number): Promise<T | null>;
-  findAll(): Promise<T[]>;
-  create(data: Partial<T>): Promise<T>;
-  update(id: number, data: Partial<T>): Promise<T>;
-  delete(id: number): Promise<void>;
+interface User {
+  name: string;
+  age: number;
 }
 
-// Implement for a specific entity
-class UserRepository implements Repository<User> {
-  async findById(id: number): Promise<User | null> { /* ... */ return null; }
-  async findAll(): Promise<User[]> { return []; }
-  async create(data: Partial<User>): Promise<User> { /* ... */ return {} as User; }
-  async update(id: number, data: Partial<User>): Promise<User> { /* ... */ return {} as User; }
-  async delete(id: number): Promise<void> { /* ... */ }
-}
-
-// 4. Generic event emitter interface
-interface EventMap {
-  userCreated: User;
-  userDeleted: { id: number };
-}
-
-interface TypedEventEmitter<T extends Record<string, unknown>> {
-  on<K extends keyof T>(event: K, listener: (data: T[K]) => void): void;
-  emit<K extends keyof T>(event: K, data: T[K]): void;
-}
-
-// 5. Generic cache interface
-interface Cache<K, V> {
-  get(key: K): V | undefined;
-  set(key: K, value: V, ttlMs?: number): void;
-  delete(key: K): void;
-  clear(): void;
-}
+type UserGetters = Getters<User>;
 ```
 
-## 2. Advanced Types
+Result:
 
-### Union & Intersection
-- **Union (`|`)** → Value can be type A **or** B.
-- **Intersection (`&`)** → Value must be type A **and** B.
-
-### Conditional Types
 ```ts
-type IsString<T> = T extends string ? "yes" : "no";
-```
-Think: **"if T is string, then yes, else no"**
-
-### `infer` Keyword
-Captures a type inside a conditional. Like a **type-level variable**.
-```ts
-type ElementOf<T> = T extends (infer U)[] ? U : never;
-// ElementOf<string[]> → string
-```
-
-### Mapped Types
-Transform every property of a type.
-```ts
-type Optional<T> = { [K in keyof T]?: T[K] };
-```
-
-### Discriminated Unions (Tagged Unions)
-Each variant has a **shared literal field** (the "tag") that TypeScript uses to narrow.
-```ts
-type Shape =
-  | { kind: "circle"; radius: number }
-  | { kind: "rect"; w: number; h: number };
-```
-
-### Template Literal Types
-Build string types from other string types.
-```ts
-type Event = `on${Capitalize<"click" | "focus">}`; // "onClick" | "onFocus"
-```
----
-
-### Generic Constraints
-Limit what `T` can be using `extends`.
-```ts
-function len<T extends { length: number }>(x: T) { return x.length; }
-```
-
-### Key Utility Types (Built-in)
-| Utility | What It Does |
-|---------|-------------|
-| `Partial<T>` | All props optional |
-| `Required<T>` | All props required |
-| `Readonly<T>` | All props readonly |
-| `Pick<T, K>` | Keep only keys K |
-| `Omit<T, K>` | Remove keys K |
-| `Record<K, V>` | Object with keys K, values V |
-| `Exclude<U, E>` | Remove E from union U |
-| `Extract<U, E>` | Keep only E from union U |
-| `NonNullable<T>` | Remove null & undefined |
-| `ReturnType<F>` | Return type of function F |
-| `Parameters<F>` | Tuple of function params |
-| `Awaited<T>` | Unwrap Promise recursively |
-
----
-
-## 4. Type Guards & Narrowing
-
-Ways to tell TypeScript **which type** a value actually is:
-
-| Guard | When to Use |
-|-------|------------|
-| `typeof x === "string"` | Primitives |
-| `x instanceof Dog` | Class instances |
-| `"swim" in x` | Check property existence |
-| Custom: `x is Fish` | Complex logic (type predicate) |
-
-### `satisfies` (TS 4.9+)
-Validates a value matches a type **without widening** it.
-```ts
-const palette = { red: [255,0,0], green: "#0f0" } satisfies Record<string, string | number[]>;
-palette.green.toUpperCase(); // ✅ still knows it's string
-```
-
----
-
-## 5. Classes & OOP
-
-### Access Modifiers
-| Modifier | Scope |
-|----------|-------|
-| `public` | Everywhere (default) |
-| `private` | Only inside the class |
-| `protected` | Class + subclasses |
-| `readonly` | Set once, never changed |
-
-### Abstract Class vs Interface
-- **Abstract class** → Can have implementation + abstract methods. Single inheritance.
-- **Interface** → Pure contract. Multiple implementation.
-
----
-
-### Decorators
-Functions that modify classes/methods at design time. `@Logger`, `@Log`.
-
-### Branded (Nominal) Types
-Make structurally identical types **incompatible** using a phantom brand field.
-```ts
-type UserId = string & { __brand: "UserId" };
-type OrderId = string & { __brand: "OrderId" };
-// Can't mix them up!
-```
-
-### Variance
-- **Covariant** (output) → Subtype OK where supertype expected.
-- **Contravariant** (input) → Supertype OK where subtype expected.
-
----
-
-## 7. Config & Tooling
-
-### `strict: true` Enables
-`strictNullChecks`, `noImplicitAny`, `strictFunctionTypes`, `strictPropertyInitialization`, `noImplicitThis`, `strictBindCallApply`, `alwaysStrict`, `useUnknownInCatchVariables`.
-
-**Always use `strict: true`.**
-
----
-
-## 8. React + TypeScript — Components
-
-### Typing Props
-```tsx
-function Greeting({ name }: { name: string }) {
-  return <h1>Hello, {name}</h1>;
-}
-```
-
-### Typing Children
-Use `React.ReactNode` — the most flexible option.
-
-### Discriminated Union Props
-```tsx
-type BtnProps =
-  | { variant: "link"; href: string }
-  | { variant: "button"; onClick: () => void };
-```
-TypeScript narrows props based on `variant`.
-
----
-
-## 9. Hooks Typing
-
-| Hook | How to Type |
-|------|------------|
-| `useState` | `useState<User \| null>(null)` |
-| `useRef` (DOM) | `useRef<HTMLInputElement>(null)` |
-| `useRef` (mutable) | `useRef<number \| null>(null)` |
-| `useReducer` | Type `State` + `Action` union → pass to reducer |
-| `useContext` | `createContext<T \| undefined>(undefined)` + guard hook |
-| `useCallback` | Inferred; or `useCallback<(e: FormEvent) => void>(...)` |
-| `useMemo` | Return type inferred; or `useMemo<User[]>(...)` |
-
-### Custom Hook Pattern
-```tsx
-function useFetch<T>(url: string) {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  // ... fetch logic
-  return { data, loading, error } as const;
+{
+  getName: () => string;
+  getAge: () => number;
 }
 ```
 
 ---
 
-## 10. Event Handling
+## 6. Recursive Types
 
-| Event | Type |
-|-------|------|
-| Click | `React.MouseEvent<HTMLButtonElement>` |
-| Change | `React.ChangeEvent<HTMLInputElement>` |
-| Submit | `React.FormEvent<HTMLFormElement>` |
-| Key | `React.KeyboardEvent<HTMLInputElement>` |
-| Focus | `React.FocusEvent<HTMLInputElement>` |
+### Q14. What is a recursive type?
 
----
+**Answer:**
 
-## 11. Advanced React Patterns
+A recursive type references itself.
 
-### Generic Components
-Components that accept a type parameter (e.g., `<Table<User>>`).
-
-### HOC (Higher-Order Component)
-A function that takes a component and returns an enhanced one. Type both input and injected props.
-
-### Render Props
-Pass a **function as children** that receives data and returns JSX.
-
-### Polymorphic `as` Prop
-Let a component render as **any HTML element** while keeping correct props.
-```tsx
-<Text as="a" href="/home">Link</Text>
-<Text as="h1">Heading</Text>
+```ts
+type TreeNode<T> = {
+  value: T;
+  children: TreeNode<T>[];
+};
 ```
 
-### `forwardRef`
-```tsx
-const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => (
-  <input ref={ref} {...props} />
-));
+This is useful for:
+
+- Trees
+- Nested configuration
+- JSON
+- ASTs
+- File systems
+
+---
+
+### Q15. How would you implement `DeepPartial<T>`?
+
+**Answer:**
+
+```ts
+type DeepPartial<T> = {
+  [K in keyof T]?:
+    T[K] extends object
+      ? DeepPartial<T[K]>
+      : T[K];
+};
+```
+
+Example:
+
+```ts
+interface User {
+  name: string;
+  address: {
+    city: string;
+    country: string;
+  };
+}
+
+type PartialUser = DeepPartial<User>;
+```
+
+Now nested properties are also optional.
+
+---
+
+## 7. `never`, `unknown`, `void`, and `undefined`
+
+### Q16. What is the difference between `never` and `unknown`?
+
+**Answer:**
+
+`unknown` means:
+
+> I have a value, but I don't know its type yet.
+
+`never` means:
+
+> This value can never exist.
+
+```ts
+function fail(): never {
+  throw new Error("Failed");
+}
+
+function process(value: unknown) {
+  if (typeof value === "string") {
+    console.log(value.toUpperCase());
+  }
+}
+```
+
+`unknown` is safe because you must narrow it before using it.
+
+---
+
+### Q17. Why is `never` useful for exhaustive checking?
+
+**Answer:**
+
+It ensures all cases in a discriminated union are handled.
+
+```ts
+type Event =
+  | { type: "login" }
+  | { type: "logout" };
+
+function handle(event: Event) {
+  switch (event.type) {
+    case "login":
+      return;
+    case "logout":
+      return;
+    default:
+      const exhaustive: never = event;
+      return exhaustive;
+  }
+}
+```
+
+If a new event type is added and not handled, TypeScript reports an error.
+
+---
+
+### Q18. What is the difference between `void` and `undefined`?
+
+**Answer:**
+
+`undefined` is an actual value.
+
+`void` generally represents a function whose return value should not be used.
+
+```ts
+function log(): void {
+  console.log("hello");
+}
+```
+
+A function returning `undefined` is more specifically saying that the return value is `undefined`.
+
+---
+
+## 8. Type Assertions
+
+### Q19. What is the difference between `as`, `as const`, and `satisfies`?
+
+**Answer:**
+
+### `as`
+
+Tells TypeScript to treat a value as another type.
+
+```ts
+const user = data as User;
+```
+
+It does not perform runtime validation.
+
+### `as const`
+
+Preserves literal values and makes properties readonly.
+
+```ts
+const roles = ["admin", "user"] as const;
+```
+
+### `satisfies`
+
+Checks that a value conforms to a type while preserving its more specific inferred type.
+
+```ts
+const config = {
+  mode: "production",
+  retries: 3
+} satisfies {
+  mode: string;
+  retries: number;
+};
 ```
 
 ---
 
-## 12. State Management
+### Q20. Why is `as unknown as Type` considered dangerous?
 
-### Redux Toolkit
-- Type `State`, `Action` with `PayloadAction<T>`.
-- Create typed hooks: `useAppDispatch`, `useAppSelector`.
-- `RootState = ReturnType<typeof store.getState>`.
+**Answer:**
 
-### Zustand
-```tsx
-const useStore = create<StoreType>((set) => ({
-  count: 0,
-  inc: () => set((s) => ({ count: s.count + 1 })),
-}));
+It bypasses normal type compatibility checks.
+
+```ts
+const value = something as unknown as User;
+```
+
+This does not make `value` a real `User` at runtime.
+
+Use runtime validation instead:
+
+```ts
+const user = UserSchema.parse(value);
 ```
 
 ---
 
-## 13. Data Fetching
+## 9. Assertion Functions
 
-### React Query (TanStack Query)
-```tsx
-useQuery<User[], Error>({ queryKey: ["users"], queryFn: fetchUsers });
-useMutation<User, Error, NewUserPayload>({ mutationFn: createUser });
+### Q21. What is an assertion function?
+
+**Answer:**
+
+An assertion function tells TypeScript that a condition is guaranteed after the function returns.
+
+```ts
+function assertString(
+  value: unknown
+): asserts value is string {
+  if (typeof value !== "string") {
+    throw new Error("Expected string");
+  }
+}
+
+function process(value: unknown) {
+  assertString(value);
+
+  value.toUpperCase();
+}
 ```
 
-### Typed Axios
-Generic response wrappers: `ApiResponse<T>` with `data`, `message`, `pagination`.
+The compiler understands that `value` is a string after `assertString()`.
 
 ---
 
-## 14. Forms
+## 10. Function Overloads & Variance
 
-### React Hook Form + Zod
-1. Define Zod schema.
-2. Infer type: `type FormData = z.infer<typeof schema>`.
-3. Pass to `useForm<FormData>({ resolver: zodResolver(schema) })`.
+### Q22. When should you use function overloads instead of unions?
 
-**Result:** Runtime validation + compile-time types from a single source of truth.
+**Answer:**
 
----
+Use overloads when the return type depends on the input type.
 
-## 15. Testing
+```ts
+function parse(value: string): User;
+function parse(value: Buffer): User;
 
-- Use `render`, `screen`, `userEvent` from Testing Library.
-- Type mock functions: `vi.fn<[ParamTypes], ReturnType>()`.
-- Create typed `renderWithProviders` helper for Redux tests.
+function parse(value: string | Buffer): User {
+  // implementation
+}
+```
 
----
-
-## 16. Performance Patterns
-
-| Pattern | Typing |
-|---------|--------|
-| `React.memo` | `React.memo<Props>(Component, areEqual?)` |
-| `React.lazy` | `React.lazy<ComponentType<Props>>(() => import(...))` |
-| Custom comparison | `(prev: Props, next: Props) => boolean` |
+A union is simpler when the return type does not depend on the input.
 
 ---
 
-## 17. Quick-Fire Answers
+### Q23. What is function parameter variance?
 
-| Question | One-Line Answer |
-|----------|----------------|
-| `keyof` | Union of all property names of a type |
-| `typeof` (type context) | Extracts type from a runtime value |
-| Index signature | `{ [key: string]: number }` — dynamic keys |
-| `Readonly` vs `ReadonlyArray` | Readonly props vs no-mutate array |
-| `Awaited<T>` | Unwraps nested Promises |
-| `undefined` vs `void` | `void` = no useful return; `undefined` = specific value |
+**Answer:**
 
----
+Function parameters are primarily checked using **contravariance** under `strictFunctionTypes`.
 
-## 18. Migration & Leadership
+Conceptually, a callback that can safely handle a broader input type can be used where a narrower input is expected.
 
-### JS → TS Migration Strategy
-1. Rename `.js` → `.ts` incrementally.
-2. Start `strict: false`, enable flags one by one.
-3. Prioritize shared modules & API layers first.
-4. Block new `.js` files in CI.
+This prevents unsafe callback assignments.
 
-### Enforcing Best Practices
-ESLint + `@typescript-eslint`, strict tsconfig, pre-commit hooks, CI type checks, shared utility types, code review guidelines.
+Enable:
 
-### Missing Types for Libraries
-1. `npm i -D @types/libname` (DefinitelyTyped).
-2. If none → create local `.d.ts` file.
-3. Quick escape: `declare module "lib"`.
+```json
+{
+  "compilerOptions": {
+    "strictFunctionTypes": true
+  }
+}
+```
 
 ---
 
-## PART 2 — React + TypeScript
+### Q24. What are covariance, contravariance, and invariance?
+
+**Answer:**
+
+- **Covariance** — output types can become more specific.
+- **Contravariance** — input types can accept broader types.
+- **Invariance** — neither substitution direction is safe.
+- **Bivariance** — both directions are accepted in certain TypeScript cases.
+
+These concepts are especially important for:
+
+- Function callbacks
+- Generic APIs
+- React event handlers
+- Collections
+- Library design
 
 ---
 
-### 7. Component Typing
+## 11. Variadic Tuple Types
 
-| Pattern | Definition |
-|---------|-----------|
-| **Inline props** | `function Btn({ label }: { label: string })` — preferred |
-| **`React.ReactNode`** | Most flexible children type |
-| **Discriminated union props** | Different props per `variant` — TS narrows automatically |
-| **Polymorphic `as` prop** | Component renders as any element with correct props |
-| **`forwardRef`** | `React.forwardRef<HTMLInputElement, Props>((props, ref) => ...)` |
-| **Generic component** | `function Table<T>({ data }: { data: T[] })` — type-safe for any data |
+### Q25. What are variadic tuple types?
 
-### 8. Hooks Typing
+**Answer:**
 
-| Hook | How to Type |
-|------|------------|
-| `useState` | `useState<User \| null>(null)` |
-| `useRef` (DOM) | `useRef<HTMLInputElement>(null)` → `RefObject` (readonly) |
-| `useRef` (mutable) | `useRef<number \| null>(null)` → `MutableRefObject` |
-| `useReducer` | `State` + `Action` discriminated union |
-| `useContext` | `createContext<T \| undefined>(undefined)` + throw-if-undefined hook |
-| `useCallback` | Inferred, or `useCallback<(e: FormEvent) => void>(...)` |
-| `useMemo` | Return type inferred |
+They allow tuple types to be combined or manipulated using spreads.
 
-### 9. Event Types
+```ts
+type Concat<
+  A extends unknown[],
+  B extends unknown[]
+> = [...A, ...B];
 
-| Event | Type |
-|-------|------|
-| Click | `React.MouseEvent<HTMLButtonElement>` |
-| Change | `React.ChangeEvent<HTMLInputElement>` |
-| Submit | `React.FormEvent<HTMLFormElement>` |
-| Key | `React.KeyboardEvent` |
-| Focus | `React.FocusEvent` |
+type Result = Concat<
+  [string, number],
+  [boolean]
+>;
 
-### 10. Advanced React Patterns
+// [string, number, boolean]
+```
 
-| Pattern | Definition |
-|---------|-----------|
-| **HOC** | Function that takes component, returns enhanced component. Type both input & injected props. |
-| **Render Props** | Pass function-as-children that receives data, returns JSX. |
-| **Compound Components** | Parent shares state via context; children consume it. |
-| **React.memo** | `React.memo<Props>(Component, areEqual?)` — skip re-render if props unchanged |
-| **React.lazy** | `React.lazy(() => import("./Comp"))` — code-split at component level |
+They are useful for strongly typed:
 
-### 11. State Management (Typed)
+- Function composition
+- Middleware
+- Event systems
+- Utility functions
 
-| Library | Key Typing Pattern |
-|---------|-------------------|
-| **Redux Toolkit** | `PayloadAction<T>`, typed hooks via `RootState` & `AppDispatch` |
-| **Zustand** | `create<StoreInterface>((set) => ({...}))` |
-| **React Query** | `useQuery<Data, Error>`, `useMutation<Result, Error, Variables>` |
-| **React Hook Form + Zod** | `z.infer<typeof schema>` → single source of truth for runtime + compile-time |
+---
+
+## 12. Advanced Tuples
+
+### Q26. What tuple features should a senior TypeScript developer know?
+
+**Answer:**
+
+Know:
+
+- Fixed-length tuples
+- Optional tuple elements
+- Rest tuple elements
+- Named tuple elements
+- Readonly tuples
+- Variadic tuples
+
+```ts
+type User = [
+  id: number,
+  name: string,
+  email?: string
+];
+```
+
+---
+
+## 13. `this` Typing
+
+### Q27. How do you explicitly type `this` in a function?
+
+**Answer:**
+
+Use a special `this` parameter.
+
+```ts
+interface DB {
+  query(this: DB, sql: string): void;
+}
+```
+
+The `this` parameter is removed from the runtime function signature but provides compile-time checking.
+
+---
+
+### Q28. What is `ThisType<T>`?
+
+**Answer:**
+
+`ThisType<T>` provides contextual typing for `this` inside object literals.
+
+It is useful for APIs that define methods through object configuration.
+
+---
+
+## 14. Module System
+
+### Q29. What is the difference between CommonJS and ESM?
+
+**Answer:**
+
+CommonJS uses:
+
+```ts
+const fs = require("fs");
+module.exports = {};
+```
+
+ESM uses:
+
+```ts
+import fs from "node:fs";
+export {};
+```
+
+Modern Node.js applications commonly use ESM or explicitly configure CommonJS.
+
+TypeScript configuration must align with the runtime module system.
+
+---
+
+### Q30. What is `moduleResolution`?
+
+**Answer:**
+
+It determines how TypeScript resolves imported modules.
+
+Modern projects may use resolution strategies such as:
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "NodeNext"
+  }
+}
+```
+
+or:
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  }
+}
+```
+
+The correct option depends on whether the project runs through Node.js directly or a bundler.
+
+---
+
+### Q31. What is `verbatimModuleSyntax`?
+
+**Answer:**
+
+It makes TypeScript preserve import/export syntax more predictably and requires clear separation between type-only and runtime imports.
+
+```ts
+import type { User } from "./types";
+import { createUser } from "./user";
+```
+
+This is particularly useful in modern ESM projects.
+
+---
+
+## 15. Advanced `tsconfig`
+
+### Q32. What does `noUncheckedIndexedAccess` do?
+
+**Answer:**
+
+It adds `undefined` to indexed access where the value may not exist.
+
+Without it:
+
+```ts
+const user = users[0];
+// User
+```
+
+With it:
+
+```ts
+const user = users[0];
+// User | undefined
+```
+
+This catches many real production bugs.
+
+---
+
+### Q33. What does `exactOptionalPropertyTypes` do?
+
+**Answer:**
+
+It distinguishes between a missing optional property and explicitly assigning `undefined`.
+
+```ts
+interface User {
+  name?: string;
+}
+```
+
+With `exactOptionalPropertyTypes`, these can be treated differently:
+
+```ts
+{}
+```
+
+and:
+
+```ts
+{ name: undefined }
+```
+
+This provides more precise modeling of APIs.
+
+---
+
+### Q34. What does `noImplicitOverride` do?
+
+**Answer:**
+
+It requires the `override` keyword when overriding a parent class method.
+
+```ts
+class Dog extends Animal {
+  override speak() {
+    console.log("woof");
+  }
+}
+```
+
+This protects against accidental method-name changes in base classes.
+
+---
+
+### Q35. Which advanced TypeScript compiler flags do you consider important?
+
+**Answer:**
+
+For production applications:
+
+```json
+{
+  "strict": true,
+  "noUncheckedIndexedAccess": true,
+  "exactOptionalPropertyTypes": true,
+  "noImplicitOverride": true,
+  "noPropertyAccessFromIndexSignature": true,
+  "useUnknownInCatchVariables": true,
+  "verbatimModuleSyntax": true
+}
+```
+
+The exact configuration should be adapted to the runtime and build system.
+
+---
+
+## 16. Declaration & Module Augmentation
+
+### Q36. What is declaration merging?
+
+**Answer:**
+
+TypeScript can merge multiple declarations with the same name.
+
+```ts
+interface User {
+  id: number;
+}
+
+interface User {
+  name: string;
+}
+```
+
+The resulting interface contains both:
+
+```ts
+interface User {
+  id: number;
+  name: string;
+}
+```
+
+---
+
+### Q37. What is module augmentation?
+
+**Answer:**
+
+It allows you to add types to an existing module.
+
+A common Express example:
+
+```ts
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+      requestId: string;
+    }
+  }
+}
+```
+
+Now middleware-added properties can be recognized throughout the application.
+
+---
+
+### Q38. What is the difference between `declare module` and module augmentation?
+
+**Answer:**
+
+`declare module` can describe an untyped module:
+
+```ts
+declare module "legacy-package" {
+  export function run(): void;
+}
+```
+
+Module augmentation extends declarations that already exist.
+
+Use augmentation when you need to add functionality or fields to an existing library type.
+
+---
+
+## 17. Enum vs Union vs `as const`
+
+### Q39. When would you use enum, union, or `as const`?
+
+**Answer:**
+
+### Union
+
+```ts
+type Status = "active" | "inactive";
+```
+
+Excellent when you only need compile-time types.
+
+### `as const`
+
+```ts
+const STATUS = {
+  ACTIVE: "active",
+  INACTIVE: "inactive"
+} as const;
+
+type Status =
+  typeof STATUS[keyof typeof STATUS];
+```
+
+Useful when you need both runtime values and a derived type.
+
+### Enum
+
+```ts
+enum Status {
+  Active = "active",
+  Inactive = "inactive"
+}
+```
+
+Useful when a runtime enum object is specifically desired, but many modern TypeScript codebases prefer unions or `as const`.
+
+---
+
+## 18. Object vs `{}` vs `object`
+
+### Q40. What is the difference between `Object`, `{}`, `object`, and `Record<string, unknown>`?
+
+**Answer:**
+
+They are not interchangeable.
+
+- `{}` accepts almost any non-nullish value.
+- `object` means a non-primitive object.
+- `Object` is generally discouraged as a broad type.
+- `Record<string, unknown>` specifically represents an object with string keys.
+
+For unknown object-shaped data, prefer:
+
+```ts
+Record<string, unknown>
+```
+
+when that accurately represents the contract.
+
+---
+
+## 19. Runtime vs Compile-Time
+
+### Q41. Can TypeScript validate an API response at runtime?
+
+**Answer:**
+
+No.
+
+TypeScript types disappear during compilation.
+
+An API can return:
+
+```json
+{
+  "id": "wrong-type"
+}
+```
+
+even if TypeScript says:
+
+```ts
+interface User {
+  id: number;
+}
+```
+
+Use runtime validation:
+
+```ts
+const user = UserSchema.parse(response);
+```
+
+Libraries such as Zod can provide runtime validation and TypeScript inference.
+
+---
+
+### Q42. Why is `fetchData<T>()` alone not enough for API safety?
+
+**Answer:**
+
+This:
+
+```ts
+async function fetchData<T>(
+  url: string
+): Promise<T> {
+  const response = await fetch(url);
+  return response.json() as T;
+}
+```
+
+only tells the compiler what you **claim** the server returned.
+
+It does not validate the actual response.
+
+A safer design is:
+
+```ts
+async function fetchData<T>(
+  url: string,
+  schema: ZodSchema<T>
+): Promise<T> {
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return schema.parse(data);
+}
+```
+
+---
+
+## 20. TypeScript Performance
+
+### Q43. Why can TypeScript compilation become slow?
+
+**Answer:**
+
+Common causes include:
+
+- Very large unions
+- Deep recursive types
+- Complex conditional types
+- Huge mapped types
+- Excessive generic instantiation
+- Large dependency graphs
+- Large monorepos
+- Repeated type computation
+
+---
+
+### Q44. How would you diagnose a slow TypeScript build?
+
+**Answer:**
+
+Start with:
+
+```bash
+tsc --extendedDiagnostics
+```
+
+For deeper compiler investigation, use TypeScript tracing options such as:
+
+```bash
+tsc --generateTrace trace
+```
+
+Then identify:
+
+- Slow files
+- Large type instantiations
+- Dependency bottlenecks
+- Expensive library declarations
+
+---
+
+### Q45. How do you improve TypeScript performance in a large monorepo?
+
+**Answer:**
+
+Use:
+
+1. Project references
+2. `composite`
+3. Incremental builds
+4. Clear package boundaries
+5. Smaller dependency graphs
+6. Avoid excessively complex types
+7. Avoid unnecessary recursive conditional types
+8. Consider `skipLibCheck` where appropriate
+9. Separate build and type-check pipelines when useful
+
+Example:
+
+```json
+{
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true
+  }
+}
+```
+
+---
+
+## 21. Project References
+
+### Q46. What are TypeScript project references?
+
+**Answer:**
+
+Project references allow a large TypeScript codebase to be split into independently compiled projects.
+
+Example:
+
+```json
+{
+  "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/api" },
+    { "path": "./packages/web" }
+  ]
+}
+```
+
+They improve:
+
+- Build performance
+- Dependency boundaries
+- Incremental compilation
+- Monorepo scalability
+
+---
+
+## 22. TypeScript Build Tools
+
+### Q47. Does `tsc` only transpile TypeScript?
+
+**Answer:**
+
+`tsc` can type-check and emit JavaScript.
+
+Other tools may transpile without type-checking:
+
+| Tool | Type-checking | Transpilation |
+|---|---|---|
+| `tsc` | Yes | Yes |
+| `esbuild` | No | Yes |
+| SWC | No | Yes |
+| Babel | No | Yes |
+| `tsx` | No full type-check | Yes |
+
+A production CI pipeline should normally have a dedicated type-check step:
+
+```bash
+tsc --noEmit
+```
+
+---
+
+## 23. Node.js TypeScript
+
+### Q48. What Node.js types should a senior TypeScript developer know?
+
+**Answer:**
+
+Important Node types include:
+
+```ts
+NodeJS.ProcessEnv
+NodeJS.Timeout
+Buffer
+NodeJS.ReadableStream
+NodeJS.WritableStream
+```
+
+Also understand typing for:
+
+- `fs`
+- `http`
+- `EventEmitter`
+- Streams
+- `worker_threads`
+- `child_process`
+- `AbortController`
+- Web Streams
+
+Install Node types when required:
+
+```bash
+npm install -D @types/node
+```
+
+---
+
+## 24. Senior Scenario Questions
+
+### Q49. Your API response type is correct but production receives invalid data. What do you do?
+
+**Answer:**
+
+I would not trust TypeScript types at the runtime boundary.
+
+I would:
+
+1. Define a runtime schema.
+2. Validate the response.
+3. Reject malformed data.
+4. Log the validation failure.
+5. Add monitoring.
+6. Fix the upstream API contract.
+7. Add contract/integration tests.
+
+---
+
+### Q50. Your 500k-line TypeScript monorepo takes 10 minutes to type-check. What is your approach?
+
+**Answer:**
+
+I would:
+
+1. Measure first with compiler diagnostics.
+2. Identify expensive packages/types.
+3. Introduce project references.
+4. Enable incremental compilation.
+5. Reduce dependency graph size.
+6. Simplify recursive/conditional types.
+7. Review generated declaration files.
+8. Separate package builds.
+9. Use CI caching.
+10. Avoid hiding problems by simply disabling strict checking.
+
+---
+
+### Q51. A developer uses `any` for every third-party API response. How would you fix it?
+
+**Answer:**
+
+I would replace the boundary with:
+
+```ts
+unknown
+```
+
+then validate:
+
+```ts
+const data: unknown = await response.json();
+
+const user = UserSchema.parse(data);
+```
+
+For libraries without types:
+
+1. Check for `@types/package`.
+2. Create a local `.d.ts` declaration if needed.
+3. Use module augmentation when extending an existing library.
+4. Avoid `any` unless there is a documented reason.
+
+---
+
+### Q52. Your team has hundreds of `as` assertions. How would you reduce them?
+
+**Answer:**
+
+I would categorize them:
+
+- Legitimate assertions
+- Missing type definitions
+- Poor API boundaries
+- Missing narrowing
+- Unsafe runtime data
+- Incorrect generic design
+
+Then replace them with:
+
+- Type guards
+- Assertion functions
+- Generics
+- `unknown`
+- Runtime schemas
+- Better domain types
+- `satisfies`
+
+The goal is not blindly removing every assertion; it is eliminating **unnecessary and unsafe assertions**.
+
+---
+
+### Q53. How would you design a type-safe middleware pipeline?
+
+**Answer:**
+
+Use generic input/output context types.
+
+```ts
+type Middleware<In, Out> =
+  (ctx: In) => Out | Promise<Out>;
+
+function compose<A, B, C>(
+  first: Middleware<A, B>,
+  second: Middleware<B, C>
+): Middleware<A, C> {
+  return async (ctx) => {
+    return second(await first(ctx));
+  };
+}
+```
+
+This allows each middleware to transform the context while preserving type safety.
+
+---
+
+### Q54. How would you design end-to-end type safety for React + Node.js?
+
+**Answer:**
+
+I would use:
+
+```text
+API Contract
+     ↓
+Runtime Schema
+     ↓
+Server Validation
+     ↓
+Shared Types
+     ↓
+Typed Client
+     ↓
+React Components
+```
+
+Possible approaches:
+
+- OpenAPI + generated TypeScript
+- GraphQL code generation
+- tRPC
+- ts-rest
+- Zod-based contracts
+
+The important point is that **compile-time types and runtime validation solve different problems**.
+
 ---
