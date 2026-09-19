@@ -127,12 +127,6 @@ export async function getStaticProps() {
 
 **What it is:** A rendering strategy that combines static and dynamic content in a single page. The static parts of the page (header, footer, layout) are pre-rendered and served instantly from the CDN. The dynamic parts (user-specific data, real-time content) are streamed in afterward using Suspense boundaries.
 
-**How it works:**
-1. At build time, Next.js generates the static shell of the page.
-2. When a user requests the page, the CDN serves the static shell instantly.
-3. The dynamic parts (wrapped in `<Suspense>`) are rendered on the server and streamed to the browser.
-4. The browser fills in the dynamic sections as they arrive — no full-page reload.
-
 ```tsx
 import { Suspense } from "react";
 
