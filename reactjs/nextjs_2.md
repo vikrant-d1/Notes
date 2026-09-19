@@ -1,34 +1,4 @@
-# Next.js Interview Preparation — Missing Topics, Scenario Questions & Caching
-
-> Senior-level interview companion for Next.js (App Router focused), with extra coverage for production architecture, caching, performance, security, observability, deployment, and troubleshooting.
-
-## Purpose
-
-This README extends the existing Next.js interview notes with areas that are commonly missed in senior interviews.
-
-The existing notes already cover rendering strategies, Server/Client Components, App vs Pages Router, version changes, basic caching, data fetching, routing, middleware, Server Actions, optimization, authentication, SEO, deployment, and common questions. fileciteturn1file9L592-L613
-
-The highest-value additions are:
-
-- Deep cache architecture and cache invalidation
-- Next.js 15/16 cache model differences
-- `use cache`, `cacheLife`, `cacheTag`, `revalidateTag`, `revalidatePath`
-- Request memoization vs Data Cache vs Full Route Cache vs Router Cache
-- CDN and HTTP caching
-- Redis/application caching
-- Cache stampede and stale data handling
-- Server Actions security and authorization
-- RSC payload and hydration performance
-- Streaming/Suspense failure modes
-- Observability and production debugging
-- Database/API performance from a Next.js application
-- Rate limiting and abuse protection
-- Multi-region deployment concerns
-- Testing Server Components, Server Actions, and Route Handlers
-- Docker/self-hosting and runtime differences
-- Advanced scenario-based interview questions
-
----
+# Next.js Interview Preparation
 
 # Table of Contents
 
