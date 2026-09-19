@@ -1,18 +1,4 @@
-# React Hooks — Complete Senior Interview Guide
-
-> Complete React Hooks interview preparation from React 16 → React 19, including the hooks already covered in the source guide, the missing hooks, real-project scenarios, practical examples, troubleshooting questions, and senior-level cross questions.
-
-## What was missing in the original file?
-
-The original guide covered 17 hook/API sections, but its own Hook Selection Matrix also listed two hooks that did not have dedicated sections:
-
-1. `useDebugValue`
-2. `useInsertionEffect`
-
-This README adds both in full and expands **every hook/API into a practical project scenario + code example + interview Q&A**. The original guide also ends with senior-level questions around hook ordering, conditional hooks, `use()`, and transition/deferred-value selection. fileciteturn0file0L459-L499
-
----
-
+# React Hooks 
 # Table of Contents
 
 1. [useState](#1-usestate)
