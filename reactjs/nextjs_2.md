@@ -1,28 +1,5 @@
 # Next.js Interview Preparation
 
-# Table of Contents
-
-1. [Missing Topics](#1-missing-topics)
-2. [Caching in Next.js — Complete Mental Model](#2-caching-in-nextjs--complete-mental-model)
-3. [How to Manage Cache in Next.js](#3-how-to-manage-cache-in-nextjs)
-4. [Caching Patterns](#4-caching-patterns)
-5. [Cache Invalidation](#5-cache-invalidation)
-6. [Redis + Next.js](#6-redis--nextjs)
-7. [HTTP/CDN/Browser Caching](#7-httpcdnbrowser-caching)
-8. [Senior Interview Questions](#8-senior-interview-questions)
-9. [Scenario-Based Questions](#9-scenario-based-questions)
-10. [Production Troubleshooting Scenarios](#10-production-troubleshooting-scenarios)
-11. [Security Scenarios](#11-security-scenarios)
-12. [Performance Scenarios](#12-performance-scenarios)
-13. [Architecture Scenarios](#13-architecture-scenarios)
-14. [Additional Questions](#14-additional-questions)
-15. [Practical Coding Questions](#15-practical-coding-questions)
-16. [Quick Revision Checklist](#16-quick-revision-checklist)
-
----
-
-# 1. Missing Topics
-
 ## 1.1 Cache Components / `use cache`
 
 ### Q: What is the explicit cache model in modern Next.js?
