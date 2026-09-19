@@ -1,8 +1,6 @@
-# Managerial Round — Questions & Strong Answers
+# Managerial Round 
 
-## 1. Tell me about yourself.
-
-**Answer:**
+### 1. Tell me about yourself.
 
 I’m a Full Stack Developer with 9+ years of experience working with JavaScript and TypeScript, mainly across React, Next.js, Node.js, databases, and cloud technologies.
 
@@ -11,11 +9,10 @@ I’ve worked on enterprise, e-commerce, CMS, and backend applications, with a s
 Recently, I’ve been focusing on AI applications, including LLMs, RAG, AI agents, LangChain, and LangGraph.
 
 My strength is combining technical expertise with business understanding, while focusing on scalability, security, performance, and maintainability.
+
 ---
 
-# 2. Why are you looking for a change?
-
-**Answer:**
+### 2. Why are you looking for a change?
 
 > I’m looking for an opportunity where I can work on more challenging products and take greater ownership of architecture and technical decisions.
 
@@ -28,9 +25,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 3. Why do you want to join our company?
-
-**Answer:**
+### 3. Why do you want to join our company?
 
 > What interests me about this opportunity is the combination of full-stack engineering and AI.
 >
@@ -40,10 +35,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 4. Why should we hire you?
-
-**Answer:**
-
+### 4. Why should we hire you?
 > I bring three things that are important for this role.
 >
 > First, strong full-stack engineering experience across frontend, backend and APIs.
@@ -56,10 +48,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 5. What does ownership mean to you?
-
-**Answer:**
-
+### 5. What does ownership mean to you?
 > For me, ownership means taking responsibility for the outcome, not just completing the assigned task.
 >
 > If I'm responsible for a feature, I want to understand:
@@ -78,10 +67,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 6. How do you handle ambiguous requirements?
-
-**Answer:**
-
+### 6. How do you handle ambiguous requirements?
 > I don't immediately start coding when requirements are unclear.
 >
 > First, I clarify the business objective and expected user behavior.
@@ -101,10 +87,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 7. How do you prioritize tasks?
-
-**Answer:**
-
+### 7. How do you prioritize tasks?
 > I prioritize based on business impact, urgency, dependencies and technical risk.
 >
 > For example:
@@ -118,10 +101,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 8. How do you handle pressure and tight deadlines?
-
-**Answer:**
-
+### 8. How do you handle pressure and tight deadlines?
 > I first separate the critical requirements from the optional ones.
 >
 > Then I communicate what can realistically be delivered within the deadline.
@@ -134,9 +114,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 9. How do you handle disagreements with another developer?
-
-**Answer:**
+### 9. How do you handle disagreements with another developer?
 
 > I try to make the discussion about the technical problem rather than the person.
 >
@@ -157,10 +135,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 10. What if your manager disagrees with your technical decision?
-
-**Answer:**
-
+### 10. What if your manager disagrees with your technical decision?
 > I would first understand the reason behind the disagreement.
 >
 > If I believe my approach is technically better, I'd explain the trade-offs using data or evidence rather than personal preference.
@@ -171,9 +146,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 11. How do you handle a developer who is underperforming?
-
-**Answer:**
+### 11. How do you handle a developer who is underperforming?
 
 > I would first understand the reason rather than immediately assuming it's a performance problem.
 >
@@ -193,9 +166,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 12. How do you mentor junior developers?
-
-**Answer:**
+### 12. How do you mentor junior developers?
 
 > I prefer mentoring through real work rather than only theoretical sessions.
 >
@@ -215,9 +186,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 13. What makes a good code review?
-
-**Answer:**
+### 13. What makes a good code review?
 
 > A good code review should improve the quality of the system and help developers learn.
 >
@@ -235,9 +204,7 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 14. How do you balance technical debt and feature development?
-
-**Answer:**
+### 14. How do you balance technical debt and feature development?
 
 > I don't believe technical debt should always be eliminated before delivering features.
 >
@@ -251,25 +218,25 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
-# 15. Tell me about a production incident you handled.
+### 15. Tell me about a production incident you handled.
 
 Use the **STAR format**.
 
-### Situation
+#### Situation
 
 > We had a production issue where an API started responding slowly after traffic increased.
 
-### Task
+#### Task
 
 > I was responsible for identifying the bottleneck and restoring acceptable performance.
 
-### Action
+#### Action
 
 > I checked application logs and metrics and broke down latency across the database, external APIs and application processing.
 >
 > We identified a slow database query as one of the major contributors. I optimized the query and added the appropriate index. We also introduced better monitoring around the endpoint.
 
-### Result
+#### Result
 
 > API latency significantly improved, and we added monitoring so similar performance degradation could be detected earlier.
 
@@ -277,9 +244,7 @@ Use the **STAR format**.
 
 ---
 
-# 16. How would you handle an AI feature that gives incorrect answers?
-
-**Answer:**
+### 16. How would you handle an AI feature that gives incorrect answers?
 
 > I wouldn't immediately blame the model.
 >
@@ -307,9 +272,7 @@ Use the **STAR format**.
 
 ---
 
-# 17. How would you convince management not to release an unsafe AI feature?
-
-**Answer:**
+### 17. How would you convince management not to release an unsafe AI feature?
 
 > I would avoid saying simply, "This isn't safe."
 >
@@ -325,9 +288,7 @@ Use the **STAR format**.
 
 ---
 
-# 18. What are the biggest risks in an enterprise AI application?
-
-**Answer:**
+### 18. What are the biggest risks in an enterprise AI application?
 
 I'd consider:
 
@@ -346,9 +307,7 @@ The JD specifically emphasizes authorization, guardrails, evaluation, observabil
 
 ---
 
-# 19. How do you communicate technical issues to non-technical stakeholders?
-
-**Answer:**
+### 19. How do you communicate technical issues to non-technical stakeholders?
 
 > I avoid unnecessary technical terminology.
 >
@@ -364,9 +323,7 @@ The JD specifically emphasizes authorization, guardrails, evaluation, observabil
 
 ---
 
-# 20. How do you communicate delays?
-
-**Answer:**
+### 20. How do you communicate delays?
 
 > I communicate early rather than waiting until the deadline.
 >
@@ -383,9 +340,7 @@ The JD specifically emphasizes authorization, guardrails, evaluation, observabil
 
 ---
 
-# 21. How do you estimate a project?
-
-**Answer:**
+### 21. How do you estimate a project?
 
 I break the requirement into smaller deliverables:
 
@@ -418,9 +373,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 22. How do you decide between building something and using an existing solution?
-
-**Answer:**
+### 22. How do you decide between building something and using an existing solution?
 
 > I compare total cost and risk rather than automatically building everything ourselves.
 >
@@ -438,9 +391,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 23. What is your leadership style?
-
-**Answer:**
+### 23. What is your leadership style?
 
 > I'd describe my style as collaborative and ownership-driven.
 >
@@ -450,9 +401,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 24. How do you handle multiple projects?
-
-**Answer:**
+### 24. How do you handle multiple projects?
 
 > I make priorities and dependencies visible.
 >
@@ -462,9 +411,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 25. Where do you see yourself in 3–5 years?
-
-**Answer:**
+### 25. Where do you see yourself in 3–5 years?
 
 > I want to grow into a senior technical leadership role where I can continue contributing hands-on while taking ownership of larger systems and architectural decisions.
 >
@@ -472,9 +419,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 26. What is your biggest strength?
-
-**Answer:**
+### 26. What is your biggest strength?
 
 > My biggest strength is end-to-end ownership.
 >
@@ -484,7 +429,7 @@ I also include contingency for unknowns.
 
 ---
 
-# 27. What is your weakness?
+### 27. What is your weakness?
 
 Don't say:
 
@@ -500,57 +445,57 @@ A better answer:
 
 # 28. What would you do in your first 30/60/90 days?
 
-### First 30 days
+#### First 30 days
 
 > Understand the product, architecture, team, development process and existing AI systems.
 
-### 60 days
+#### 60 days
 
 > Start taking ownership of features and contribute to architecture and technical decisions.
 
-### 90 days
+#### 90 days
 
 > Own larger initiatives, improve reliability/performance and contribute to engineering practices and mentoring.
 
 ---
 
-# 29. What questions should YOU ask the manager?
+### 29. What questions should YOU ask the manager?
 
 This is **very important** in a managerial round.
 
 Ask 3–5 of these:
 
-### Product
+#### Product
 
 > What are the most important business problems this AI product is trying to solve?
 
-### Success
+#### Success
 
 > What would success look like for this person after the first six months?
 
-### Team
+#### Team
 
 > How is the engineering team structured, and how are technical decisions made?
 
-### AI
+#### AI
 
 > What are the biggest challenges you're currently facing with RAG, model accuracy, security or cost?
 
-### Ownership
+#### Ownership
 
 > What level of ownership would you expect from this role?
 
-### Culture
+#### Culture
 
 > How does the team handle disagreements around architecture and technical decisions?
 
-### Growth
+#### Growth
 
 > What opportunities are there for someone in this role to take on architectural or technical leadership?
 
 ---
 
-# 🔥 10 Managerial Questions I Would Practice Most
+### 🔥 10 Managerial Questions I Would Practice Most
 
 For **your specific JD**, practice these until you can answer naturally:
 
