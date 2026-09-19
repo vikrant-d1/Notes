@@ -92,13 +92,6 @@ export async function getStaticPaths() {
 
 **What it is:** A hybrid approach that combines the speed of SSG with the freshness of SSR. Pages are statically generated at build time, but they automatically regenerate in the background after a specified time interval. Users always get a fast cached page, but the content stays reasonably fresh.
 
-**How it works:**
-1. Page is generated at build time (like SSG).
-2. CDN serves the cached page instantly to users.
-3. After the revalidation interval (e.g., 60 seconds), the next request triggers a background regeneration.
-4. The old page is served to the current user (still fast).
-5. The new page replaces the old one for future users.
-
 **When it happens in Next.js:**
 - **App Router:** Using `revalidate` option in fetch or the page/layout config.
 - **Pages Router:** Using `revalidate` in `getStaticProps`.
