@@ -227,68 +227,6 @@ Push `"use client"` as deep as possible in your component tree. Don't put it on 
 
 
 
-## 6. Next.js 14 vs 15 vs 16 — What Changed
-
-### Next.js 14 (October 2023)
-
-| Feature | Detail |
-|---------|--------|
-| React Version | React 18 |
-| Bundler | Turbopack in beta (dev only) — had to opt in manually |
-| Server Actions | Became stable — no longer experimental |
-| Caching | Aggressive by default — `fetch()`, GET handlers, and client navigations were all cached automatically |
-| Partial Prerendering | Experimental preview — not production-ready |
-| Request APIs | Synchronous — `params`, `searchParams`, `cookies()`, `headers()` were all sync |
-| Metadata API | Stable |
-| App Router | Stable and recommended for new projects |
-
-### Next.js 15 (October 2024)
-
-| Feature | What Changed from 14 |
-|---------|---------------------|
-| React Version | React 19 RC — new hooks, improved Suspense, Actions API |
-| Bundler | Turbopack stable for dev, beta for production builds — much faster |
-| Caching (Breaking Change) | No longer cached by default — `fetch()`, GET handlers, and client navigations are now uncached unless you explicitly opt in. This was one of the biggest complaints about v14. |
-| Request APIs (Breaking Change) | Now async — `params`, `searchParams`, `cookies()`, `headers()` must be `await`ed |
-| Partial Prerendering | Stable — combine static and dynamic content in one page |
-| `next/after` API | New — run code after the response finishes streaming (analytics, logging) |
-| `<Form>` Component | New built-in form component with client-side navigation support |
-| Hydration Errors | Much better error messages with source code location |
-| Turbopack Dev | 5-10x faster Fast Refresh during development |
-| `next/image` | Better AVIF support and optimizations |
-| Security | Enhanced Server Actions security |
-| Minimum Node.js | 18.18 (was 18.17) |
-
-### Next.js 16 (October 2025)
-
-| Feature | What Changed from 15 |
-|---------|---------------------|
-| React Version | React 19.2 — View Transitions, `useEffectEvent()`, `<Activity/>` |
-| Bundler | Turbopack is now the DEFAULT bundler — Webpack fully replaced |
-| Turbopack Speed | Up to 10x faster Fast Refresh, 2-5x faster production builds |
-| Cache Components (`"use cache"`) | New caching model — explicit and opt-in using `"use cache"` directive. Replaces the confusing implicit caching of v13-14. |
-| React Compiler | Stable — automatic memoization, no more manual `useMemo`/`useCallback` |
-| `proxy.ts` | New — replaces `middleware.ts` for network-level concerns (auth, redirects) |
-| Devtools MCP | AI-assisted debugging via Model Context Protocol |
-| Enhanced Routing | Optimized navigation and prefetching — 50% less network transfer for shared layouts |
-| Build Adapters API | Alpha — create custom adapters for different hosting platforms |
-| Caching APIs | New `updateTag()`, `refresh()`, refined `revalidateTag()` |
-| Breaking Changes | Async params enforced, `next/image` default changes, AMP support removed |
-| File System Caching | Beta — persists Turbopack cache across restarts for even faster startup |
-
-### Side-by-Side Comparison
-
-| Feature | Next.js 14 | Next.js 15 | Next.js 16 |
-|---------|-----------|-----------|-----------|
-| React | 18 | 19 RC | 19.2 |
-| Bundler | Webpack (Turbopack beta) | Turbopack (stable dev) | Turbopack (default everywhere) |
-| Build Speed | Baseline | 2-3x faster | 2-5x faster |
-| Caching Default | Cached by default | Uncached by default | Explicit `"use cache"` |
-| `params` / `searchParams` | Sync | Async (breaking) | Async (enforced) |
-| Partial Prerendering | Experimental | Stable | Stable + Cache Components |
-| Server Actions | Stable | Enhanced + secure | Enhanced + forms |
-| React Compiler | Not available | Experimental | Stable |
-| Middleware | `middleware.ts` | `middleware.ts` | `proxy.ts` (new) |
 
 ### What This Means for Interviews
 
