@@ -1,4 +1,4 @@
-# Advanced Promise & Async Patterns in JavaScript / Node.js
+# Advanced Promise Node.js
 
 A practical guide to **Promises, async/await, concurrency, retries, timeouts, cancellation, error handling, and production patterns** for JavaScript and Node.js.
 
