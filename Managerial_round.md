@@ -4,7 +4,7 @@
 
 I’m a Full Stack Developer with 9+ years of experience working with JavaScript and TypeScript, mainly across React, Next.js, Node.js, databases, and cloud technologies.
 
-I’ve worked on enterprise, e-commerce, CMS, and backend applications, with a strong focus on end-to-end ownership—from understanding requirements and designing solutions to development and production support.
+I’ve worked on enterprise, e-commerce, Headless CMS, and backend applications, with a strong focus on end-to-end ownership—from understanding requirements and designing solutions to development and production support.
 
 My strength is combining technical expertise with business understanding, while focusing on scalability, security, performance, and maintainability.
 
