@@ -1,4 +1,41 @@
+## deep comparison obj
+```javascript
+const compareObj = (obj1, obj2) => {
+  // Same reference
+  if (obj1 === obj2) return true;
 
+  // Either is not an object
+  if (
+    typeof obj1 !== "object" ||
+    typeof obj2 !== "object" ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return obj1 === obj2;
+  }
+
+  // Different number of keys
+  if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+    return false;
+  }
+
+  for (const key in obj1) {
+    // Key doesn't exist in obj2
+    if (!Object.hasOwn(obj2, key)) {
+      return false;
+    }
+
+    // Recursively compare nested values
+    if (!compareObj(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+console.log(compareObj(a, b)); // true
+```
 
 ##  Move Zeroes
 **Pattern:** Two Pointer
