@@ -75,20 +75,6 @@ console.log(moveZeroes(nums));
 [1, 3, 12, 0, 0]
 ```
 
-```javascript
-function missingNumber(nums) {
-  let result = nums.length;
-
-  for (let i = 0; i < nums.length; i++) {
-    result ^= i ^ nums[i];
-  }
-
-  return result;
-}
-```
-
-
-
 ### Convert a flat array of objects into a hierarchical tree structure based on id and parentId.
 ```javascript
 const data = [
