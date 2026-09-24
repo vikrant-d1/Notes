@@ -34,7 +34,12 @@ const compareObj = (obj1, obj2) => {
   return true;
 };
 
-console.log(compareObj(a, b)); // true
+console.log(
+  compareObj(
+    { name: "John", address: { city: "Noida" } },
+    { name: "John", address: { city: "Delhi" } }
+  )
+); // true
 ```
 
 ##  Move Zeroes
