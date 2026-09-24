@@ -89,20 +89,6 @@ function missingNumber(nums) {
 
 
 
-### Example Input
-
-```javascript
-const nums = [3, 0, 1];
-console.log(missingNumber(nums));
-```
-
-### Example Output
-
-```text
-2
-```
-
-
 ### Convert a flat array of objects into a hierarchical tree structure based on id and parentId.
 ```javascript
 const data = [
