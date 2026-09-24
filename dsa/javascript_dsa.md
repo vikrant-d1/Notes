@@ -640,50 +640,6 @@ console.log(b[i])
 console.log('word reverse', reversString);
 ```
 
-### 5. Upper left triangle
-```javascript 
-let n = 5;
-for (let i = 1; i <= n; i++) {
-    let str = "* ";
-    console.log(str.repeat(i));
-}
-
-```
-
-### 6. Upper right triangle
-```javascript 
- let count =5;
- let printResult='';
- for(let i=1; i<=count; i++){
-     let printResult = " *";
-     let space = '  ';
-
-   console.log(space.repeat(count-i)+printResult.repeat(i));
- }
-
-```
- ### 7. Lower Right Triangle
-
-```javascript 
- let count =5;
- let printResult='';
- for(let i=count; i>=1; i--){
-     let printResult = " *";
-     let space = '  ';
-
-   console.log(space.repeat(count-i)+printResult.repeat(i));
- }
-```
-
-
- ### 8. Lower Left Triangle
- ```javascript 
-let n = 5;
-for (let i = n; i >= 1; i--) {
-    let str = "* ";
-    console.log(str.repeat(i));
-}
-```
 
 ###  9. Find pair of the sum given total number
 ```javascript 
@@ -883,18 +839,20 @@ console.log('check the data',objCount);
 ```
 ### 20. Given an array containing some numbers write a code to that will find out the missing number in the array’s range ?
 ```javascript 
- function returnMissingNumber(arr) {
-    let n=arr.length+1;
-    let sum=0;
-    for(let item of arr) {
-      sum+=item;
-    }
-   let x=(n*(n+1)/2)-sum;
-    return x;
-   }
+const arr = [1, 2, 3, 4, 5, 7, 9, 10];
 
-   let arr=[1,2,3,5];
-   console.log(returnMissingNumber(arr));  //4
+const missingNumbers = [];
+
+for (let i = 0; i < arr.length - 1; i++) {
+  if (arr[i + 1] - arr[i] > 1) {
+    for (let j = arr[i] + 1; j < arr[i + 1]; j++) {
+      missingNumbers.push(j);
+    }
+  }
+}
+
+console.log(missingNumbers);
+// [6, 8]
 ```
 
 
