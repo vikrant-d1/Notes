@@ -10,6 +10,42 @@ My strength is combining technical expertise with business understanding, while 
 
 ---
 
+### Q. Walk me through how your time is split in an average week across your different responsibilities — give me rough percentages.?
+In an average week, I would say around 50% of my time goes into hands-on development, including coding, code reviews, debugging, and technical design.
+
+Around 20% goes into planning and delivery activities such as requirement discussions, breaking down tasks, estimating work, and coordinating with the team.
+
+Around 15% goes into mentoring and supporting other engineers, including 1:1 discussions, technical guidance, and helping team members resolve blockers.
+
+The remaining 15% is usually spent on meetings, stakeholder communication, production issues, and process improvements.
+
+I try to keep the balance because I believe that at a senior level, I should remain technically hands-on while also helping the team deliver effectively.
+
+### Q.Delivery pressure — Tell me about the last time a customer was unhappy with delivery. In two or three sentences, what happened and what did you do?
+In one project, a customer was unhappy because a feature was delayed due to some unexpected technical dependencies and integration issues.
+
+I first clarified the exact business impact, discussed the situation transparently with the customer and internal team, and then broke the remaining work into smaller deliverables. We prioritized the business-critical functionality, provided a revised timeline, and delivered the critical part first while completing the remaining improvements afterward.
+
+The key thing I focused on was keeping the customer informed rather than allowing the delay to become a surprise.
+
+
+### Q. When you bring a new engineer onto the team, what do your first 30 days look like and how do your 1:1s evolve after that?
+For the first 30 days, I focus on helping the engineer understand the product, architecture, development process, coding standards, and team expectations.
+
+In the first week, I make sure they have the required access and environment setup and understand the overall system. During the second and third weeks, I give them smaller, well-defined tasks so they can become familiar with the codebase. By the fourth week, I try to give them ownership of a small feature or module.
+
+Initially, I would have more frequent check-ins, especially during the first couple of weeks. Once they become comfortable, I move to regular 1:1s focused less on day-to-day technical issues and more on their growth, challenges, feedback, and career development.
+
+My goal is to make a new engineer independent as quickly as possible rather than making them dependent on me.
+
+### Q. What's one concrete thing you changed in your team's engineering process, and how did you know it worked?
+One improvement I introduced was making code reviews more structured. Instead of treating a pull request as just an approval step, we started using a checklist covering functionality, error handling, security, performance, testing, and maintainability.
+
+I also encouraged smaller pull requests so reviewers could provide meaningful feedback instead of reviewing very large changes.
+
+I measured the impact through fewer review iterations, fewer issues being discovered after merging, and faster PR turnaround. It also helped maintain consistency across the codebase and made it easier for junior engineers to understand our engineering standards.
+
+
 ### 2. Why are you looking for a change?
 
 > I’m looking for an opportunity where I can work on more challenging products and take greater ownership of architecture and technical decisions.
