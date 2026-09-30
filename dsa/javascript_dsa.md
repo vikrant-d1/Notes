@@ -1,3 +1,44 @@
+
+```javascript
+let input = "India is a big country";
+
+let word = '';
+let revrsInput = [];
+
+for (let w of input) {
+  if (w !== ' ') {
+    word += w;
+  } else {
+    let wordLength = word.length;
+    let revWord = '';
+
+    for (let i = 0; i < wordLength; i++) {
+      revWord += word[wordLength - 1 - i];
+    }
+
+    revrsInput.push(revWord);
+    word = '';
+  }
+}
+
+// Process the last word
+if (word.length > 0) {
+  let wordLength = word.length;
+  let revWord = '';
+
+  for (let i = 0; i < wordLength; i++) {
+    revWord += word[wordLength - 1 - i];
+  }
+
+  revrsInput.push(revWord);
+}
+
+input = revrsInput.join(' ');
+
+console.log(input);
+
+```
+
 ## deep comparison obj
 ```javascript
 const compareObj = (obj1, obj2) => {
