@@ -1,15 +1,4 @@
 # Managerial Round 
-
-### 1. Tell me about yourself.
-
-I’m a Full Stack Developer with 9+ years of experience working with JavaScript and TypeScript, mainly across React, Next.js, Node.js, databases, and cloud technologies.
-
-I’ve worked on enterprise, e-commerce, Headless CMS, and backend applications, with a strong focus on end-to-end ownership—from understanding requirements and designing solutions to development and production support.
-
-My strength is combining technical expertise with business understanding, while focusing on scalability, security, performance, and maintainability.
-
----
-
 ### Q. Walk me through how your time is split in an average week across your different responsibilities — give me rough percentages.?
 In an average week, I would say around 50% of my time goes into hands-on development, including coding, code reviews, debugging, and technical design.
 
